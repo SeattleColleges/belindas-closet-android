@@ -1,0 +1,10 @@
+name: PR Workflow
+run-name: PR from branch ${{ github.ref }}
+# Will run CI workflow on an opened or reopened PR for easy reference. For compilation, unit tests, code coverage etc.
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  Continuous-Integration:
+    uses: ./.github/workflows/ci.yml

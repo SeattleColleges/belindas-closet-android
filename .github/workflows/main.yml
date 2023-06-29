@@ -1,0 +1,21 @@
+name: Main Workflow
+run-name: CI-CD Workflow
+
+# runs when a branch is pushed to main or merged. The closing of the PR triggers the event and the if statements check
+# whether the branch was merged or not before running the CI and CD jobs
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+
+
+  CI:
+    uses: ./.github/workflows/ci.yml
+    if: github.event.pull_request.merged == true || github.event_name == 'push'
