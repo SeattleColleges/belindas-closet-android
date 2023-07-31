@@ -167,9 +167,22 @@ fun LoginPage(navController: NavHostController) {
                         .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                         .align(Alignment.CenterHorizontally)
                 )
+
+
+                /* Add product button */
+                Button(
+                    onClick = {
+                        navController.navigate(Routes.AddProduct.route)
+                    },
+                    modifier = Modifier.padding(16.dp).width(200.dp).align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "Add Product")
+                }
+
             }
         }
     }
+
 
     // Create a new account text
     Box(modifier = Modifier.fillMaxSize()) {
