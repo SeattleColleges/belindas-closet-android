@@ -1,0 +1,27 @@
+# This is the CI New Branch Workflow.
+# The purpose of this workflow is to automate the process of integrating (CI) code changes
+# that are made on new branches or on pull requests targeting the 'main' branch which we use for development.
+#
+# The workflow is triggered::
+# 1. When a new branch is created. This is triggered by the 'create' event.
+#
+# The workflow consists of a single job: 'CI'.
+#
+# The 'CI' job:
+# - Is defined in the separate '.github/workflows/ci.yml' file.
+# - Runs every time the workflow is triggered, regardless of the specific event.
+# - Represents the 'Continuous Integration' part of the workflow, where the code changes are built and tested.
+#
+# This setup ensures that code changes are always integrated and tested (CI) when they're made on a new branch.
+
+name: CI (On Branch Creation)
+run-name: CI (On Branch Creation)
+
+
+on:
+
+  create:
+
+jobs:
+  CI:
+    uses: ./.github/workflows/ci.yml # reusable workflow file path

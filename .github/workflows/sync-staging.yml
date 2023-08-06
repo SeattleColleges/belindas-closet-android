@@ -1,0 +1,59 @@
+# Workflow to sync main branch changes into staging branch.
+# Triggered on pushes to main branch.
+# Jobs:
+# - CI-preSyncCheck: Runs CI checks on main branch.
+# - sync-branch:
+#   - Checks out staging branch
+#   - Merges main into staging with --no-ff
+#   - Pushes merged staging branch
+# Merging with --no-ff creates a merge commit to track changes.
+
+name: Sync Main to Staging
+run-name: Sync-Staging
+
+on:
+  push:
+    branches: ["main"]
+permissions: # we can tighten this up in settings but are able to set customize permissions against GITHUB_TOKEN in Yaml
+  contents: write
+  actions: write
+  checks: write
+  deployments: write
+  discussions: write
+  issues: write
+  pages: read
+  packages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: write
+  statuses: write
+jobs:
+  CI-preSyncCheck:
+    if: github.event.pull_request.merged == true || github.event_name == 'push'
+    uses: ./.github/workflows/ci.yml # reusable workflow file path
+
+  sync-branch:
+    needs: CI-preSyncCheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # fetch all history so we can perform a merge
+          ref: 'staging'
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+        #          git push origin staging
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # git merge main --no-ff -> no fast forwarding makes it easier to track changes
+        # flag option to auto resolve merge conflicts using mains changes git merge main --no-ff --strategy-option ours
+      - name: Merge main(dev) -> staging
+        run: |
+          git checkout main
+          git pull
+          git checkout staging
+          git merge main --no-ff
+          git push origin staging

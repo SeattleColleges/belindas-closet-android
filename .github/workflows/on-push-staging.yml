@@ -1,0 +1,41 @@
+# This workflow defines a CI/CD pipeline for the staging environment
+
+# name: The name of the workflow
+# run-name: The name that will display in the GitHub UI for each run
+
+# on.push.branches: This workflow will run on pushes to the "staging" branch
+
+# on.pull_request: This workflow will run on pull requests targeting the "staging" branch
+# on.pull_request.types: It will run when pull requests are closed
+
+# jobs.CI: Runs the CI workflow defined in .github/workflows/ci.yml
+# CI.if: Only runs if the PR was merged or if it was a push (not a PR)
+
+# jobs.CD: Runs the CD workflow defined in .github/workflows/cd-production.yml
+# CD.needs: Runs after the "CI" job completes successfully
+# CD.if: Only runs if the PR was merged or if it was a push (not a PR)
+
+name: Main Staging Workflow
+run-name: CI-CD Staging
+
+on:
+  push:
+    branches: [ "staging"]
+
+  pull_request:
+    branches: [ "staging" ]
+
+    types:
+      - closed
+
+jobs:
+  # redundant check to ensure CI passes before deployment
+  CI-Staging:
+    if: github.event.pull_request.merged == true || github.event_name == 'push'
+    uses: ./.github/workflows/ci.yml # reusable workflow file path
+
+
+  CD-Staging:
+    if: github.event.pull_request.merged == true || github.event_name == 'push'
+    uses: ./.github/workflows/cd-staging.yml # reusable workflow file path
+    needs: CI
