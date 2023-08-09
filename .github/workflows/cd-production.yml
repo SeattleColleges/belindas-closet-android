@@ -1,0 +1,32 @@
+# CD workflow to deploy app to production environment.
+# Defines one job - deploy-to-production.
+# Job runs on ubuntu-latest runner.
+#  Steps:
+#   - Download build artifact
+#   - Run CD script to deploy app to production
+# Workflow is reusable and triggered via workflow_call.
+# Can pass inputs and secrets.
+
+name: CD Production
+run-name: Gradle CD (production)
+on:
+  workflow_call: # required when creating a reusable workflow
+#    inputs:
+#      config-path:
+#        required: false
+#        type: string
+#    secrets:
+#      token:
+#        required: false
+jobs:
+  deploy-to-production:
+    runs-on: ubuntu-latest
+    steps:
+      #      - name: Download build
+      #        uses: actions/download-artifact@v3
+      #        with:
+      #          name: Package (will grab apk files for build in cloud environment)
+
+      - name: Run CD for Production
+        run: |
+          echo Perform deployment steps for the production environment

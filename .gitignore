@@ -48,3 +48,7 @@ google-services.json
 .externalNativeBuild
 .cxx
 local.properties
+
+# secrets
+.env*
+!.env.sample
