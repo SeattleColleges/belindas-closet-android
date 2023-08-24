@@ -40,6 +40,7 @@ fun AddProductPage(navController: NavHostController) {
     var productName by remember { mutableStateOf("") }
     var productDescription by remember { mutableStateOf("") }
     var productSize by remember { mutableStateOf(Sizes.SELECT_SIZE) } /* Default size set */
+    val productImage by remember { mutableStateOf("") }
 
     /* Back arrow that navigates back to login page */
     TopAppBar(
@@ -83,7 +84,7 @@ fun AddProductPage(navController: NavHostController) {
                 if (productName.isNotEmpty()
                     && productDescription.isNotEmpty()
                     && productSize != Sizes.SELECT_SIZE) {
-                    val newProduct = Product(productName, productDescription, productSize)
+                    val newProduct = Product(productName, productDescription, productSize, productImage)
                     /* TODO: save new product to db or use a list to hold products (ex: List<Product>) */
                 } else {
                     /* TODO: show error message for empty fields */
