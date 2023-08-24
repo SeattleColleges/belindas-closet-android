@@ -9,4 +9,13 @@
     <string name="login_logo_description">Logo</string>
     <string name="login_email_error">Invalid email!</string>
     <string name="login_password_error">Invalid password!</string>
+
+    <!--    Home Screen Strings    -->
+    <string name="home_logo_description">Logo</string>
+    <string name="home_welcome">Belinda\'s Closet</string>
+    <string name="product_image_description">Product</string>
+    <string name="home_login">Get Started</string>
+
+    <!--    Product Detail Screen Strings    -->
+    <string name="product_detail_page_title">Product Detail</string>
 </resources>
