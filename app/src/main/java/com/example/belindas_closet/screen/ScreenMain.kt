@@ -12,7 +12,13 @@ import com.example.belindas_closet.Routes
 fun ScreenMain() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "Login") {
+    NavHost(navController = navController, startDestination = "Home") {
+        composable(Routes.Home.route) {
+            HomePage(navController = navController)
+        }
+        composable(Routes.ProductDetail.route) {
+            ProductDetailPage(navController = navController)
+        }
         composable(Routes.Login.route) {
             LoginPage(navController = navController)
         }
