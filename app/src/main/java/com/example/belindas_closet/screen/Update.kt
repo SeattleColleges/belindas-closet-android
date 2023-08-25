@@ -95,10 +95,11 @@ fun UpdatePage(navController: NavController) {
             }
         }
     ) {
+        innerPadding ->
+        val modifier = Modifier.padding(innerPadding)
         Column (
-            modifier = Modifier
-                .padding(top = 80.dp)
-                .wrapContentSize(),
+            modifier = modifier
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
