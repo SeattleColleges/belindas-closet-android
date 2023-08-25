@@ -6,9 +6,9 @@ enum class Sizes {
 }
 
 data class Product(
-    val name: String,
-    val description: String,
-    val size: Sizes,
+    var name: String,
+    var description: String,
+    var size: Sizes,
     val image: String,
     /* TODO: what other product properties should be added? */
 )

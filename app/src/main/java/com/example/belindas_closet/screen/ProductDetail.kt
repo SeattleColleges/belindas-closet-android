@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -57,7 +58,19 @@ fun ProductDetailPage(navController: NavController) {
                         navController.navigate(Routes.Home.route)
                     }
                 ) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back to Home page")
+                }
+            },
+            actions = {
+                IconButton(
+                    onClick = {
+                        //TODO: verify that the user is an admin or the owner of the product
+                        //If yes, then navigate to the update page
+                        navController.navigate(Routes.Update.route)
+                        //Else, navigate to the login page
+                    }
+                ) {
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                 }
             }
         )
