@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,6 +19,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -42,53 +42,60 @@ import com.example.belindas_closet.data.Sizes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailPage(navController: NavController) {
-    Column (
+    Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .wrapContentSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        /* Back arrow that navigates back to login page */
-        TopAppBar(
-            title = { Text("Home") },
-            navigationIcon = {
-                IconButton(
-                    onClick = {
-                        navController.navigate(Routes.Home.route)
+            .fillMaxSize(),
+        topBar = {
+            /* Back arrow that navigates back to login page */
+            TopAppBar(
+                title = { Text("Home") },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navController.navigate(Routes.Home.route)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back to Home page"
+                        )
                     }
-                ) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back to Home page")
-                }
-            },
-            actions = {
-                IconButton(
-                    onClick = {
-                        //TODO: verify that the user is an admin or the owner of the product
-                        //If yes, then navigate to the update page
-                        navController.navigate(Routes.Update.route)
-                        //Else, navigate to the login page
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            //TODO: verify that the user is an admin or the owner of the product
+                            //If yes, then navigate to the update page
+                            navController.navigate(Routes.Update.route)
+                            //Else, navigate to the login page
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                     }
-                ) {
-                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                 }
-            }
-        )
+            )
+        },
+    ) { innerPadding ->
+        val modifier = Modifier.padding(innerPadding)
+        Column(
+            modifier = modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CustomTextField(text = stringResource(R.string.product_detail_page_title))
 
-        Spacer(modifier = Modifier.padding(8.dp))
-        CustomTextField(text = stringResource(R.string.product_detail_page_title))
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        // Display a list of product from Product class
-        val products = listOf(
-            // TODO: Replace these products with the products from the database
-            // Examples of products:
-            Product("Dresses", "Dresses", Sizes.S, R.drawable.product1.toString()),
-            Product("Shirts", "Shirts", Sizes.M, R.drawable.product2.toString()),
-            Product("Pants", "Pants", Sizes.L, R.drawable.product3.toString()),
-            Product("Shoes", "Shoes", Sizes.XL, R.drawable.product4.toString()),
-        )
-        ProductDetailList(products = products, navController = navController)
+            // Display a list of product from Product class
+            val products = listOf(
+                // TODO: Replace these products with the products from the database
+                // Examples of products:
+                Product("Dresses", "Dresses", Sizes.S, R.drawable.product1.toString()),
+                Product("Shirts", "Shirts", Sizes.M, R.drawable.product2.toString()),
+                Product("Pants", "Pants", Sizes.L, R.drawable.product3.toString()),
+                Product("Shoes", "Shoes", Sizes.XL, R.drawable.product4.toString()),
+            )
+            ProductDetailList(products = products, navController = navController)
+        }
     }
 }
 
@@ -96,6 +103,7 @@ fun ProductDetailPage(navController: NavController) {
 fun ProductDetailCard(product: Product, navController: NavController) {
     Card(
         modifier = Modifier
+            .padding(8.dp)
             .clickable {
                 navController.navigate(Routes.ProductDetail.route)
             },
@@ -112,7 +120,6 @@ fun ProductDetailCard(product: Product, navController: NavController) {
                 modifier = Modifier
                     .size(200.dp)
                     .padding(16.dp),
-
                 )
             Text(
                 text = "Name: ${product.name}",
@@ -134,13 +141,14 @@ fun ProductDetailCard(product: Product, navController: NavController) {
 @Composable
 fun ProductDetailList(products: List<Product>, navController: NavController) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(products) { product ->
             ProductDetailCard(product = product, navController = navController)
-            Spacer(modifier = Modifier.padding(16.dp))
         }
     }
 }
