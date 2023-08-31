@@ -30,8 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.belindas_closet.Routes
-import com.example.belindas_closet.data.Product
-import com.example.belindas_closet.data.Sizes
+import com.example.belindas_closet.model.Product
+import com.example.belindas_closet.model.Sizes
 
 
 @OptIn(ExperimentalMaterial3Api::class)

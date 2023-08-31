@@ -1,8 +1,6 @@
 package com.example.belindas_closet.screen
 
-import android.content.res.Resources.Theme
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,7 +35,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +43,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -58,8 +54,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
-import com.example.belindas_closet.data.Product
-import com.example.belindas_closet.data.Sizes
+import com.example.belindas_closet.model.Product
+import com.example.belindas_closet.data.Datasource
+import com.example.belindas_closet.model.Sizes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -105,15 +102,7 @@ fun UpdatePage(navController: NavController) {
         ){
             CustomTextField(text = stringResource(R.string.update_page_title))
 
-            // Only display products that are belong to the user
-            // TODO: Replace with the products that are belong to the user from the database
-            val products = listOf(
-                Product("Dresses", "Dresses", Sizes.S, R.drawable.product1.toString()),
-                Product("Shirts", "Shirts", Sizes.M, R.drawable.product2.toString()),
-                Product("Pants", "Pants", Sizes.L, R.drawable.product3.toString()),
-                Product("Shoes", "Shoes", Sizes.XL, R.drawable.product4.toString()),
-            )
-            UpdateProductList(products = products)
+            UpdateProductList(products = Datasource().loadProducts())
         }
     }
 }
