@@ -1,4 +1,4 @@
-package com.example.belindas_closet.data
+package com.example.belindas_closet.model
 
 /* TODO: maybe change the size variable to a enum. Also add more enum sizes */
 enum class Sizes {

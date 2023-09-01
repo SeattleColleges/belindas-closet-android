@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
-import com.example.belindas_closet.data.Product
-import com.example.belindas_closet.data.Sizes
+import com.example.belindas_closet.model.Product
+import com.example.belindas_closet.data.Datasource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,16 +85,7 @@ fun ProductDetailPage(navController: NavController) {
         ) {
             CustomTextField(text = stringResource(R.string.product_detail_page_title))
 
-            // Display a list of product from Product class
-            val products = listOf(
-                // TODO: Replace these products with the products from the database
-                // Examples of products:
-                Product("Dresses", "Dresses", Sizes.S, R.drawable.product1.toString()),
-                Product("Shirts", "Shirts", Sizes.M, R.drawable.product2.toString()),
-                Product("Pants", "Pants", Sizes.L, R.drawable.product3.toString()),
-                Product("Shoes", "Shoes", Sizes.XL, R.drawable.product4.toString()),
-            )
-            ProductDetailList(products = products, navController = navController)
+            ProductDetailList(products = Datasource().loadProducts(), navController = navController)
         }
     }
 }
