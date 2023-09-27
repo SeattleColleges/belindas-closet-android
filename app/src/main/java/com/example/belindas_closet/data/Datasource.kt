@@ -12,6 +12,7 @@ class Datasource {
             Product("Shirts", "Shirts", Sizes.M, R.drawable.product2.toString()),
             Product("Pants", "Pants", Sizes.L, R.drawable.product3.toString()),
             Product("Shoes", "Shoes", Sizes.XL, R.drawable.product4.toString()),
-        )
+            Product("Belt", "Belt", Sizes.XL, R.drawable.product4.toString()),
+            )
     }
 }
