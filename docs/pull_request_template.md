@@ -19,12 +19,18 @@ This would be for the belindas-closet-android repo, sprint 2, issue 5, with the 
 
 ![Labels](https://github.com/SeattleColleges/nsc-events-nextjs/assets/37163331/86e27abd-d119-4194-bb79-a97fe7eb5fdd)
 
-# **When submitting your pull request, be descriptive in both your topic name (IntelliJ Configuration(s)) and also assign it to a numbered issue. In this case, we've assigned this #12, because at the time of creation, there were 11 issues, and this was the logical next number to assign it to.**
+# **When submitting your pull request, be descriptive in both your topic name (IntelliJ Configuration(s)) and also assign it to a numbered issue. In this case, we've assigned this #12, because at the time of creation, there were 11 issues, and this was the logical next number to assign it to. 
 
 ![PullComment](https://github.com/SeattleColleges/nsc-events-nextjs/assets/37163331/907d72fc-b85f-47c8-bfd5-6187e8d61d0d)
+
+# **Ensure you include details. As <insert role> I did the following: <insert steps, include images if applicable>**
 
 # **When submitting a comment for a pull request, please label your pull request as a solution to another issue.**
 
 For example, reference the below image, and what I have put into the comment that will resolve our number 12 issue of no .idea file that's ignored in our .gitignore file.
 
 ![ResolvesComment](https://github.com/SeattleColleges/nsc-events-nextjs/assets/37163331/ed24c121-5af0-465b-9ad9-d7999ea9250f)
+
+# **We also want to include unit tests if and when possible to make sure we're getting full coverage of our code. This will simulate a real world environment where tests are extremely important.**
+
+[Unit Test Example](https://www.geeksforgeeks.org/unit-testing-software-testing/)
