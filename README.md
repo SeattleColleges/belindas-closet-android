@@ -11,6 +11,8 @@ In the fall quarter of 2022 Belinda's Closet opened as a response to students' n
 - E. Brink, Technical Project Manager
 - Taylor Papke, Product Owner
 - Gary Larson, Lead Developer
+- Tin Pham, Full Stack Developer
+- Robel Hailu, Full Stack Developer
 - New team members TBA!
  
 ## Acknowledgements
