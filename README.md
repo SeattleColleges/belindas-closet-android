@@ -6,13 +6,12 @@ In the fall quarter of 2022 Belinda's Closet opened as a response to students' n
 - Visit our [Wiki](https://github.com/SeattleColleges/belindas-closet-android/wiki) for more information about style and formatting.
  
 ## Team Members
-- BC Ko 
-- Brandon Dombrowsky 
-- E. Brink 
-- Taylor Papke
+- BC Ko, instructor and advisor
+- Brandon Dombrowsky, Technical Program Manager
+- E. Brink, Technical Project Manager
+- Taylor Papke, Product Owner
+- Gary Larson, Lead Developer
 - New team members TBA!
-
-roles may be added at a later date
  
 ## Acknowledgements
 - Thank you, BC!
