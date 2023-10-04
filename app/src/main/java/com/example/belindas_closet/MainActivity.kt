@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.belindas_closet.screen.ScreenMain
 import com.example.belindas_closet.ui.theme.Belindas_closetTheme
-
+// this is a comment
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
