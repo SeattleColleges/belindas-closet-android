@@ -1,5 +1,7 @@
 package com.example.belindas_closet.screen
 
+
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -52,10 +54,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
-import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.data.Datasource
+import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.Sizes
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,7 +105,7 @@ fun UpdatePage(navController: NavController) {
         ){
             CustomTextField(text = stringResource(R.string.update_page_title))
 
-            UpdateProductList(products = Datasource().loadProducts())
+            UpdateProductList(products = Datasource().loadProducts(), navController = navController)
         }
     }
 }
@@ -162,7 +165,7 @@ fun TextFieldEditable(
 }
 
 @Composable
-fun UpdateProductCard(product: Product) {
+fun UpdateProductCard(product: Product, navController: NavController) {
     var isEditing by remember { mutableStateOf(false) }
     var isDelete by remember { mutableStateOf(false) }
     var isSave by remember { mutableStateOf(false) }
@@ -254,6 +257,13 @@ fun UpdateProductCard(product: Product) {
                     }
                     if (isDelete) {
                         ConfirmationDialog(onConfirm = {
+                            var hidden = MainActivity.getPref().getStringSet("hidden", setOf(""))
+                            val editor = MainActivity.getPref().edit();
+                            hidden?.add(product.name)
+                            editor.putStringSet("hidden", hidden)
+                            editor.apply();
+                            navController.navigate(Routes.ProductDetail.route)
+                            // TODO: Navigate
                             // TODO: Delete the product from the database
                             // Remove the product from the database
                             isDelete = false
@@ -276,7 +286,7 @@ fun UpdateProductCard(product: Product) {
 }
 
 @Composable
-fun UpdateProductList(products: List<Product>) {
+fun UpdateProductList(products: List<Product>, navController: NavController) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -285,7 +295,7 @@ fun UpdateProductList(products: List<Product>) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(products) { product ->
-            UpdateProductCard(product = product)
+            UpdateProductCard(product = product, navController = navController)
         }
     }
 }

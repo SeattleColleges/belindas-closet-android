@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
@@ -131,6 +132,7 @@ fun ProductDetailCard(product: Product, navController: NavController) {
 
 @Composable
 fun ProductDetailList(products: List<Product>, navController: NavController) {
+    val hidden = MainActivity.getPref().getStringSet("hidden", setOf(""))
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -138,7 +140,7 @@ fun ProductDetailList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products) { product ->
+        items(products.filter { !hidden!!.contains(it.name) }) { product ->
             ProductDetailCard(product = product, navController = navController)
         }
     }
