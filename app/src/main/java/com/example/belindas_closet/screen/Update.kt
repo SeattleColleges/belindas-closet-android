@@ -1,7 +1,5 @@
 package com.example.belindas_closet.screen
 
-
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -257,11 +255,11 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                     }
                     if (isDelete) {
                         ConfirmationDialog(onConfirm = {
-                            var hidden = MainActivity.getPref().getStringSet("hidden", setOf(""))
-                            val editor = MainActivity.getPref().edit();
+                            val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.name))
                             hidden?.add(product.name)
+                            val editor = MainActivity.getPref().edit()
                             editor.putStringSet("hidden", hidden)
-                            editor.apply();
+                            editor.apply()
                             navController.navigate(Routes.ProductDetail.route)
                             // TODO: Navigate
                             // TODO: Delete the product from the database
@@ -287,6 +285,7 @@ fun UpdateProductCard(product: Product, navController: NavController) {
 
 @Composable
 fun UpdateProductList(products: List<Product>, navController: NavController) {
+    val hidden = MainActivity.getPref().getStringSet("hidden", setOf(""))
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -294,7 +293,7 @@ fun UpdateProductList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products) { product ->
+        items(products.filter { !hidden!!.contains(it.name) }) { product ->
             UpdateProductCard(product = product, navController = navController)
         }
     }

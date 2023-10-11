@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
@@ -112,12 +113,13 @@ fun ProductCard(product: Product, navController: NavController) {
 
 @Composable
 fun ProductList(products: List<Product>, navController: NavController) {
+    val hidden = MainActivity.getPref().getStringSet("hidden", setOf(""))
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products) { product ->
+        items(products.filter { !hidden!!.contains(it.name) }) { product ->
             ProductCard(product = product, navController = navController)
             Spacer(modifier = Modifier.padding(16.dp))
         }
