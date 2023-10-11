@@ -264,7 +264,7 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                                 val editor = MainActivity.getPref().edit()
                                 editor.putStringSet("hidden", hidden)
                                 editor.apply()
-                                // TODO: Navigate
+                                isVisible = false
                                 // TODO: Delete the product from the database
                                 // Remove the product from the database
                                 isDelete = false
