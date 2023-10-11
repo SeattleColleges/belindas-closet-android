@@ -102,7 +102,7 @@ fun UpdatePage(navController: NavController) {
         ){
             CustomTextField(text = stringResource(R.string.update_page_title))
 
-            UpdateProductList(products = Datasource().loadProducts())
+            UpdateProductList(products = Datasource().loadProducts(), navController = navController)
         }
     }
 }
@@ -162,7 +162,7 @@ fun TextFieldEditable(
 }
 
 @Composable
-fun UpdateProductCard(product: Product) {
+fun UpdateProductCard(product: Product, navController: NavController) {
     var isEditing by remember { mutableStateOf(false) }
     var isDelete by remember { mutableStateOf(false) }
     var isSave by remember { mutableStateOf(false) }
@@ -216,7 +216,7 @@ fun UpdateProductCard(product: Product) {
                             isCancel = false
                         }, onDismiss = {
                             isCancel = false
-                        })
+                        }, navController = navController)
                     }
 
                     Spacer(modifier = Modifier.padding(8.dp))
@@ -276,7 +276,7 @@ fun UpdateProductCard(product: Product) {
 }
 
 @Composable
-fun UpdateProductList(products: List<Product>) {
+fun UpdateProductList(products: List<Product>, navController: NavController) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -285,7 +285,7 @@ fun UpdateProductList(products: List<Product>) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(products) { product ->
-            UpdateProductCard(product = product)
+            UpdateProductCard(product = product, navController = navController)
         }
     }
 }
@@ -381,7 +381,8 @@ fun ConfirmSaveDialog(
 @Composable
 fun ConfirmCancelDialog(
     onConfirm: () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    navController: NavController
 ) {
     Dialog(onDismissRequest = {
         onDismiss()
@@ -412,7 +413,9 @@ fun ConfirmCancelDialog(
                         Text("No")
                     }
                     Button(
-                        onClick = { onConfirm() }, modifier = Modifier.padding(8.dp)
+                        onClick = { onConfirm()
+                            navController.navigate(Routes.ProductDetail.route)
+                                  }, modifier = Modifier.padding(8.dp)
                     ) {
                         Text("Yes")
                     }
