@@ -221,7 +221,7 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                                 isCancel = false
                             }, onDismiss = {
                                 isCancel = false
-                            })
+                            }, navController = navController)
                         }
 
                         Spacer(modifier = Modifier.padding(8.dp))
@@ -394,7 +394,8 @@ fun ConfirmSaveDialog(
 @Composable
 fun ConfirmCancelDialog(
     onConfirm: () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    navController: NavController
 ) {
     Dialog(onDismissRequest = {
         onDismiss()
@@ -425,7 +426,9 @@ fun ConfirmCancelDialog(
                         Text("No")
                     }
                     Button(
-                        onClick = { onConfirm() }, modifier = Modifier.padding(8.dp)
+                        onClick = { onConfirm()
+                            navController.navigate(Routes.ProductDetail.route)
+                        }, modifier = Modifier.padding(8.dp)
                     ) {
                         Text("Yes")
                     }
