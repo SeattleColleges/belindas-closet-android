@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -126,6 +127,13 @@ fun ProductDetailCard(product: Product, navController: NavController) {
             )
             Text(text = "Size: ${product.size}")
             Text(text = "Description: ${product.description}")
+            TextButton(
+                onClick = {
+                    navController.navigate(Routes.IndividualProduct.route+"/${product.name}")
+                }
+            ) {
+                Text(text = "More Info")
+            }
         }
     }
 }
