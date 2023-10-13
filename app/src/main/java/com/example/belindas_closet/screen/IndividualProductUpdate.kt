@@ -1,6 +1,7 @@
 package com.example.belindas_closet.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -43,7 +45,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
@@ -138,13 +142,14 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                         )
                     }
                     if (isCancel) {
-                        ConfirmCancelDialog(onConfirm = {
+                        ConfirmCancelDialogIndividual(onConfirm = {
                             // TODO: Cancel the edit
                             // Keep the original data
                             isCancel = false
                         }, onDismiss = {
                             isCancel = false
-                        }, navController = navController)
+                        }, navController = navController,
+                            productId = product.name)
                     }
 
                     Spacer(modifier = Modifier.padding(8.dp))
@@ -182,6 +187,12 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                     }
                     if (isDelete) {
                         ConfirmationDialog(onConfirm = {
+                            val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.name))
+                            hidden?.add(product.name)
+                            val editor = MainActivity.getPref().edit()
+                            editor.putStringSet("hidden", hidden)
+                            editor.apply()
+                            navController.navigate(Routes.ProductDetail.route)
                             // TODO: Delete the product from the database
                             // Remove the product from the database
                             isDelete = false
@@ -253,4 +264,52 @@ fun TextFieldEditableIndividual(
     }
 
     //TODO: Add image field, can be called from the AddProduct.kt
+}
+
+@Composable
+fun ConfirmCancelDialogIndividual(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+    navController: NavController,
+    productId: String
+) {
+    Dialog(onDismissRequest = {
+        onDismiss()
+    }) {
+        Card(
+            modifier = Modifier
+                .padding(16.dp)
+                .border(1.dp, Color.White),
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(stringResource(R.string.update_cancel_confirm_text))
+                Spacer(modifier = Modifier.padding(8.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        onClick = { onDismiss() }, modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text("No")
+                    }
+                    Button(
+                        onClick = { onConfirm()
+                            navController.navigate(Routes.IndividualProduct.route+"/${productId}")
+                        }, modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text("Yes")
+                    }
+                }
+            }
+        }
+    }
 }
