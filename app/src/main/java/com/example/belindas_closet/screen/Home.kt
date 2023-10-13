@@ -67,7 +67,7 @@ fun HomePage(navController: NavController) {
                 MainActivity.getPref().edit().clear().commit()
             }
         ) {
-            Text(text = "Clear List")
+            Text(text = "Reset Deleted Products")
         }
 
         ProductList(products = Datasource().loadProducts(), navController = navController)
