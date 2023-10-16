@@ -225,7 +225,7 @@ fun LoginPage(navController: NavHostController) {
 // Validation functions
 fun validateEmail(email: String): Boolean {
     return Patterns.EMAIL_ADDRESS.matcher(email)
-        .matches() && email.isNotEmpty() && email.isNotBlank() && email.length > 5 && email.length < 30 && email.contains(
+        .matches() && email.isNotEmpty() && email.isNotBlank() && email.length > 5 && email.length < 254 && email.contains(
         "@"
     )
 }
