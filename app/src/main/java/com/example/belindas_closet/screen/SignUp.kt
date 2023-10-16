@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -35,6 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -47,7 +50,11 @@ fun SignUpPage( navController: NavHostController) {
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
     var isEmailValid by remember { mutableStateOf(true) }
+    var isPasswordValid by remember { mutableStateOf(true) }
+    var doPasswordsMatch by remember { mutableStateOf(true) }
 
     /* Back arrow that navigates back to login page */
     TopAppBar(
@@ -138,18 +145,63 @@ fun SignUpPage( navController: NavHostController) {
                     singleLine = true,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 30.dp, end = 30.dp, bottom = 20.dp)
+                        .padding(start = 30.dp, end = 30.dp, bottom = 16.dp)
                 )
                 // Email display error
                 if (!isEmailValid) {
                     ErrorDisplay(text = stringResource(id = R.string.signup_email_error))
                 }
 
+                // Password field
+                TextField(
+                    value = password,
+                    onValueChange = {
+                        password = it
+                        isPasswordValid = validatePassword(it)
+                        doPasswordsMatch = validateConfirmPassword(password, confirmPassword)
+                    },
+                    isError = !isPasswordValid,
+                    label = { Text(text = stringResource(id = R.string.signup_password)) },
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 30.dp, end = 30.dp, bottom = 16.dp),
+                )
+
+                // Password display error
+                if (!isPasswordValid) {
+                    ErrorDisplay(text = stringResource(id = R.string.signup_password_error))
+                }
+
+                // Confirm password field
+                TextField(
+                    value = confirmPassword,
+                    onValueChange = {
+                        confirmPassword = it
+                        doPasswordsMatch = validateConfirmPassword(password, it)
+                    },
+                    isError = !doPasswordsMatch,
+                    label = { Text(text = stringResource(id = R.string.signup_confirm_password)) },
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 30.dp, end = 30.dp, bottom = 20.dp),
+                )
+
+                // Confirm password display error
+                if (!doPasswordsMatch) {
+                    ErrorDisplay(text = stringResource(id = R.string.signup_confirm_password_error))
+                }
+
                 // SignUp button
                 Button(
                     onClick = {
                         try {
-                            // TODO: Add sign up functionality and ensure type safety
+                            // TODO: Add sign up functionality
                         } catch (e: Exception) {
                             // TODO: Add error handling
                         }
@@ -172,4 +224,8 @@ fun SignUpPage( navController: NavHostController) {
             }
         }
     }
-    }
+}
+
+fun validateConfirmPassword(password: String, confirmPassword: String): Boolean {
+    return password.isNotEmpty() && password.isNotBlank() && password == confirmPassword
+}
