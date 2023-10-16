@@ -177,6 +177,7 @@ fun LoginPage(navController: NavHostController) {
                     text = AnnotatedString("Forgot password?"),
                     onClick = {
                         // TODO: Add forgot password functionality
+                        navController.navigate(Routes.ForgotPassword.route)
                     },
                     style = TextStyle(
                         fontSize = 14.sp,

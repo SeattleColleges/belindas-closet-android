@@ -25,4 +25,9 @@
     <string name="update_save_confirm_text">Are you sure you want to save this product?</string>
     <string name="update_cancel_confirm_text">Are you sure you want to cancel this edit?</string>
     <string name="update_page_title">Update Product</string>
+
+    <!--    Forgot Password Screen Strings    -->
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password_button">Submit</string>
+
 </resources>

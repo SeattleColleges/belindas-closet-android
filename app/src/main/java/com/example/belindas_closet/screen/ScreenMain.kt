@@ -31,5 +31,8 @@ fun ScreenMain() {
         composable(Routes.AddProduct.route) {
             AddProductPage(navController = navController)
         }
+        composable(Routes.ForgotPassword.route) {
+            ForgotPasswordPage(navController = navController)
+        }
     }
 }
