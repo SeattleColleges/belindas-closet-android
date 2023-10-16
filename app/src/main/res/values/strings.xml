@@ -16,8 +16,12 @@
     <string name="signup_first_name">First Name</string>
     <string name="signup_last_name">Last Name</string>
     <string name="signup_email">Email</string>
+    <string name="signup_password">Password</string>
+    <string name="signup_confirm_password">Confirm Password</string>
     <string name="signup_button_text">Create Account</string>
     <string name="signup_email_error">Invalid email!</string>
+    <string name="signup_password_error">Invalid password!</string>
+    <string name="signup_confirm_password_error">Passwords do not match!</string>
 
 
     <!--    Home Screen Strings    -->
