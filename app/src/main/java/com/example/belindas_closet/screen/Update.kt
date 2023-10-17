@@ -182,9 +182,68 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
-                    painter = painterResource(id = product.image.toInt()),
-                    contentDescription = stringResource(id = R.string.product_image_description),
+            Image(
+                painter = painterResource(id = product.image.toInt()),
+                contentDescription = stringResource(id = R.string.product_image_description),
+                modifier = Modifier
+                    .size(200.dp)
+                    .padding(16.dp),
+            )
+            Text(
+                text = "Name: ${product.name}", style = TextStyle(
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Default,
+                ), modifier = Modifier.wrapContentSize()
+            )
+            Text(text = "Size: ${product.size}")
+            Text(text = "Description: ${product.description}")
+
+            // Display the text fields and buttons
+            if (isEditing) {
+                TextFieldEditable(
+                    initialName = product.name,
+                    initialDescription = product.description,
+                    initialSize = product.size
+                )
+                Row {
+                    Button(onClick = {
+                        isCancel = !isCancel
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Close, contentDescription = "Cancel"
+                        )
+                    }
+                    if (isCancel) {
+                        ConfirmCancelDialog(onConfirm = {
+                            // TODO: Cancel the edit
+                            // Keep the original data
+                            isCancel = false
+                        }, onDismiss = {
+                            isCancel = false
+                        }, navController = navController)
+                    }
+
+                    Spacer(modifier = Modifier.padding(8.dp))
+                    Button(onClick = {
+                        isSave = !isSave
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Check, contentDescription = "Save"
+                        )
+                    }
+                    if (isSave) {
+                        ConfirmSaveDialog(onConfirm = {
+                            // TODO: Save the product to the database
+                            // Update the product with the new data
+                            isSave = false
+                        }, onDismiss = {
+                            isSave = false
+                        })
+                    }
+                }
+            } else {
+                Row(
                     modifier = Modifier
                         .size(200.dp)
                         .padding(16.dp),
@@ -428,7 +487,7 @@ fun ConfirmCancelDialog(
                     Button(
                         onClick = { onConfirm()
                             navController.navigate(Routes.ProductDetail.route)
-                        }, modifier = Modifier.padding(8.dp)
+                                  }, modifier = Modifier.padding(8.dp)
                     ) {
                         Text("Yes")
                     }
