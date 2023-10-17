@@ -62,7 +62,7 @@ fun ForgotPasswordPage(navController: NavHostController) {
         navigationIcon = {
             IconButton(
                 onClick = {
-                    navController.navigate(Routes.Home.route)
+                    navController.navigate(Routes.Login.route)
                 }
             ) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
