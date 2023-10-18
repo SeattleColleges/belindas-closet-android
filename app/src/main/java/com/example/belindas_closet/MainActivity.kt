@@ -1,5 +1,7 @@
 package com.example.belindas_closet
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,6 +16,7 @@ import com.example.belindas_closet.ui.theme.Belindas_closetTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        pref = getSharedPreferences("belindasHidden", Context.MODE_PRIVATE)
         super.onCreate(savedInstanceState)
         setContent {
             Belindas_closetTheme {
@@ -25,6 +28,13 @@ class MainActivity : ComponentActivity() {
                     ScreenMain()
                 }
             }
+        }
+    }
+
+    companion object {
+        private lateinit var pref: SharedPreferences
+        fun getPref(): SharedPreferences{
+            return pref
         }
     }
 }

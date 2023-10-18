@@ -1,5 +1,6 @@
 package com.example.belindas_closet.screen
 
+import android.content.Intent.getIntent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,11 +27,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
+import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
 import com.example.belindas_closet.model.Product
+
 
 @Composable
 fun HomePage(navController: NavController) {
@@ -55,6 +60,15 @@ fun HomePage(navController: NavController) {
             text = stringResource(R.string.home_login)
         )
         Spacer(modifier = Modifier.padding(8.dp))
+
+        // TODO Delete later. Just for testing purpose
+        TextButton(
+            onClick = {
+                MainActivity.getPref().edit().clear().commit()
+            }
+        ) {
+            Text(text = "Reset Deleted Products")
+        }
 
         ProductList(products = Datasource().loadProducts(), navController = navController)
     }
@@ -112,12 +126,13 @@ fun ProductCard(product: Product, navController: NavController) {
 
 @Composable
 fun ProductList(products: List<Product>, navController: NavController) {
+    val hidden = MainActivity.getPref().getStringSet("hidden", setOf(""))
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products) { product ->
+        items(products.filter { !hidden!!.contains(it.name) }) { product ->
             ProductCard(product = product, navController = navController)
             Spacer(modifier = Modifier.padding(16.dp))
         }

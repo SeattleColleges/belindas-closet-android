@@ -2,9 +2,11 @@ package com.example.belindas_closet.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.belindas_closet.Routes
 
 @Preview(showBackground = true)
@@ -33,6 +35,27 @@ fun ScreenMain() {
         }
         composable(Routes.ForgotPassword.route) {
             ForgotPasswordPage(navController = navController)
+            
+        composable(Routes.IndividualProduct.route+"/{productId}",
+            arguments = listOf(navArgument("productId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            IndividualProductPage(navController = navController,
+                productId = backStackEntry.arguments!!.getString("productId")!!,
+            )
+        }
+        composable(Routes.IndividualProduct.route+"/{productId}",
+            arguments = listOf(navArgument("productId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            IndividualProductPage(navController = navController,
+                productId = backStackEntry.arguments!!.getString("productId")!!,
+            )
+        }
+        composable(Routes.IndividualProductUpdate.route+"/{productId}",
+            arguments = listOf(navArgument("productId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            IndividualProductUpdatePage(navController = navController,
+                productId = backStackEntry.arguments!!.getString("productId")!!,
+            )
         }
     }
 }

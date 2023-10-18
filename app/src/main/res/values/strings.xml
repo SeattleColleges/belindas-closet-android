@@ -10,6 +10,16 @@
     <string name="login_email_error">Invalid email!</string>
     <string name="login_password_error">Invalid password!</string>
 
+    <!--    Sign Up Screen Strings    -->
+    <string name="signup_title">Resupply</string>
+    <string name="signup_logo_description">Logo</string>
+    <string name="signup_first_name">First Name</string>
+    <string name="signup_last_name">Last Name</string>
+    <string name="signup_email">Email</string>
+    <string name="signup_button_text">Create Account</string>
+    <string name="signup_email_error">Invalid email!</string>
+
+
     <!--    Home Screen Strings    -->
     <string name="home_logo_description">Logo</string>
     <string name="home_welcome">Belinda\'s Closet</string>
