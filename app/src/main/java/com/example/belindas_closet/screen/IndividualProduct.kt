@@ -1,6 +1,5 @@
 package com.example.belindas_closet.screen
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -10,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
@@ -35,7 +32,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
@@ -43,7 +39,7 @@ import com.example.belindas_closet.data.Datasource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductDetailPage(navController: NavController) {
+fun IndividualProductPage(navController: NavController, productId: String) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -54,7 +50,7 @@ fun ProductDetailPage(navController: NavController) {
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            navController.navigate(Routes.Home.route)
+                            navController.navigate(Routes.ProductDetail.route)
                         }
                     ) {
                         Icon(
@@ -66,10 +62,7 @@ fun ProductDetailPage(navController: NavController) {
                 actions = {
                     IconButton(
                         onClick = {
-                            //TODO: verify that the user is an admin or the owner of the product
-                            //If yes, then navigate to the update page
-                            navController.navigate(Routes.Update.route)
-                            //Else, navigate to the login page
+                            navController.navigate(Routes.IndividualProductUpdate.route+"/${productId}")
                         }
                     ) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
@@ -85,15 +78,15 @@ fun ProductDetailPage(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CustomTextField(text = stringResource(R.string.product_detail_page_title))
-
-            ProductDetailList(products = Datasource().loadProducts(), navController = navController)
+            CustomTextField(text = productId)
+            val product = Datasource().loadProducts().find { it.name == productId }!!
+            IndividualProductCard(product = product, navController = navController)
         }
     }
 }
 
 @Composable
-fun ProductDetailCard(product: Product, navController: NavController) {
+fun IndividualProductCard(product: Product, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -113,45 +106,10 @@ fun ProductDetailCard(product: Product, navController: NavController) {
                 modifier = Modifier
                     .size(200.dp)
                     .padding(16.dp),
-                )
-            Text(
-                text = "Name: ${product.name}",
-                style = TextStyle(
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Default,
-                    color = if (isSystemInDarkTheme()) Color.White else Color.Black
-                ),
-                modifier = Modifier
-                    .wrapContentSize()
             )
             Text(text = "Size: ${product.size}")
             Text(text = "Description: ${product.description}")
-            TextButton(
-                onClick = {
-                    navController.navigate(Routes.IndividualProduct.route+"/${product.name}")
-                }
-            ) {
-                Text(text = "More Info")
-            }
         }
     }
 }
-
-@Composable
-fun ProductDetailList(products: List<Product>, navController: NavController) {
-    val hidden = MainActivity.getPref().getStringSet("hidden", setOf(""))
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        items(products.filter { !hidden!!.contains(it.name) }) { product ->
-            ProductDetailCard(product = product, navController = navController)
-        }
-    }
-}
-
 

@@ -1,5 +1,6 @@
 package com.example.belindas_closet.screen
 
+import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -33,11 +35,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -46,15 +50,11 @@ import com.example.belindas_closet.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpPage( navController: NavHostController) {
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
+fun ForgotPasswordPage(navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
     var isEmailValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
-    var doPasswordsMatch by remember { mutableStateOf(true) }
 
     /* Back arrow that navigates back to login page */
     TopAppBar(
@@ -69,21 +69,21 @@ fun SignUpPage( navController: NavHostController) {
             }
         }
     )
-    Column (
+
+    Column(
         modifier = Modifier
-            .fillMaxSize()
-            .wrapContentSize(Alignment.Center),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             painter = painterResource(id = R.drawable.packaging),
-            contentDescription = stringResource(id = R.string.signup_logo_description),
+            contentDescription = stringResource(id = R.string.login_logo_description),
             modifier = Modifier
                 .size(50.dp)
         )
         Text(
-            text = stringResource(id = R.string.signup_title),
+            text = stringResource(id = R.string.forgot_password),
             style = TextStyle(
                 fontSize = 30.sp,
                 fontFamily = FontFamily.Default,
@@ -107,32 +107,6 @@ fun SignUpPage( navController: NavHostController) {
                         shape = MaterialTheme.shapes.small
                     ),
             ) {
-                // First name field
-                TextField(
-                    value = firstName,
-                    onValueChange = {
-                        firstName = it
-                    },
-                    label = { Text(text = stringResource(id = R.string.signup_first_name)) },
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 30.dp, top = 30.dp, end = 30.dp, bottom = 16.dp)
-                )
-
-                // Last name field
-                TextField(
-                    value = lastName,
-                    onValueChange = {
-                        lastName = it
-                    },
-                    label = { Text(text = stringResource(id = R.string.signup_last_name)) },
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 30.dp, end = 30.dp, bottom = 16.dp)
-                )
-
                 // Email field
                 TextField(
                     value = email,
@@ -141,78 +115,34 @@ fun SignUpPage( navController: NavHostController) {
                         isEmailValid = validateEmail(it)
                     },
                     isError = !isEmailValid,
-                    label = { Text(text = stringResource(id = R.string.signup_email)) },
+                    label = { Text(text = stringResource(id = R.string.login_email)) },
                     singleLine = true,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 30.dp, end = 30.dp, bottom = 16.dp)
+                        .padding(start = 30.dp, top = 30.dp, end = 30.dp, bottom = 16.dp)
                 )
                 // Email display error
                 if (!isEmailValid) {
-                    ErrorDisplay(text = stringResource(id = R.string.signup_email_error))
+                    ErrorDisplay(text = stringResource(id = R.string.login_email_error))
                 }
 
-                // Password field
-                TextField(
-                    value = password,
-                    onValueChange = {
-                        password = it
-                        isPasswordValid = validatePassword(it)
-                        doPasswordsMatch = validateConfirmPassword(password, confirmPassword)
-                    },
-                    isError = !isPasswordValid,
-                    label = { Text(text = stringResource(id = R.string.signup_password)) },
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 30.dp, end = 30.dp, bottom = 16.dp),
-                )
 
-                // Password display error
-                if (!isPasswordValid) {
-                    ErrorDisplay(text = stringResource(id = R.string.signup_password_error))
-                }
-
-                // Confirm password field
-                TextField(
-                    value = confirmPassword,
-                    onValueChange = {
-                        confirmPassword = it
-                        doPasswordsMatch = validateConfirmPassword(password, it)
-                    },
-                    isError = !doPasswordsMatch,
-                    label = { Text(text = stringResource(id = R.string.signup_confirm_password)) },
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 30.dp, end = 30.dp, bottom = 20.dp),
-                )
-
-                // Confirm password display error
-                if (!doPasswordsMatch) {
-                    ErrorDisplay(text = stringResource(id = R.string.signup_confirm_password_error))
-                }
-
-                // SignUp button
+                // Submit button
                 Button(
                     onClick = {
                         try {
-                            // TODO: Add sign up functionality
+                            // TODO: Add login functionality after verifying email and password
                         } catch (e: Exception) {
                             // TODO: Add error handling
                         }
                     },
                     modifier = Modifier
                         .padding(16.dp)
-                        .width(225.dp)
+                        .width(200.dp)
                         .align(Alignment.CenterHorizontally),
                 ) {
                     Text(
-                        text = stringResource(id = R.string.signup_button_text).uppercase(),
+                        text = stringResource(id = R.string.forgot_password_button).uppercase(),
                         style = TextStyle(
                             fontSize = 14.sp,
                             fontFamily = FontFamily.Default,
@@ -220,12 +150,32 @@ fun SignUpPage( navController: NavHostController) {
                         )
                     )
                 }
-
             }
         }
     }
 }
 
-fun validateConfirmPassword(password: String, confirmPassword: String): Boolean {
-    return password.isNotEmpty() && password.isNotBlank() && password == confirmPassword
+// Validation functions
+/*
+fun validateEmail(email: String): Boolean {
+    return Patterns.EMAIL_ADDRESS.matcher(email)
+        .matches() && email.isNotEmpty() && email.isNotBlank() && email.length > 5 && email.length < 30 && email.contains(
+        "@"
+    )
 }
+
+// Error display function
+@Composable
+fun ErrorDisplay(text: String) {
+    Text(
+        text = text,
+        color = Color.Red,
+        style = TextStyle(
+            fontSize = 14.sp,
+            fontFamily = FontFamily.Default,
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 30.dp, end = 30.dp, bottom = 8.dp)
+    )
+}*/

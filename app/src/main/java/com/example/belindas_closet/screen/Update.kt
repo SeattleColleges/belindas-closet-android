@@ -1,5 +1,6 @@
 package com.example.belindas_closet.screen
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -39,6 +40,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,10 +54,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
-import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.data.Datasource
+import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.Sizes
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -167,107 +170,182 @@ fun UpdateProductCard(product: Product, navController: NavController) {
     var isDelete by remember { mutableStateOf(false) }
     var isSave by remember { mutableStateOf(false) }
     var isCancel by remember { mutableStateOf(false) }
+    var isVisible by rememberSaveable { mutableStateOf(true) }
 
-    Card(
-        modifier = Modifier
-            .padding(8.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+    AnimatedVisibility(visible = isVisible ) {
+        Card(
+            modifier = Modifier
+                .padding(8.dp)
         ) {
-            Image(
-                painter = painterResource(id = product.image.toInt()),
-                contentDescription = stringResource(id = R.string.product_image_description),
-                modifier = Modifier
-                    .size(200.dp)
-                    .padding(16.dp),
-            )
-            Text(
-                text = "Name: ${product.name}", style = TextStyle(
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Default,
-                ), modifier = Modifier.wrapContentSize()
-            )
-            Text(text = "Size: ${product.size}")
-            Text(text = "Description: ${product.description}")
-
-            // Display the text fields and buttons
-            if (isEditing) {
-                TextFieldEditable(
-                    initialName = product.name,
-                    initialDescription = product.description,
-                    initialSize = product.size
-                )
-                Row {
-                    Button(onClick = {
-                        isCancel = !isCancel
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Close, contentDescription = "Cancel"
-                        )
-                    }
-                    if (isCancel) {
-                        ConfirmCancelDialog(onConfirm = {
-                            // TODO: Cancel the edit
-                            // Keep the original data
-                            isCancel = false
-                        }, onDismiss = {
-                            isCancel = false
-                        }, navController = navController)
-                    }
-
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    Button(onClick = {
-                        isSave = !isSave
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Check, contentDescription = "Save"
-                        )
-                    }
-                    if (isSave) {
-                        ConfirmSaveDialog(onConfirm = {
-                            // TODO: Save the product to the database
-                            // Update the product with the new data
-                            isSave = false
-                        }, onDismiss = {
-                            isSave = false
-                        })
-                    }
-                }
-            } else {
-                Row(
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(id = product.image.toInt()),
+                    contentDescription = stringResource(id = R.string.product_image_description),
                     modifier = Modifier
-                        .wrapContentSize()
+                        .size(200.dp)
                         .padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Button(onClick = {
-                        isDelete = !isDelete
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Delete, contentDescription = "Delete"
-                        )
+                )
+                Text(
+                    text = "Name: ${product.name}", style = TextStyle(
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.Default,
+                    ), modifier = Modifier.wrapContentSize()
+                )
+                Text(text = "Size: ${product.size}")
+                Text(text = "Description: ${product.description}")
+
+                // Display the text fields and buttons
+                if (isEditing) {
+                    TextFieldEditable(
+                        initialName = product.name,
+                        initialDescription = product.description,
+                        initialSize = product.size
+                    )
+                    Row {
+                        Button(onClick = {
+                            isCancel = !isCancel
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Close, contentDescription = "Cancel"
+                            )
+                        }
+                        if (isCancel) {
+                            ConfirmCancelDialog(onConfirm = {
+                                // TODO: Cancel the edit
+                                // Keep the original data
+                                isCancel = false
+                            }, onDismiss = {
+                                isCancel = false
+                            }, navController = navController)
+                        }
+
+                        Spacer(modifier = Modifier.padding(8.dp))
+                        Button(onClick = {
+                            isSave = !isSave
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Check, contentDescription = "Save"
+                            )
+                        }
+                        if (isSave) {
+                            ConfirmSaveDialog(onConfirm = {
+                                // TODO: Save the product to the database
+                                // Update the product with the new data
+                                isSave = false
+                            }, onDismiss = {
+                                isSave = false
+                            })
+                        }
                     }
-                    if (isDelete) {
-                        ConfirmationDialog(onConfirm = {
-                            // TODO: Delete the product from the database
-                            // Remove the product from the database
-                            isDelete = false
-                        }, onDismiss = {
-                            isDelete = false
-                        })
-                    }
-                    Spacer(modifier = Modifier.padding(16.dp))
-                    Button(onClick = {
-                        isEditing = !isEditing
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Edit, contentDescription = "Edit"
+                } else {
+                    Row(
+                        modifier = Modifier
+                            .size(200.dp)
+                            .padding(16.dp),
+                    ) {
+                        Text(
+                            text = "Name: ${product.name}", style = TextStyle(
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = FontFamily.Default,
+                            ), modifier = Modifier.wrapContentSize()
                         )
+                        Text(text = "Size: ${product.size}")
+                        Text(text = "Description: ${product.description}")
+
+                        // Display the text fields and buttons
+                        if (isEditing) {
+                            TextFieldEditable(
+                                initialName = product.name,
+                                initialDescription = product.description,
+                                initialSize = product.size
+                            )
+                            Row {
+                                Button(onClick = {
+                                    isCancel = !isCancel
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Cancel"
+                                    )
+                                }
+                                if (isCancel) {
+                                    ConfirmCancelDialog(onConfirm = {
+                                        // TODO: Cancel the edit
+                                        // Keep the original data
+                                        isCancel = false
+                                    }, onDismiss = {
+                                        isCancel = false
+                                    }, navController = navController)
+                                }
+
+                                Spacer(modifier = Modifier.padding(8.dp))
+                                Button(onClick = {
+                                    isSave = !isSave
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Check,
+                                        contentDescription = "Save"
+                                    )
+                                }
+                                if (isSave) {
+                                    ConfirmSaveDialog(onConfirm = {
+                                        // TODO: Save the product to the database
+                                        // Update the product with the new data
+                                        isSave = false
+                                    }, onDismiss = {
+                                        isSave = false
+                                    })
+                                }
+                            }
+                        } else {
+                            Row(
+                                modifier = Modifier
+                                    .wrapContentSize()
+                                    .padding(16.dp),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Button(onClick = {
+                                    isDelete = !isDelete
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Delete"
+                                    )
+                                }
+                                if (isDelete) {
+                                    ConfirmationDialog(onConfirm = {
+                                        val hidden = MainActivity.getPref()
+                                            .getStringSet("hidden", mutableSetOf(product.name))
+                                        hidden?.add(product.name)
+                                        val editor = MainActivity.getPref().edit()
+                                        editor.putStringSet("hidden", hidden)
+                                        editor.apply()
+                                        isVisible = false
+                                        // TODO: Delete the product from the database
+                                        // Remove the product from the database
+                                        isDelete = false
+                                    }, onDismiss = {
+                                        isDelete = false
+                                    })
+                                }
+                                Spacer(modifier = Modifier.padding(16.dp))
+                                Button(onClick = {
+                                    isEditing = !isEditing
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = "Edit"
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -277,6 +355,7 @@ fun UpdateProductCard(product: Product, navController: NavController) {
 
 @Composable
 fun UpdateProductList(products: List<Product>, navController: NavController) {
+    val hidden = MainActivity.getPref().getStringSet("hidden", setOf(""))
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -284,7 +363,7 @@ fun UpdateProductList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products) { product ->
+        items(products.filter { !hidden!!.contains(it.name) }) { product ->
             UpdateProductCard(product = product, navController = navController)
         }
     }
