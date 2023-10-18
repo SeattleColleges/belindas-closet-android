@@ -161,7 +161,7 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                         )
                     }
                     if (isSave) {
-                        ConfirmSaveDialog(onConfirm = {
+                        ConfirmSaveDialogIndividual(onConfirm = {
                             // TODO: Save the product to the database
                             // Update the product with the new data
                             isSave = false
@@ -186,7 +186,7 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                         )
                     }
                     if (isDelete) {
-                        ConfirmationDialog(onConfirm = {
+                        ConfirmationDialogIndividual(onConfirm = {
                             val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.name))
                             hidden?.add(product.name)
                             val editor = MainActivity.getPref().edit()
@@ -266,6 +266,92 @@ fun TextFieldEditableIndividual(
     //TODO: Add image field, can be called from the AddProduct.kt
 }
 
+@Composable
+fun ConfirmationDialogIndividual(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    Dialog(onDismissRequest = {
+        onDismiss()
+    }) {
+        Card(
+            modifier = Modifier
+                .padding(16.dp)
+                .border(1.dp, Color.White)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(stringResource(R.string.update_delete_confirm_text))
+                Spacer(modifier = Modifier.padding(8.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        onClick = { onDismiss() }, modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text("No")
+                    }
+                    Button(
+                        onClick = { onConfirm() }, modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text("Yes")
+                    }
+                }
+            }
+        }
+    }
+}
+@Composable
+fun ConfirmSaveDialogIndividual(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    Dialog(onDismissRequest = {
+        onDismiss()
+    }) {
+        Card(
+            modifier = Modifier
+                .padding(16.dp)
+                .border(1.dp, Color.White),
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(stringResource(R.string.update_save_confirm_text))
+                Spacer(modifier = Modifier.padding(8.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        onClick = { onDismiss() }, modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text("No")
+                    }
+                    Button(
+                        onClick = { onConfirm() }, modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text("Yes")
+                    }
+                }
+            }
+        }
+    }
+}
 @Composable
 fun ConfirmCancelDialogIndividual(
     onConfirm: () -> Unit,
