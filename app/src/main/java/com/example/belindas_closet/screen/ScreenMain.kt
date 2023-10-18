@@ -33,6 +33,9 @@ fun ScreenMain() {
         composable(Routes.AddProduct.route) {
             AddProductPage(navController = navController)
         }
+        composable(Routes.ForgotPassword.route) {
+            ForgotPasswordPage(navController = navController)
+            
         composable(Routes.IndividualProduct.route+"/{productId}",
             arguments = listOf(navArgument("productId") { type = NavType.StringType })
         ) { backStackEntry ->
