@@ -84,7 +84,8 @@ fun AddProductPage(navController: NavHostController) {
                 if (productName.isNotEmpty()
                     && productDescription.isNotEmpty()
                     && productSize != Sizes.SELECT_SIZE) {
-                    val newProduct = Product(productName, productDescription, productSize, productImage)
+                    val newProduct = Product(productName, productDescription, productSize, null, productImage)
+                    /* TODO: have db generate unique ID or generate ID here */
                     /* TODO: save new product to db or use a list to hold products (ex: List<Product>) */
                 } else {
                     /* TODO: show error message for empty fields */

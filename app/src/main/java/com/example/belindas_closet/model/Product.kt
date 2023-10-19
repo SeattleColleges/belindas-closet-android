@@ -9,6 +9,7 @@ data class Product(
     var name: String,
     var description: String,
     var size: Sizes,
+    var id: String?,
     val image: String,
     /* TODO: what other product properties should be added? */
 )

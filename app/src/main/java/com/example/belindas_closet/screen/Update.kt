@@ -63,7 +63,7 @@ import com.example.belindas_closet.model.Sizes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpdatePage(navController: NavController) {
+fun UpdatePage(navController: NavController, categoryKey: String) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -73,7 +73,7 @@ fun UpdatePage(navController: NavController) {
                 title = { Text("Product Detail") },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigate(Routes.ProductDetail.route)
+                        navController.navigate(Routes.ProductDetail.route+"/${categoryKey}")
                     }) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back to Product Detail")
                     }
@@ -105,7 +105,7 @@ fun UpdatePage(navController: NavController) {
         ){
             CustomTextField(text = stringResource(R.string.update_page_title))
 
-            UpdateProductList(products = Datasource().loadProducts(), navController = navController)
+            UpdateProductList(products = Datasource().loadProducts().getValue(categoryKey).getProducts(), navController = navController)
         }
     }
 }
@@ -322,8 +322,8 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                                 if (isDelete) {
                                     ConfirmationDialog(onConfirm = {
                                         val hidden = MainActivity.getPref()
-                                            .getStringSet("hidden", mutableSetOf(product.name))
-                                        hidden?.add(product.name)
+                                            .getStringSet("hidden", mutableSetOf(product.id))
+                                        hidden?.add(product.id)
                                         val editor = MainActivity.getPref().edit()
                                         editor.putStringSet("hidden", hidden)
                                         editor.apply()

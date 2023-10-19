@@ -43,7 +43,7 @@ import com.example.belindas_closet.data.Datasource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductDetailPage(navController: NavController) {
+fun ProductDetailPage(navController: NavController, categoryKey: String) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -68,7 +68,7 @@ fun ProductDetailPage(navController: NavController) {
                         onClick = {
                             //TODO: verify that the user is an admin or the owner of the product
                             //If yes, then navigate to the update page
-                            navController.navigate(Routes.Update.route)
+                            navController.navigate(Routes.Update.route+"/${categoryKey}")
                             //Else, navigate to the login page
                         }
                     ) {
@@ -87,13 +87,13 @@ fun ProductDetailPage(navController: NavController) {
         ) {
             CustomTextField(text = stringResource(R.string.product_detail_page_title))
 
-            ProductDetailList(products = Datasource().loadProducts(), navController = navController)
+            ProductDetailList(category = categoryKey, products = Datasource().loadProducts().getValue(categoryKey).getProducts(), navController = navController)
         }
     }
 }
 
 @Composable
-fun ProductDetailCard(product: Product, navController: NavController) {
+fun ProductDetailCard(category: String, product: Product, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -129,7 +129,7 @@ fun ProductDetailCard(product: Product, navController: NavController) {
             Text(text = "Description: ${product.description}")
             TextButton(
                 onClick = {
-                    navController.navigate(Routes.IndividualProduct.route+"/${product.name}")
+                    navController.navigate(Routes.IndividualProduct.route+"/${category}"+"/${product.id}")
                 }
             ) {
                 Text(text = "More Info")
@@ -139,7 +139,7 @@ fun ProductDetailCard(product: Product, navController: NavController) {
 }
 
 @Composable
-fun ProductDetailList(products: List<Product>, navController: NavController) {
+fun ProductDetailList(category: String, products: List<Product>, navController: NavController) {
     val hidden = MainActivity.getPref().getStringSet("hidden", setOf(""))
     LazyColumn(
         modifier = Modifier
@@ -148,8 +148,8 @@ fun ProductDetailList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products.filter { !hidden!!.contains(it.name) }) { product ->
-            ProductDetailCard(product = product, navController = navController)
+        items(products.filter { !hidden!!.contains(it.id) }) { product ->
+            ProductDetailCard(category = category, product = product, navController = navController)
         }
     }
 }

@@ -34,6 +34,7 @@ import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
 import com.example.belindas_closet.model.Product
+import com.example.belindas_closet.model.ProductCategory
 
 
 @Composable
@@ -70,7 +71,7 @@ fun HomePage(navController: NavController) {
             Text(text = "Reset Deleted Products (testing purposes only)")
         }
 
-        ProductList(products = Datasource().loadProducts(), navController = navController)
+        CategoryList(categories = Datasource().loadProducts().toList(), navController = navController)
     }
 }
 
@@ -89,11 +90,11 @@ fun CustomTextField(text: String, fontSize: TextUnit = 20.sp) {
 }
 
 @Composable
-fun ProductCard(product: Product, navController: NavController) {
+fun CategoryCard(category: Pair<String, ProductCategory>, navController: NavController) {
     Card(
         modifier = Modifier
             .clickable {
-                navController.navigate(Routes.ProductDetail.route)
+                navController.navigate(Routes.ProductDetail.route+"/${category.first}")
             },
     ) {
         Column(
@@ -103,7 +104,7 @@ fun ProductCard(product: Product, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = product.image.toInt()),
+                painter = painterResource(id = category.second.image.toInt()),
                 contentDescription = stringResource(id = R.string.product_image_description),
                 modifier = Modifier
                     .size(200.dp)
@@ -111,7 +112,7 @@ fun ProductCard(product: Product, navController: NavController) {
 
                 )
             Text(
-                text = "Name: ${product.name}",
+                text = "Name: ${category.second.name}",
                 style = TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
@@ -125,15 +126,14 @@ fun ProductCard(product: Product, navController: NavController) {
 }
 
 @Composable
-fun ProductList(products: List<Product>, navController: NavController) {
-    val hidden = MainActivity.getPref().getStringSet("hidden", setOf(""))
+fun CategoryList(categories: List<Pair<String, ProductCategory>>, navController: NavController) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products.filter { !hidden!!.contains(it.name) }) { product ->
-            ProductCard(product = product, navController = navController)
+        items(categories) { category ->
+            CategoryCard(category = category, navController = navController)
             Spacer(modifier = Modifier.padding(16.dp))
         }
     }

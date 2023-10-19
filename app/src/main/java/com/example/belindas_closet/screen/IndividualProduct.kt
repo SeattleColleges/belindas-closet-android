@@ -39,7 +39,7 @@ import com.example.belindas_closet.data.Datasource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IndividualProductPage(navController: NavController, productId: String) {
+fun IndividualProductPage(navController: NavController, category: String, productId: String) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -50,7 +50,7 @@ fun IndividualProductPage(navController: NavController, productId: String) {
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            navController.navigate(Routes.ProductDetail.route)
+                            navController.navigate(Routes.ProductDetail.route+"/${category}")
                         }
                     ) {
                         Icon(
@@ -62,7 +62,7 @@ fun IndividualProductPage(navController: NavController, productId: String) {
                 actions = {
                     IconButton(
                         onClick = {
-                            navController.navigate(Routes.IndividualProductUpdate.route+"/${productId}")
+                            navController.navigate(Routes.IndividualProductUpdate.route+"/${category}"+"/${productId}")
                         }
                     ) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
@@ -79,19 +79,19 @@ fun IndividualProductPage(navController: NavController, productId: String) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CustomTextField(text = productId)
-            val product = Datasource().loadProducts().find { it.name == productId }!!
-            IndividualProductCard(product = product, navController = navController)
+            val product = Datasource().loadProducts().getValue(category).getProducts().find { it.id == productId }!!
+            IndividualProductCard(category = category, product = product, navController = navController)
         }
     }
 }
 
 @Composable
-fun IndividualProductCard(product: Product, navController: NavController) {
+fun IndividualProductCard(category: String, product: Product, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                navController.navigate(Routes.ProductDetail.route)
+                navController.navigate(Routes.ProductDetail.route+"/${category}")
             },
     ) {
         Column(

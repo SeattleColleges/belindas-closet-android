@@ -18,11 +18,17 @@ fun ScreenMain() {
         composable(Routes.Home.route) {
             HomePage(navController = navController)
         }
-        composable(Routes.ProductDetail.route) {
-            ProductDetailPage(navController = navController)
+        composable(Routes.ProductDetail.route+"/{category}",
+            arguments = listOf(navArgument("category") { type = NavType.StringType })
+        ) { backStackEntry ->
+                ProductDetailPage(navController = navController,
+                categoryKey = backStackEntry.arguments!!.getString("category")!!)
         }
-        composable(Routes.Update.route) {
-            UpdatePage(navController = navController)
+        composable(Routes.Update.route+"/{category}",
+            arguments = listOf(navArgument("category") { type = NavType.StringType })
+        ) { backStackEntry ->
+                UpdatePage(navController = navController,
+                categoryKey = backStackEntry.arguments!!.getString("category")!!)
         }
         composable(Routes.Login.route) {
             LoginPage(navController = navController)
@@ -36,26 +42,32 @@ fun ScreenMain() {
         composable(Routes.ForgotPassword.route) {
             ForgotPasswordPage(navController = navController)
         }
-        composable(Routes.IndividualProduct.route+"/{productId}",
-            arguments = listOf(navArgument("productId") { type = NavType.StringType })
+//        composable(Routes.IndividualProduct.route+"/{productId}",
+//            arguments = listOf(navArgument("productId") { type = NavType.StringType })
+//        ) { backStackEntry ->
+//            IndividualProductPage(navController = navController,
+//                productId = backStackEntry.arguments!!.getString("productId")!!,
+//            )
+//        }
+
+        composable(Routes.IndividualProduct.route+"/{category}"+"/{productId}",
+            arguments = listOf(
+                navArgument("category") { type = NavType.StringType },
+                navArgument("productId") { type = NavType.StringType })
         ) { backStackEntry ->
             IndividualProductPage(navController = navController,
+                category = backStackEntry.arguments!!.getString("category")!!,
                 productId = backStackEntry.arguments!!.getString("productId")!!,
             )
         }
 
-        composable(Routes.IndividualProduct.route+"/{productId}",
-            arguments = listOf(navArgument("productId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            IndividualProductPage(navController = navController,
-                productId = backStackEntry.arguments!!.getString("productId")!!,
-            )
-        }
-
-        composable(Routes.IndividualProductUpdate.route+"/{productId}",
-            arguments = listOf(navArgument("productId") { type = NavType.StringType })
+        composable(Routes.IndividualProductUpdate.route+"/{category}"+"/{productId}",
+            arguments = listOf(
+                navArgument("category") { type = NavType.StringType },
+                navArgument("productId") { type = NavType.StringType })
         ) { backStackEntry ->
             IndividualProductUpdatePage(navController = navController,
+                category = backStackEntry.arguments!!.getString("category")!!,
                 productId = backStackEntry.arguments!!.getString("productId")!!,
             )
         }

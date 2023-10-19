@@ -1,5 +1,6 @@
 package com.example.belindas_closet.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -56,7 +57,7 @@ import com.example.belindas_closet.model.Sizes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IndividualProductUpdatePage(navController: NavController, productId: String) {
+fun IndividualProductUpdatePage(navController: NavController, category: String, productId: String) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -67,7 +68,7 @@ fun IndividualProductUpdatePage(navController: NavController, productId: String)
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            navController.navigate(Routes.IndividualProduct.route+"/${productId}")
+                            navController.navigate(Routes.IndividualProduct.route+"/${category}"+"/${productId}")
                         }
                     ) {
                         Icon(
@@ -87,14 +88,14 @@ fun IndividualProductUpdatePage(navController: NavController, productId: String)
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CustomTextField(text = productId)
-            val product = Datasource().loadProducts().find { it.name == productId }!!
-            UpdateIndividualProductCard(product = product, navController = navController)
+            val product = Datasource().loadProducts().getValue(category).getProducts().find { it.id == productId }!!
+            UpdateIndividualProductCard(category = category, product = product, navController = navController)
         }
     }
 }
 
 @Composable
-fun UpdateIndividualProductCard(product: Product, navController: NavController) {
+fun UpdateIndividualProductCard(category: String, product: Product, navController: NavController) {
     var isEditing by remember { mutableStateOf(false) }
     var isDelete by remember { mutableStateOf(false) }
     var isSave by remember { mutableStateOf(false) }
@@ -149,9 +150,9 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                         }, onDismiss = {
                             isCancel = false
                         }, navController = navController,
-                            productId = product.name)
+                            productId = product.id,
+                            category = category)
                     }
-
                     Spacer(modifier = Modifier.padding(8.dp))
                     Button(onClick = {
                         isSave = !isSave
@@ -187,12 +188,12 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                     }
                     if (isDelete) {
                         ConfirmationDialogIndividual(onConfirm = {
-                            val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.name))
-                            hidden?.add(product.name)
+                            val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.id))
+                            hidden?.add(product.id)
                             val editor = MainActivity.getPref().edit()
                             editor.putStringSet("hidden", hidden)
                             editor.apply()
-                            navController.navigate(Routes.ProductDetail.route)
+                            navController.navigate(Routes.ProductDetail.route+"/${category}")
                             // TODO: Delete the product from the database
                             // Remove the product from the database
                             isDelete = false
@@ -357,7 +358,8 @@ fun ConfirmCancelDialogIndividual(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
     navController: NavController,
-    productId: String
+    productId: String?,
+    category: String
 ) {
     Dialog(onDismissRequest = {
         onDismiss()
@@ -389,7 +391,7 @@ fun ConfirmCancelDialogIndividual(
                     }
                     Button(
                         onClick = { onConfirm()
-                            navController.navigate(Routes.IndividualProduct.route+"/${productId}")
+                            navController.navigate(Routes.IndividualProduct.route+"/${category}"+"/${productId}")
                         }, modifier = Modifier.padding(8.dp)
                     ) {
                         Text("Yes")
