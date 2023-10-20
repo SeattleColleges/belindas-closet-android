@@ -109,11 +109,13 @@ fun IndividualProductCard(product: Product, navController: NavController) {
             )
             Text(text = "Size: ${product.productSizes}")
             Text(text = "Gender: ${product.productGender}")
-            Text(text = "Description: ${product.productDescription}")
             if (product.productType.type == "Pant") {
                 Text(text = "Waist: ${product.productSizePantsWaist.size}")
                 Text(text = "Inseam: ${product.productSizePantsInseam.size}")
+            } else if (product.productType.type == "Shoes") {
+                Text(text = "Shoes Size: ${product.productSizeShoe.size}")
             }
+            Text(text = "Description: ${product.productDescription}")
         }
     }
 }
