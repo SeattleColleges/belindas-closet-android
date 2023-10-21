@@ -61,6 +61,20 @@ fun HomePage(navController: NavController) {
         )
         Spacer(modifier = Modifier.padding(8.dp))
 
+        // Add Product button (Temporary),
+        // todo: will later be moved and protected for only admin access
+        Button(
+            onClick = {
+                /*TODO add navigation logic to the protected page only allowing Admin access*/
+                navController.navigate(Routes.AddProduct.route)
+            },
+            modifier = Modifier
+                .padding(4.dp)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Text(text = "Add Product")
+        }
+
         // TODO Delete later. Just for testing purpose
         TextButton(
             onClick = {
@@ -71,7 +85,9 @@ fun HomePage(navController: NavController) {
         }
 
         ProductList(products = Datasource().loadProducts(), navController = navController)
+
     }
+
 }
 
 @Composable

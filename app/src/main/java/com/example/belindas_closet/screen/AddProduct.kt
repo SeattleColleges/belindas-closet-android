@@ -1,6 +1,10 @@
 package com.example.belindas_closet.screen
 
 
+import android.graphics.ImageDecoder
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,27 +32,50 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.Sizes
+import androidx.compose.ui.platform.LocalContext
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductPage(navController: NavHostController) {
+
     var productName by remember { mutableStateOf("") }
     var productDescription by remember { mutableStateOf("") }
     var productSize by remember { mutableStateOf(Sizes.SELECT_SIZE) } /* Default size set */
-    val productImage by remember { mutableStateOf("") }
+    var productImage by remember { mutableStateOf("") }
+
+
+    /* // todo: button for inserting an image, need to change productImage type to BitImage everywhere it exists
+    val context = LocalContext.current
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) {
+        uri: Uri? ->
+        uri?.let {
+            imageUri = it
+            val source = ImageDecoder.createSource(context.contentResolver, it)
+            val bitmap = ImageDecoder.decodeBitmap(source)
+            productImage = bitmap.asImageBitmap()
+        }
+    }
+    */
+
 
     /* Back arrow that navigates back to login page */
     TopAppBar(
-        title = { Text("Login") }, /* todo: change destination where arrow navigates to */
+        title = { Text("Home") }, /* todo: change destination where arrow navigates to */
         navigationIcon = {
             IconButton(
                 onClick = {
-                    navController.navigate(Routes.Login.route) /* Navigate back to login page */
+                    navController.navigate(Routes.Home.route) /* Navigate back to home page */
                 }
             ) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
@@ -68,15 +95,16 @@ fun AddProductPage(navController: NavHostController) {
             onProductChange = { newName -> productName = newName }
         )
 
+        ProductSizeField(
+            productSize = productSize,
+            onSizeChange = { newSize -> productSize = newSize }
+        )
+
         ProductDescriptionField(
             productDescription = productDescription,
             onDescriptionChange = { newDescription -> productDescription = newDescription }
         )
 
-        ProductSizeField(
-            productSize = productSize,
-            onSizeChange = { newSize -> productSize = newSize }
-        )
 
         /* TODO: finish up product button and validation logic */
         Button(
