@@ -1,6 +1,7 @@
 package com.example.belindas_closet.screen
 
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
@@ -41,7 +43,7 @@ fun AddProductPage(navController: NavHostController) {
     var productDescription by remember { mutableStateOf("") }
     var productSize by remember { mutableStateOf(Sizes.SELECT_SIZE) } /* Default size set */
     val productImage by remember { mutableStateOf("") }
-
+    var toastMessage by remember { mutableStateOf("") }
     /* Back arrow that navigates back to login page */
     TopAppBar(
         title = { Text("Login") }, /* todo: change destination where arrow navigates to */
@@ -85,21 +87,31 @@ fun AddProductPage(navController: NavHostController) {
                     && productDescription.isNotEmpty()
                     && productSize != Sizes.SELECT_SIZE) {
                     val newProduct = Product(productName, productDescription, productSize, productImage)
-                    /* TODO: save new product to db or use a list to hold products (ex: List<Product>) */
+                    // TODO: Save the new product to the database or use a list to hold products
+                    // Set the toast message for success
+                    toastMessage = "Product added successfully"
                 } else {
                     /* TODO: show error message for empty fields */
+                    // Set the toast message for an error
+                    toastMessage = "Please fill in all fields"
                 }
             },
             modifier = Modifier
                 .padding(16.dp)
                 .width(200.dp)
                 .align(Alignment.CenterHorizontally)
-        )
-        {
+        ) {
             Text(text = "Add Product")
         }
     }
-
+    // Display the toast message
+    if (toastMessage.isNotEmpty()) {
+        Toast.makeText(
+            LocalContext.current,
+            toastMessage,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
 }
 
 @Composable
