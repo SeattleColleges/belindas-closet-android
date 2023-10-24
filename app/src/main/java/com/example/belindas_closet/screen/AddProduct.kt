@@ -39,13 +39,14 @@ import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.Sizes
 import androidx.compose.ui.platform.LocalContext
+import com.example.belindas_closet.model.ProductType
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductPage(navController: NavHostController) {
 
-    var productName by remember { mutableStateOf("") }
+    var selectedProductType by remember { mutableStateOf(ProductType.SHIRTS) }
     var productDescription by remember { mutableStateOf("") }
     var productSize by remember { mutableStateOf(Sizes.SELECT_SIZE) } /* Default size set */
     var productImage by remember { mutableStateOf("") }
@@ -90,9 +91,10 @@ fun AddProductPage(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ProductInfoField(
-            productName = productName,
-            onProductChange = { newName -> productName = newName }
+
+        ProductTypeDropdown(
+            selectedProductType = selectedProductType,
+            onProductTypeChange = { newType -> selectedProductType = newType }
         )
 
         ProductSizeField(
@@ -109,10 +111,8 @@ fun AddProductPage(navController: NavHostController) {
         /* TODO: finish up product button and validation logic */
         Button(
             onClick = {
-                if (productName.isNotEmpty()
-                    && productDescription.isNotEmpty()
-                    && productSize != Sizes.SELECT_SIZE) {
-                    val newProduct = Product(productName, productDescription, productSize, productImage)
+                if (productDescription.isNotEmpty() && productSize != Sizes.SELECT_SIZE) {
+                    val newProduct = Product(selectedProductType, productDescription, productSize, productImage)
                     /* TODO: save new product to db or use a list to hold products (ex: List<Product>) */
                 } else {
                     /* TODO: show error message for empty fields */
@@ -130,6 +130,7 @@ fun AddProductPage(navController: NavHostController) {
 
 }
 
+/*
 @Composable
 fun ProductInfoField(productName: String, onProductChange: (String) -> Unit) {
     TextField(
@@ -142,6 +143,44 @@ fun ProductInfoField(productName: String, onProductChange: (String) -> Unit) {
             .padding(16.dp)
     )
 }
+*/
+
+@Composable
+fun ProductTypeDropdown(selectedProductType: ProductType, onProductTypeChange: (ProductType) -> Unit) {
+    val productTypes = ProductType.values()
+    var currentProductType by remember { mutableStateOf(selectedProductType) }
+    var isDropdownMenuExpanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { isDropdownMenuExpanded = !isDropdownMenuExpanded }
+    ) {
+        Text(
+            text = "Type: ${currentProductType.name}",
+            modifier = Modifier.padding(16.dp)
+        )
+        DropdownMenu(
+            expanded = isDropdownMenuExpanded,
+            onDismissRequest = { isDropdownMenuExpanded = false }
+        ) {
+            productTypes.forEach { productType ->
+                DropdownMenuItem(
+                    text = { Text(productType.name) },
+                    onClick = {
+                        currentProductType = productType
+                        isDropdownMenuExpanded = false
+                        onProductTypeChange(productType)
+                    }
+                )
+
+            }
+
+        }
+
+    }
+}
+
 
 @Composable
 fun ProductDescriptionField(productDescription: String, onDescriptionChange: (String) -> Unit) {
