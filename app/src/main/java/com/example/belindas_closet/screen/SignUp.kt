@@ -6,6 +6,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -55,6 +57,8 @@ fun SignUpPage( navController: NavHostController) {
     var isEmailValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
     var doPasswordsMatch by remember { mutableStateOf(true) }
+    var isPasswordVisible by remember { mutableStateOf(false) }
+    var isConfirmPasswordVisible by remember { mutableStateOf(false) }
 
     /* Back arrow that navigates back to login page */
     TopAppBar(
@@ -152,45 +156,86 @@ fun SignUpPage( navController: NavHostController) {
                     ErrorDisplay(text = stringResource(id = R.string.signup_email_error))
                 }
 
-                // Password field
-                TextField(
-                    value = password,
-                    onValueChange = {
-                        password = it
-                        isPasswordValid = validatePassword(it)
-                        doPasswordsMatch = validateConfirmPassword(password, confirmPassword)
-                    },
-                    isError = !isPasswordValid,
-                    label = { Text(text = stringResource(id = R.string.signup_password)) },
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 30.dp, end = 30.dp, bottom = 16.dp),
-                )
+                // Password field and toggle button
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    // Password field
+                    TextField(
+                        value = password,
+                        onValueChange = {
+                            password = it
+                            isPasswordValid = validatePassword(it)
+                            doPasswordsMatch = validateConfirmPassword(password, confirmPassword)
+                        },
+                        isError = !isPasswordValid,
+                        label = { Text(text = stringResource(id = R.string.signup_password)) },
+                        singleLine = true,
+                        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 30.dp, end = 8.dp, bottom = 16.dp),
+                    )
+
+                    // Toggle button to show/hide password
+                    IconButton(
+                        onClick = {
+                            isPasswordVisible = !isPasswordVisible
+                        }
+                    ) {
+                        Icon(
+                            painter = if (isPasswordVisible) painterResource(R.drawable.baseline_visibility_24) else painterResource(R.drawable.baseline_visibility_off_24),
+                            contentDescription = if (isPasswordVisible) "Hide Password" else "Show Password",
+                            modifier = Modifier
+                                .padding(top = 15.dp),
+                        )
+                    }
+                }
+
 
                 // Password display error
                 if (!isPasswordValid) {
                     ErrorDisplay(text = stringResource(id = R.string.signup_password_error))
                 }
 
-                // Confirm password field
-                TextField(
-                    value = confirmPassword,
-                    onValueChange = {
-                        confirmPassword = it
-                        doPasswordsMatch = validateConfirmPassword(password, it)
-                    },
-                    isError = !doPasswordsMatch,
-                    label = { Text(text = stringResource(id = R.string.signup_confirm_password)) },
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 30.dp, end = 30.dp, bottom = 20.dp),
-                )
+                // Confirm password field and toggle button
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    // Confirm password field
+                    TextField(
+                        value = confirmPassword,
+                        onValueChange = {
+                            confirmPassword = it
+                            doPasswordsMatch = validateConfirmPassword(password, it)
+                        },
+                        isError = !doPasswordsMatch,
+                        label = { Text(text = stringResource(id = R.string.signup_confirm_password)) },
+                        singleLine = true,
+                        visualTransformation = if (isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 30.dp, end = 8.dp, bottom = 16.dp),
+                    )
+
+                    // Toggle button to show/hide confirm password
+                    IconButton(
+                        onClick = {
+                            isConfirmPasswordVisible = !isConfirmPasswordVisible
+                        }
+                    ) {
+                        Icon(
+                            painter = if (isConfirmPasswordVisible) painterResource(R.drawable.baseline_visibility_24) else painterResource(R.drawable.baseline_visibility_off_24),
+                            contentDescription = if (isConfirmPasswordVisible) "Hide Confirm Password" else "Show Confirm Password",
+                            modifier = Modifier
+                                .padding(top = 15.dp),
+                        )
+                    }
+                }
 
                 // Confirm password display error
                 if (!doPasswordsMatch) {
