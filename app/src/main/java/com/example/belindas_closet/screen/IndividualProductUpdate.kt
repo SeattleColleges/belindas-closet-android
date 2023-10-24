@@ -87,7 +87,7 @@ fun IndividualProductUpdatePage(navController: NavController, productId: String)
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CustomTextField(text = productId)
-            val product = Datasource().loadProducts().find { it.name == productId }!!
+            val product = Datasource().loadProducts().find { it.productType.name == productId }!!
             UpdateIndividualProductCard(product = product, navController = navController)
         }
     }
@@ -117,7 +117,7 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                     .padding(16.dp),
             )
             Text(
-                text = "Name: ${product.name}", style = TextStyle(
+                text = "Name: ${product.productType.name}", style = TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.Default,
@@ -129,7 +129,7 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
             // Display the text fields and buttons
             if (isEditing) {
                 TextFieldEditableIndividual(
-                    initialName = product.name,
+                    initialName = product.productType.name,
                     initialDescription = product.description,
                     initialSize = product.size
                 )
@@ -149,7 +149,7 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                         }, onDismiss = {
                             isCancel = false
                         }, navController = navController,
-                            productId = product.name)
+                            productId = product.productType.name)
                     }
 
                     Spacer(modifier = Modifier.padding(8.dp))
@@ -187,8 +187,8 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                     }
                     if (isDelete) {
                         ConfirmationDialogIndividual(onConfirm = {
-                            val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.name))
-                            hidden?.add(product.name)
+                            val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.productType.name))
+                            hidden?.add(product.productType.name)
                             val editor = MainActivity.getPref().edit()
                             editor.putStringSet("hidden", hidden)
                             editor.apply()

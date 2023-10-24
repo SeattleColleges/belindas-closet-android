@@ -115,7 +115,7 @@ fun ProductDetailCard(product: Product, navController: NavController) {
                     .padding(16.dp),
                 )
             Text(
-                text = "Name: ${product.name}",
+                text = "Name: ${product.productType.name}",
                 style = TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
@@ -129,7 +129,7 @@ fun ProductDetailCard(product: Product, navController: NavController) {
             Text(text = "Description: ${product.description}")
             TextButton(
                 onClick = {
-                    navController.navigate(Routes.IndividualProduct.route+"/${product.name}")
+                    navController.navigate(Routes.IndividualProduct.route+"/${product.productType.name}")
                 }
             ) {
                 Text(text = "More Info")
@@ -148,7 +148,7 @@ fun ProductDetailList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products.filter { !hidden!!.contains(it.name) }) { product ->
+        items(products.filter { !hidden!!.contains(it.productType.name) }) { product ->
             ProductDetailCard(product = product, navController = navController)
         }
     }

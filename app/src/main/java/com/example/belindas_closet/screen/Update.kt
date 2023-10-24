@@ -190,7 +190,7 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                         .padding(16.dp),
                 )
                 Text(
-                    text = "Name: ${product.name}", style = TextStyle(
+                    text = "Name: ${product.productType.name}", style = TextStyle(
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.Default,
@@ -202,7 +202,7 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                 // Display the text fields and buttons
                 if (isEditing) {
                     TextFieldEditable(
-                        initialName = product.name,
+                        initialName = product.productType.name,
                         initialDescription = product.description,
                         initialSize = product.size
                     )
@@ -249,7 +249,7 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                             .padding(16.dp),
                     ) {
                         Text(
-                            text = "Name: ${product.name}", style = TextStyle(
+                            text = "Name: ${product.productType.name}", style = TextStyle(
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 fontFamily = FontFamily.Default,
@@ -261,7 +261,7 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                         // Display the text fields and buttons
                         if (isEditing) {
                             TextFieldEditable(
-                                initialName = product.name,
+                                initialName = product.productType.name,
                                 initialDescription = product.description,
                                 initialSize = product.size
                             )
@@ -322,8 +322,8 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                                 if (isDelete) {
                                     ConfirmationDialog(onConfirm = {
                                         val hidden = MainActivity.getPref()
-                                            .getStringSet("hidden", mutableSetOf(product.name))
-                                        hidden?.add(product.name)
+                                            .getStringSet("hidden", mutableSetOf(product.productType.name))
+                                        hidden?.add(product.productType.name)
                                         val editor = MainActivity.getPref().edit()
                                         editor.putStringSet("hidden", hidden)
                                         editor.apply()
@@ -363,7 +363,7 @@ fun UpdateProductList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products.filter { !hidden!!.contains(it.name) }) { product ->
+        items(products.filter { !hidden!!.contains(it.productType.name) }) { product ->
             UpdateProductCard(product = product, navController = navController)
         }
     }

@@ -127,7 +127,7 @@ fun ProductCard(product: Product, navController: NavController) {
 
                 )
             Text(
-                text = "Name: ${product.name}",
+                text = "Name: ${product.productType.name}",
                 style = TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
@@ -140,6 +140,7 @@ fun ProductCard(product: Product, navController: NavController) {
     }
 }
 
+
 @Composable
 fun ProductList(products: List<Product>, navController: NavController) {
     val hidden = MainActivity.getPref().getStringSet("hidden", setOf(""))
@@ -148,7 +149,7 @@ fun ProductList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products.filter { !hidden!!.contains(it.name) }) { product ->
+        items(products.filter { !hidden!!.contains(it.productType.name) }) { product ->
             ProductCard(product = product, navController = navController)
             Spacer(modifier = Modifier.padding(16.dp))
         }
