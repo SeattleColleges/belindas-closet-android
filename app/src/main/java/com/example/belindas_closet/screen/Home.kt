@@ -121,7 +121,7 @@ fun ProductCard(product: Product, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = product.image.toInt()),
+                painter = painterResource(id = product.productImage.toInt()),
                 contentDescription = stringResource(id = R.string.product_image_description),
                 modifier = Modifier
                     .size(200.dp)
@@ -129,7 +129,7 @@ fun ProductCard(product: Product, navController: NavController) {
 
                 )
             Text(
-                text = product.name,
+                text = product.productType.type,
                 style = TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
@@ -150,7 +150,7 @@ fun ProductList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products.filter { !hidden!!.contains(it.name) }) { product ->
+        items(products.filter { !hidden!!.contains(it.productType.name) }) { product ->
             ProductCard(product = product, navController = navController)
             Spacer(modifier = Modifier.padding(16.dp))
         }
