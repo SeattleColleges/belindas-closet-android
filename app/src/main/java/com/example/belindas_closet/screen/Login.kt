@@ -76,6 +76,12 @@ fun LoginPage(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.packaging),
+            contentDescription = stringResource(id = R.string.login_logo_description),
+            modifier = Modifier
+                .size(50.dp)
+        )
         Text(
             text = stringResource(id = R.string.login_title),
             style = TextStyle(
@@ -86,12 +92,6 @@ fun LoginPage(navController: NavHostController) {
             ),
             modifier = Modifier
                 .wrapContentSize()
-        )
-        Image(
-            painter = painterResource(id = R.drawable.packaging),
-            contentDescription = stringResource(id = R.string.login_logo_description),
-            modifier = Modifier
-                .size(50.dp)
         )
         Box(
             modifier = Modifier
