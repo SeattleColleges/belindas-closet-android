@@ -1,6 +1,5 @@
 package com.example.belindas_closet.screen
 
-import android.content.Intent.getIntent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
@@ -55,11 +53,12 @@ fun HomePage(navController: NavController) {
             text = stringResource(R.string.home_welcome),
             fontSize = 30.sp
         )
+        Spacer(modifier = Modifier.padding(8.dp))
         NavigateButtons(
             navController = navController,
             text = stringResource(R.string.home_login)
         )
-        Spacer(modifier = Modifier.padding(8.dp))
+        Spacer(modifier = Modifier.padding(16.dp))
 
         // TODO Delete later. Just for testing purpose
         TextButton(
@@ -111,7 +110,7 @@ fun ProductCard(product: Product, navController: NavController) {
 
                 )
             Text(
-                text = "Name: ${product.name}",
+                text = product.name,
                 style = TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
