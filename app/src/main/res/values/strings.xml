@@ -26,6 +26,7 @@
 
     <!--    Home Screen Strings    -->
     <string name="home_logo_description">Logo</string>
+    <string name="home_nsc_logo_description">NSC Logo</string>
     <string name="home_welcome">Belinda\'s Closet</string>
     <string name="product_image_description">Product</string>
     <string name="home_login">Get Started</string>
