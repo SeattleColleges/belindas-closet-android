@@ -31,7 +31,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
-import com.example.belindas_closet.model.Sizes
+import com.example.belindas_closet.model.ProductGender
+import com.example.belindas_closet.model.ProductSizes
+import com.example.belindas_closet.model.ProductSizePantsInseam
+import com.example.belindas_closet.model.ProductSizePantsWaist
+import com.example.belindas_closet.model.ProductSizeShoes
+import com.example.belindas_closet.model.ProductType
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +44,7 @@ import com.example.belindas_closet.model.Sizes
 fun AddProductPage(navController: NavHostController) {
     var productName by remember { mutableStateOf("") }
     var productDescription by remember { mutableStateOf("") }
-    var productSize by remember { mutableStateOf(Sizes.SELECT_SIZE) } /* Default size set */
+    var productSize by remember { mutableStateOf(ProductSizes.SELECT_SIZE) } /* Default size set */
     val productImage by remember { mutableStateOf("") }
 
     /* Back arrow that navigates back to login page */
@@ -83,8 +88,17 @@ fun AddProductPage(navController: NavHostController) {
             onClick = {
                 if (productName.isNotEmpty()
                     && productDescription.isNotEmpty()
-                    && productSize != Sizes.SELECT_SIZE) {
-                    val newProduct = Product(productName, productDescription, productSize, productImage)
+                    && productSize != ProductSizes.SELECT_SIZE) {
+                    val newProduct = Product(
+                        productType = ProductType.SHOES,
+                        productGender = ProductGender.NON_BINARY,
+                        productSizeShoe = ProductSizeShoes.SELECT_SIZE,
+                        productSizes = productSize,
+                        productSizePantsWaist = ProductSizePantsWaist.S,
+                        productSizePantsInseam = ProductSizePantsInseam.M,
+                        productDescription = productDescription,
+                        productImage = productImage,
+                    )
                     /* TODO: save new product to db or use a list to hold products (ex: List<Product>) */
                 } else {
                     /* TODO: show error message for empty fields */
@@ -129,8 +143,8 @@ fun ProductDescriptionField(productDescription: String, onDescriptionChange: (St
 }
 
 @Composable
-fun ProductSizeField(productSize: Sizes, onSizeChange: (Sizes) -> Unit) {
-    val sizes = Sizes.values() /* using enum values directly */
+fun ProductSizeField(productSize: ProductSizes, onSizeChange: (ProductSizes) -> Unit) {
+    val sizes = ProductSizes.values() /* using enum values directly */
     var selectedSize by remember { mutableStateOf(productSize) }
     var isDropdownMenuExpanded by remember { mutableStateOf(false) }
 
