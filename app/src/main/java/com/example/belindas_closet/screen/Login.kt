@@ -7,8 +7,12 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -44,6 +48,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
@@ -76,11 +81,15 @@ fun LoginPage(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(
+            modifier = Modifier.height(100.dp)
+        )
         Image(
             painter = painterResource(id = R.drawable.packaging),
             contentDescription = stringResource(id = R.string.login_logo_description),
             modifier = Modifier
                 .size(50.dp)
+                .padding(bottom = 10.dp)
         )
         Text(
             text = stringResource(id = R.string.login_title),
@@ -93,105 +102,133 @@ fun LoginPage(navController: NavHostController) {
             modifier = Modifier
                 .wrapContentSize()
         )
-        Box(
+        Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
+                .fillMaxSize(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = MaterialTheme.shapes.small
-                    ),
             ) {
-                // Email field
-                TextField(
-                    value = email,
-                    onValueChange = {
-                        email = it
-                        isEmailValid = validateEmail(it)
-                    },
-                    isError = !isEmailValid,
-                    label = { Text(text = stringResource(id = R.string.login_email)) },
-                    singleLine = true,
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 30.dp, top = 30.dp, end = 30.dp, bottom = 16.dp)
-                )
-                // Email display error
-                if (!isEmailValid) {
-                    ErrorDisplay(text = stringResource(id = R.string.login_email_error))
-                }
-
-                // Password field
-                TextField(
-                    value = password,
-                    onValueChange = {
-                        password = it
-                        isPasswordValid = validatePassword(it)
-                    },
-                    isError = !isPasswordValid,
-                    label = { Text(text = stringResource(id = R.string.login_password)) },
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 30.dp, end = 30.dp, bottom = 20.dp),
-                )
-
-                // Password display error
-                if (!isPasswordValid) {
-                    ErrorDisplay(text = stringResource(id = R.string.login_password_error))
-                }
-
-                // Login button
-                Button(
-                    onClick = {
-                        try {
-                            // TODO: Add login functionality after verifying email and password
-                        } catch (e: Exception) {
-                            // TODO: Add error handling
-                        }
-                    },
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .width(200.dp)
-                        .align(Alignment.CenterHorizontally),
+                        .size(180.dp)
+                        .offset(y = (-80).dp)
+                        .zIndex(1f),
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.login_button_text).uppercase(),
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontFamily = FontFamily.Default,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    )
+                    NSCMascot()
                 }
-
-                // Forgot password
-                ClickableText(
-                    text = AnnotatedString("Forgot password?"),
-                    onClick = {
-                        // TODO: Add forgot password functionality
-                        navController.navigate(Routes.ForgotPassword.route)
-                    },
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        fontFamily = FontFamily.Default,
-                        color = if (isSystemInDarkTheme()) Color.LightGray else Color.Black
-                    ),
+                Box(
                     modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceVariant,
+                                shape = MaterialTheme.shapes.small
+                            ),
+                    ) {
+                        // Email field
+                        TextField(
+                            value = email,
+                            onValueChange = {
+                                email = it
+                                isEmailValid = validateEmail(it)
+                            },
+                            isError = !isEmailValid,
+                            label = { Text(text = stringResource(id = R.string.login_email)) },
+                            singleLine = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    start = 30.dp,
+                                    top = 30.dp,
+                                    end = 30.dp,
+                                    bottom = 16.dp
+                                )
+                        )
+                        // Email display error
+                        if (!isEmailValid) {
+                            ErrorDisplay(text = stringResource(id = R.string.login_email_error))
+                        }
 
+                        // Password field
+                        TextField(
+                            value = password,
+                            onValueChange = {
+                                password = it
+                                isPasswordValid = validatePassword(it)
+                            },
+                            isError = !isPasswordValid,
+                            label = { Text(text = stringResource(id = R.string.login_password)) },
+                            singleLine = true,
+                            visualTransformation = PasswordVisualTransformation(),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 30.dp, end = 30.dp, bottom = 20.dp),
+                        )
+
+                        // Password display error
+                        if (!isPasswordValid) {
+                            ErrorDisplay(text = stringResource(id = R.string.login_password_error))
+                        }
+
+                        // Login button
+                        Button(
+                            onClick = {
+                                try {
+                                    // TODO: Add login functionality after verifying email and password
+                                } catch (e: Exception) {
+                                    // TODO: Add error handling
+                                }
+                            },
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .width(200.dp)
+                                .align(Alignment.CenterHorizontally),
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.login_button_text).uppercase(),
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                    fontFamily = FontFamily.Default,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            )
+                        }
+
+                        // Forgot password
+                        ClickableText(
+                            text = AnnotatedString("Forgot password?"),
+                            onClick = {
+                                // TODO: Add forgot password functionality
+                                navController.navigate(Routes.ForgotPassword.route)
+                            },
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontFamily = FontFamily.Default,
+                                color = if (isSystemInDarkTheme()) Color.LightGray else Color.Black
+                            ),
+                            modifier = Modifier
+                                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                                .align(Alignment.CenterHorizontally)
+                        )
+                    }
+                }
             }
         }
     }
+
+
 
 
     // Create a new account text
@@ -239,3 +276,12 @@ fun ErrorDisplay(text: String) {
             .padding(start = 30.dp, end = 30.dp, bottom = 8.dp)
     )
 }
+
+@Composable
+fun NSCMascot() {
+    Image(
+        painter = painterResource(id = R.drawable.nsc_mascot_blue_cropped),
+        contentDescription = stringResource(id = R.string.login_nsc_mascot)
+    )
+}
+

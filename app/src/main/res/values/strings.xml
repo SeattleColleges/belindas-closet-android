@@ -9,6 +9,7 @@
     <string name="login_logo_description">Logo</string>
     <string name="login_email_error">Invalid email!</string>
     <string name="login_password_error">Invalid password!</string>
+    <string name="login_nsc_mascot">North Seattle College Mascot</string>
 
     <!--    Sign Up Screen Strings    -->
     <string name="signup_title">Resupply</string>
