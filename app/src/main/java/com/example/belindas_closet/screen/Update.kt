@@ -166,7 +166,7 @@ fun TextFieldEditable(
 
 @Composable
 fun UpdateProductCard(product: Product, navController: NavController) {
-    var isEditing by remember { mutableStateOf(false) }
+    var isEditing by remember { mutableStateOf(true) }
     var isDelete by remember { mutableStateOf(false) }
     var isSave by remember { mutableStateOf(false) }
     var isCancel by remember { mutableStateOf(false) }
