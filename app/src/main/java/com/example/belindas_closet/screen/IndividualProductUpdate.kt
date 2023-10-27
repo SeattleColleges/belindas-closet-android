@@ -52,7 +52,7 @@ import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
 import com.example.belindas_closet.model.Product
-import com.example.belindas_closet.model.Sizes
+import com.example.belindas_closet.model.ProductSizes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -110,28 +110,28 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = product.image.toInt()),
+                painter = painterResource(id = product.productImage.toInt()),
                 contentDescription = stringResource(id = R.string.product_image_description),
                 modifier = Modifier
                     .size(200.dp)
                     .padding(16.dp),
             )
             Text(
-                text = "Name: ${product.productType.name}", style = TextStyle(
+                text = "Name: ${product.productType}", style = TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.Default,
                 ), modifier = Modifier.wrapContentSize()
             )
-            Text(text = "Size: ${product.size}")
-            Text(text = "Description: ${product.description}")
+            Text(text = "Size: ${product.productSizes}")
+            Text(text = "Description: ${product.productDescription}")
 
             // Display the text fields and buttons
             if (isEditing) {
                 TextFieldEditableIndividual(
                     initialName = product.productType.name,
-                    initialDescription = product.description,
-                    initialSize = product.size
+                    initialDescription = product.productDescription,
+                    initialSize = product.productSizes
                 )
                 Row {
                     Button(onClick = {
@@ -216,13 +216,13 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
 
 @Composable
 fun TextFieldEditableIndividual(
-    initialName: String, initialDescription: String, initialSize: Sizes
+    initialName: String, initialDescription: String, initialSize: ProductSizes
 ) {
     var updateName by remember { mutableStateOf(initialName) }
     var updateDescription by remember { mutableStateOf(initialDescription) }
     var selectedSize by remember { mutableStateOf(initialSize) }
     var isDropdownMenuExpanded by remember { mutableStateOf(false) }
-    val sizes = Sizes.values()
+    val sizes = ProductSizes.values()
 
     TextField(
         value = updateName,

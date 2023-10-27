@@ -37,8 +37,12 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
-import com.example.belindas_closet.model.Sizes
 import androidx.compose.ui.platform.LocalContext
+import com.example.belindas_closet.model.ProductGender
+import com.example.belindas_closet.model.ProductSizes
+import com.example.belindas_closet.model.ProductSizePantsInseam
+import com.example.belindas_closet.model.ProductSizePantsWaist
+import com.example.belindas_closet.model.ProductSizeShoes
 import com.example.belindas_closet.model.ProductType
 
 
@@ -48,10 +52,9 @@ fun AddProductPage(navController: NavHostController) {
 
     var selectedProductType by remember { mutableStateOf(ProductType.SHIRTS) }
     var productDescription by remember { mutableStateOf("") }
-    var productSize by remember { mutableStateOf(Sizes.SELECT_SIZE) } /* Default size set */
-    var productImage by remember { mutableStateOf("") }
-
-
+    var productSize by remember { mutableStateOf(ProductSizes.SELECT_SIZE) } /* Default size set */
+    val productImage by remember { mutableStateOf("") }
+    
     /* // todo: button for inserting an image, need to change productImage type to BitImage everywhere it exists
     val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -68,7 +71,6 @@ fun AddProductPage(navController: NavHostController) {
         }
     }
     */
-
 
     /* Back arrow that navigates back to login page */
     TopAppBar(
@@ -111,8 +113,19 @@ fun AddProductPage(navController: NavHostController) {
         /* TODO: finish up product button and validation logic */
         Button(
             onClick = {
-                if (productDescription.isNotEmpty() && productSize != Sizes.SELECT_SIZE) {
-                    val newProduct = Product(selectedProductType, productDescription, productSize, productImage)
+                if (productName.isNotEmpty()
+                    && productDescription.isNotEmpty()
+                    && productSize != ProductSizes.SELECT_SIZE) {
+                    val newProduct = Product(
+                        productType = ProductType.SHOES,
+                        productGender = ProductGender.NON_BINARY,
+                        productSizeShoe = ProductSizeShoes.SELECT_SIZE,
+                        productSizes = productSize,
+                        productSizePantsWaist = ProductSizePantsWaist.S,
+                        productSizePantsInseam = ProductSizePantsInseam.M,
+                        productDescription = productDescription,
+                        productImage = productImage,
+                    )
                     /* TODO: save new product to db or use a list to hold products (ex: List<Product>) */
                 } else {
                     /* TODO: show error message for empty fields */
@@ -196,8 +209,8 @@ fun ProductDescriptionField(productDescription: String, onDescriptionChange: (St
 }
 
 @Composable
-fun ProductSizeField(productSize: Sizes, onSizeChange: (Sizes) -> Unit) {
-    val sizes = Sizes.values() /* using enum values directly */
+fun ProductSizeField(productSize: ProductSizes, onSizeChange: (ProductSizes) -> Unit) {
+    val sizes = ProductSizes.values() /* using enum values directly */
     var selectedSize by remember { mutableStateOf(productSize) }
     var isDropdownMenuExpanded by remember { mutableStateOf(false) }
 

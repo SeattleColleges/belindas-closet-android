@@ -101,14 +101,21 @@ fun IndividualProductCard(product: Product, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = product.image.toInt()),
+                painter = painterResource(id = product.productImage.toInt()),
                 contentDescription = stringResource(id = R.string.product_image_description),
                 modifier = Modifier
                     .size(200.dp)
                     .padding(16.dp),
             )
-            Text(text = "Size: ${product.size}")
-            Text(text = "Description: ${product.description}")
+            Text(text = "Size: ${product.productSizes}")
+            Text(text = "Gender: ${product.productGender}")
+            if (product.productType.type == "Pant") {
+                Text(text = "Waist: ${product.productSizePantsWaist.size}")
+                Text(text = "Inseam: ${product.productSizePantsInseam.size}")
+            } else if (product.productType.type == "Shoes") {
+                Text(text = "Shoes Size: ${product.productSizeShoe.size}")
+            }
+            Text(text = "Description: ${product.productDescription}")
         }
     }
 }

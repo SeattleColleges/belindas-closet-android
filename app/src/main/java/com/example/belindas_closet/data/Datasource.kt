@@ -2,17 +2,69 @@ package com.example.belindas_closet.data
 
 import com.example.belindas_closet.R
 import com.example.belindas_closet.model.Product
+import com.example.belindas_closet.model.ProductGender
+import com.example.belindas_closet.model.ProductSizes
+import com.example.belindas_closet.model.ProductSizePantsInseam
+import com.example.belindas_closet.model.ProductSizePantsWaist
+import com.example.belindas_closet.model.ProductSizeShoes
 import com.example.belindas_closet.model.ProductType
-import com.example.belindas_closet.model.Sizes
 
 class Datasource {
-    fun loadProducts(): List<Product> {
-        // TODO: Replace with API call to get products from backend
-        return listOf(
-            Product(ProductType.DRESSES,"Dresses", Sizes.S, R.drawable.product1.toString()),
-            Product(ProductType.SHIRTS, "Shirts", Sizes.M, R.drawable.product2.toString()),
-            Product(ProductType.PANTS, "Pants", Sizes.L, R.drawable.product3.toString()),
-            Product(ProductType.SHOES, "Shoes", Sizes.XL, R.drawable.product4.toString()),
+    private val productList = mutableListOf<Product>()
+
+    init {
+        productList.add(
+            Product(
+                ProductType.DRESS,
+                ProductGender.FEMALE,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.XS,
+                ProductSizePantsWaist.XS,
+                ProductSizePantsInseam.XS,
+                "This is a beautiful dress",
+                R.drawable.product1.toString()
+            )
         )
+        productList.add(
+            Product(
+                ProductType.SHOES,
+                ProductGender.MALE,
+                ProductSizeShoes.M,
+                ProductSizes.M,
+                ProductSizePantsWaist.SELECT_SIZE,
+                ProductSizePantsInseam.SELECT_SIZE,
+                "This is a pair of shoes",
+                R.drawable.product4.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.PANT,
+                ProductGender.MALE,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a pair of pants",
+                R.drawable.product3.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.SHORT_SLEEVE_SHIRT,
+                ProductGender.MALE,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a short sleeve shirt",
+                R.drawable.product2.toString()
+            )
+        )
+    }
+
+
+    fun loadProducts(): List<Product> {
+        return productList
     }
 }

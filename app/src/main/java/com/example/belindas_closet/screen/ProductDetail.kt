@@ -108,14 +108,14 @@ fun ProductDetailCard(product: Product, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = product.image.toInt()),
+                painter = painterResource(id = product.productImage.toInt()),
                 contentDescription = stringResource(id = R.string.product_image_description),
                 modifier = Modifier
                     .size(200.dp)
                     .padding(16.dp),
                 )
             Text(
-                text = "Name: ${product.productType.name}",
+                text = "Name: ${product.productType.type}",
                 style = TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
@@ -125,11 +125,15 @@ fun ProductDetailCard(product: Product, navController: NavController) {
                 modifier = Modifier
                     .wrapContentSize()
             )
-            Text(text = "Size: ${product.size}")
-            Text(text = "Description: ${product.description}")
+            if (product.productType.type != "Shoes") {
+                Text(text = "Size: ${product.productSizes}")
+            } else {
+                Text(text = "Size: ${product.productSizeShoe.size}")
+            }
+            Text(text = "Description: ${product.productDescription}")
             TextButton(
                 onClick = {
-                    navController.navigate(Routes.IndividualProduct.route+"/${product.productType.name}")
+                    navController.navigate(Routes.IndividualProduct.route+"/${product.productType}")
                 }
             ) {
                 Text(text = "More Info")

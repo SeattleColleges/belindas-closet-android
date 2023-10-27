@@ -119,7 +119,7 @@ fun ProductCard(product: Product, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = product.image.toInt()),
+                painter = painterResource(id = product.productImage.toInt()),
                 contentDescription = stringResource(id = R.string.product_image_description),
                 modifier = Modifier
                     .size(200.dp)
@@ -127,7 +127,7 @@ fun ProductCard(product: Product, navController: NavController) {
 
                 )
             Text(
-                text = "Name: ${product.productType.name}",
+                text = product.productType.type,
                 style = TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
