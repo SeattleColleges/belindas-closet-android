@@ -7,8 +7,12 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -44,6 +48,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
@@ -71,37 +76,54 @@ fun LoginPage(navController: NavHostController) {
     )
 
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Top,
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.packaging),
-            contentDescription = stringResource(id = R.string.login_logo_description),
-            modifier = Modifier
-                .size(50.dp)
-        )
-        Text(
-            text = stringResource(id = R.string.login_title),
-            style = TextStyle(
-                fontSize = 30.sp,
-                fontFamily = FontFamily.Default,
-                fontWeight = FontWeight.Light,
-                color = if (isSystemInDarkTheme()) Color.White else Color.Black
-            ),
-            modifier = Modifier
-                .wrapContentSize()
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Spacer(modifier = Modifier.height(75.dp))
+            Image(
+                painter = painterResource(id = R.drawable.packaging),
+                contentDescription = stringResource(id = R.string.login_logo_description),
+                modifier = Modifier
+                    .size(50.dp)
+                    .padding(bottom = 10.dp)
+            )
+            Text(
+                text = stringResource(id = R.string.login_title),
+                style = TextStyle(
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Light,
+                    color = if (isSystemInDarkTheme()) Color.White else Color.Black
+                ),
+                modifier = Modifier.wrapContentSize()
+            )
+            Spacer(modifier = Modifier.height(25.dp))
+        }
+
+        // Mascot image
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .size(100.dp)
+                .offset(y = 5.dp)
+                .zIndex(1f)
+                .padding(start = 25.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            NSCMascot()
+        }
+
+        // Login box
+        Box(
+            modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp)
                     .background(
                         color = MaterialTheme.colorScheme.surfaceVariant,
                         shape = MaterialTheme.shapes.small
@@ -119,7 +141,12 @@ fun LoginPage(navController: NavHostController) {
                     singleLine = true,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 30.dp, top = 30.dp, end = 30.dp, bottom = 16.dp)
+                        .padding(
+                            start = 30.dp,
+                            top = 30.dp,
+                            end = 30.dp,
+                            bottom = 16.dp
+                        )
                 )
                 // Email display error
                 if (!isEmailValid) {
@@ -166,7 +193,6 @@ fun LoginPage(navController: NavHostController) {
                         text = stringResource(id = R.string.login_button_text).uppercase(),
                         style = TextStyle(
                             fontSize = 14.sp,
-                            fontFamily = FontFamily.Default,
                             fontWeight = FontWeight.Bold,
                         )
                     )
@@ -181,34 +207,34 @@ fun LoginPage(navController: NavHostController) {
                     },
                     style = TextStyle(
                         fontSize = 14.sp,
-                        fontFamily = FontFamily.Default,
                         color = if (isSystemInDarkTheme()) Color.LightGray else Color.Black
                     ),
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                         .align(Alignment.CenterHorizontally)
                 )
-
             }
         }
-    }
 
-
-    // Create a new account text
-    Box(modifier = Modifier.fillMaxSize()) {
-        ClickableText(
-            text = AnnotatedString(text = stringResource(id = R.string.login_create_account)),
+        // Create a new account text
+        Box(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(20.dp),
-            onClick = { navController.navigate(Routes.SignUp.route) },
-            style = TextStyle(
-                fontSize = 14.sp,
-                fontFamily = FontFamily.Default,
-                textDecoration = TextDecoration.Underline,
-                color = if (isSystemInDarkTheme()) Color.LightGray else Color.Black
+                .fillMaxWidth()
+                .padding(20.dp)
+                .fillMaxHeight()
+                .wrapContentSize(Alignment.BottomCenter),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            ClickableText(
+                text = AnnotatedString(text = stringResource(id = R.string.login_create_account)),
+                onClick = { navController.navigate(Routes.SignUp.route) },
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    textDecoration = TextDecoration.Underline,
+                    color = if (isSystemInDarkTheme()) Color.LightGray else Color.Black
+                )
             )
-        )
+        }
     }
 }
 
@@ -239,3 +265,12 @@ fun ErrorDisplay(text: String) {
             .padding(start = 30.dp, end = 30.dp, bottom = 8.dp)
     )
 }
+
+@Composable
+fun NSCMascot() {
+    Image(
+        painter = painterResource(id = R.drawable.nsc_mascot_blue_cropped),
+        contentDescription = stringResource(id = R.string.login_nsc_mascot)
+    )
+}
+
