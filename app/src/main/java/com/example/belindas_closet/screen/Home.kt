@@ -1,10 +1,10 @@
 package com.example.belindas_closet.screen
 
-import android.content.Intent.getIntent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -27,7 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
@@ -38,41 +37,60 @@ import com.example.belindas_closet.model.Product
 
 @Composable
 fun HomePage(navController: NavController) {
-    Column(
+    Row(
+        modifier = Modifier
+            .size(125.dp)
+            .padding(top = 10.dp, start = 10.dp),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        NSCLogo()
+    }
+    Row(
         modifier = Modifier
             .fillMaxSize(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.packaging),
-            contentDescription = stringResource(id = R.string.home_logo_description),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        Column(
             modifier = Modifier
-                .size(100.dp)
-                .padding(16.dp)
-        )
-        CustomTextField(
-            text = stringResource(R.string.home_welcome),
-            fontSize = 30.sp
-        )
-        NavigateButtons(
-            navController = navController,
-            text = stringResource(R.string.home_login)
-        )
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        // TODO Delete later. Just for testing purpose
-        TextButton(
-            onClick = {
-                MainActivity.getPref().edit().clear().commit()
-            }
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Reset Deleted Products (testing purposes only)")
-        }
+            Spacer(modifier = Modifier.padding(50.dp))
+            Image(
+                painter = painterResource(id = R.drawable.packaging),
+                contentDescription = stringResource(id = R.string.home_logo_description),
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(8.dp, bottom = 16.dp)
+            )
+            CustomTextField(
+                text = stringResource(R.string.home_welcome),
+                fontSize = 30.sp
+            )
+            Spacer(modifier = Modifier.padding(8.dp))
+            NavigateButtons(
+                navController = navController,
+                text = stringResource(R.string.home_login)
+            )
+            Spacer(modifier = Modifier.padding(16.dp))
 
-        ProductList(products = Datasource().loadProducts(), navController = navController)
+            // TODO Delete later. Just for testing purpose
+            TextButton(
+                onClick = {
+                    MainActivity.getPref().edit().clear().commit()
+                }
+            ) {
+                Text(text = "Reset Deleted Products (testing purposes only)")
+            }
+
+            ProductList(products = Datasource().loadProducts(), navController = navController)
+        }
     }
 }
+
 
 @Composable
 fun CustomTextField(text: String, fontSize: TextUnit = 20.sp) {
@@ -155,4 +173,12 @@ fun NavigateButtons(navController: NavController, text: String) {
             )
         )
     }
+}
+
+@Composable
+fun NSCLogo() {
+    Image(
+        painter = painterResource(id = R.drawable.nsc_v_logo),
+        contentDescription = stringResource(id = R.string.home_nsc_logo_description)
+    ) 
 }
