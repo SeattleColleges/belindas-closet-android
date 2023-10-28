@@ -1,7 +1,8 @@
-package com.example.belindas_closet.data.network
+package com.example.belindas_closet.data.network.product
 
 
-import com.example.belindas_closet.data.network.dto.ProductResponse
+import com.example.belindas_closet.data.network.HttpRoutes
+import com.example.belindas_closet.data.network.dto.product_dto.ProductResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException

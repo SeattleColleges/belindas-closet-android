@@ -1,6 +1,7 @@
 package com.example.belindas_closet.screen
 
 import android.util.Patterns
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -29,10 +30,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -45,8 +48,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
+import com.example.belindas_closet.data.network.auth.LoginService
+import com.example.belindas_closet.data.network.dto.auth_dto.LoginRequest
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,6 +62,8 @@ fun LoginPage(navController: NavHostController) {
     var password by remember { mutableStateOf("") }
     var isEmailValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
+    val coroutineScope = rememberCoroutineScope()
+    val current = LocalContext.current
 
     /* Back arrow that navigates back to login page */
     TopAppBar(
@@ -151,10 +160,30 @@ fun LoginPage(navController: NavHostController) {
                 // Login button
                 Button(
                     onClick = {
-                        try {
-                            // TODO: Add login functionality after verifying email and password
-                        } catch (e: Exception) {
-                            // TODO: Add error handling
+                        if (isEmailValid && isPasswordValid) {
+                            coroutineScope.launch {
+                                try {
+                                    val loginRequest = LoginRequest(email, password)
+                                    val loginResponse = LoginService.create().login(loginRequest)
+                                    if (loginResponse != null) {
+                                        MainActivity.getPref().edit().putString("token", loginResponse.token).apply()
+                                        navController.navigate(Routes.AddProduct.route)
+                                    } else {
+                                        Toast.makeText(
+                                            current,
+                                            "Invalid email or password",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                } catch (e: Exception) {
+                                    // TODO: Add error handling
+                                    Toast.makeText(
+                                        current,
+                                        "Invalid email or password",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
                         }
                     },
                     modifier = Modifier

@@ -1,6 +1,7 @@
-package com.example.belindas_closet.data.network.product
+package com.example.belindas_closet.data.network.auth
 
-import com.example.belindas_closet.data.network.dto.product_dto.ProductResponse
+import com.example.belindas_closet.data.network.dto.auth_dto.LoginRequest
+import com.example.belindas_closet.data.network.dto.auth_dto.LoginResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -11,15 +12,13 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-interface ProductService {
+interface LoginService {
 
-    suspend fun getProducts(): List<ProductResponse>
-
-    suspend fun getProductById(id: Int): ProductResponse
+    suspend fun login(loginRequest: LoginRequest) : LoginResponse?
 
     companion object {
-        fun create() : ProductService {
-            return ProductServiceImpl(
+        fun create() : LoginService {
+            return LoginServiceImpl(
                 client = HttpClient(Android) {
                     install(ContentNegotiation) {
                         json(Json {
@@ -36,5 +35,4 @@ interface ProductService {
             )
         }
     }
-
 }

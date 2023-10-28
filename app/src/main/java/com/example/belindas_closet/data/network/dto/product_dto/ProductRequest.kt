@@ -1,4 +1,4 @@
-package com.example.belindas_closet.data.network.dto
+package com.example.belindas_closet.data.network.dto.product_dto
 
 import kotlinx.serialization.Serializable
 

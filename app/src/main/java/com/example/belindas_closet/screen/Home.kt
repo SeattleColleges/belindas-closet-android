@@ -1,6 +1,5 @@
 package com.example.belindas_closet.screen
 
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,8 +32,8 @@ import androidx.navigation.NavController
 import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
-import com.example.belindas_closet.data.network.ProductService
-import com.example.belindas_closet.data.network.dto.ProductResponse
+import com.example.belindas_closet.data.network.dto.product_dto.ProductResponse
+import com.example.belindas_closet.data.network.product.ProductService
 import com.example.belindas_closet.model.Product
 
 
