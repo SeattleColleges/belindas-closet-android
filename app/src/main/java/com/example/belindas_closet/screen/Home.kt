@@ -1,12 +1,13 @@
 package com.example.belindas_closet.screen
 
-import android.content.Intent.getIntent
+import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -17,6 +18,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,17 +29,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
-import com.example.belindas_closet.data.Datasource
+import com.example.belindas_closet.data.network.ProductService
+import com.example.belindas_closet.data.network.dto.ProductResponse
 import com.example.belindas_closet.model.Product
 
 
 @Composable
 fun HomePage(navController: NavController) {
+    val service = ProductService.create()
+    val products = produceState(initialValue = emptyList<ProductResponse>()) {
+        value = service.getProducts()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -70,8 +77,37 @@ fun HomePage(navController: NavController) {
             Text(text = "Reset Deleted Products (testing purposes only)")
         }
 
-        ProductList(products = Datasource().loadProducts(), navController = navController)
+        // display products from the API
+        LazyColumn {
+            items(products.value) { product ->
+                TestDisplayProductCard(productResponse = product)
+                Spacer(modifier = Modifier.padding(16.dp))
+            }
+        }
     }
+}
+
+@Composable
+fun TestDisplayProductCard (productResponse: ProductResponse) {
+    Column (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .wrapContentSize(
+                Alignment.Center
+            ),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        for (product in productResponse.products) {
+            Text(text = product.productType.toString())
+            Text(text = product.productImage)
+            Text(text = product.productDescriptionOptional)
+
+            Spacer(modifier = Modifier.padding(16.dp))
+        }
+    }
+
 }
 
 @Composable
@@ -103,7 +139,7 @@ fun ProductCard(product: Product, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = product.productImage.toInt()),
+                painter = painterResource(id = product.productImage!!.toInt()),
                 contentDescription = stringResource(id = R.string.product_image_description),
                 modifier = Modifier
                     .size(200.dp)
@@ -111,7 +147,7 @@ fun ProductCard(product: Product, navController: NavController) {
 
                 )
             Text(
-                text = product.productType.type,
+                text = product.productType!!.toString(),
                 style = TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
@@ -132,7 +168,7 @@ fun ProductList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products.filter { !hidden!!.contains(it.productType.name) }) { product ->
+        items(products.filter { !hidden!!.contains(it.productType!!.toString()) }) { product ->
             ProductCard(product = product, navController = navController)
             Spacer(modifier = Modifier.padding(16.dp))
         }
