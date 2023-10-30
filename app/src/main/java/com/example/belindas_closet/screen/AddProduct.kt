@@ -50,7 +50,9 @@ import com.example.belindas_closet.model.ProductType
 @Composable
 fun AddProductPage(navController: NavHostController) {
 
-    var selectedProductType by remember { mutableStateOf(ProductType.SHIRTS) }
+    //var selectedProductType by remember { mutableStateOf(ProductType.SHIRTS) }
+
+    var productName by remember { mutableStateOf("") }
     var productDescription by remember { mutableStateOf("") }
     var productSize by remember { mutableStateOf(ProductSizes.SELECT_SIZE) } /* Default size set */
     val productImage by remember { mutableStateOf("") }
@@ -94,9 +96,16 @@ fun AddProductPage(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+        /*Be
         ProductTypeDropdown(
             selectedProductType = selectedProductType,
             onProductTypeChange = { newType -> selectedProductType = newType }
+        )
+        */
+
+        ProductInfoField(
+            productName = productName,
+            onProductChange = { newName -> productName = newName }
         )
 
         ProductSizeField(
@@ -143,7 +152,7 @@ fun AddProductPage(navController: NavHostController) {
 
 }
 
-/*
+
 @Composable
 fun ProductInfoField(productName: String, onProductChange: (String) -> Unit) {
     TextField(
@@ -156,8 +165,9 @@ fun ProductInfoField(productName: String, onProductChange: (String) -> Unit) {
             .padding(16.dp)
     )
 }
-*/
 
+
+/*
 @Composable
 fun ProductTypeDropdown(selectedProductType: ProductType, onProductTypeChange: (ProductType) -> Unit) {
     val productTypes = ProductType.values()
@@ -193,6 +203,7 @@ fun ProductTypeDropdown(selectedProductType: ProductType, onProductTypeChange: (
 
     }
 }
+*/
 
 
 @Composable
