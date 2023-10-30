@@ -50,8 +50,7 @@ import com.example.belindas_closet.model.ProductType
 @Composable
 fun AddProductPage(navController: NavHostController) {
 
-    //var selectedProductType by remember { mutableStateOf(ProductType.SHIRTS) }
-
+    var selectedProductType by remember { mutableStateOf(ProductType.SHOES) }
     var productName by remember { mutableStateOf("") }
     var productDescription by remember { mutableStateOf("") }
     var productSize by remember { mutableStateOf(ProductSizes.SELECT_SIZE) } /* Default size set */
@@ -96,16 +95,14 @@ fun AddProductPage(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        /*Be
-        ProductTypeDropdown(
-            selectedProductType = selectedProductType,
-            onProductTypeChange = { newType -> selectedProductType = newType }
-        )
-        */
-
         ProductInfoField(
             productName = productName,
             onProductChange = { newName -> productName = newName }
+        )
+
+        ProductTypeDropdown(
+            selectedProductType = selectedProductType,
+            onProductTypeChange = { newType -> selectedProductType = newType }
         )
 
         ProductSizeField(
@@ -167,7 +164,7 @@ fun ProductInfoField(productName: String, onProductChange: (String) -> Unit) {
 }
 
 
-/*
+
 @Composable
 fun ProductTypeDropdown(selectedProductType: ProductType, onProductTypeChange: (ProductType) -> Unit) {
     val productTypes = ProductType.values()
@@ -180,7 +177,7 @@ fun ProductTypeDropdown(selectedProductType: ProductType, onProductTypeChange: (
             .clickable { isDropdownMenuExpanded = !isDropdownMenuExpanded }
     ) {
         Text(
-            text = "Type: ${currentProductType.name}",
+            text = "Type: ${currentProductType.type}",
             modifier = Modifier.padding(16.dp)
         )
         DropdownMenu(
@@ -189,7 +186,7 @@ fun ProductTypeDropdown(selectedProductType: ProductType, onProductTypeChange: (
         ) {
             productTypes.forEach { productType ->
                 DropdownMenuItem(
-                    text = { Text(productType.name) },
+                    text = { Text(productType.type) },
                     onClick = {
                         currentProductType = productType
                         isDropdownMenuExpanded = false
@@ -203,7 +200,6 @@ fun ProductTypeDropdown(selectedProductType: ProductType, onProductTypeChange: (
 
     }
 }
-*/
 
 
 @Composable
