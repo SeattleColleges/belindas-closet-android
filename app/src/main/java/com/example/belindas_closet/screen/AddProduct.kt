@@ -1,6 +1,7 @@
 package com.example.belindas_closet.screen
 
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
@@ -46,6 +48,7 @@ fun AddProductPage(navController: NavHostController) {
     var productDescription by remember { mutableStateOf("") }
     var productSize by remember { mutableStateOf(ProductSizes.SELECT_SIZE) } /* Default size set */
     val productImage by remember { mutableStateOf("") }
+    var toastMessage by remember { mutableStateOf("") }
 
     /* Back arrow that navigates back to login page */
     TopAppBar(
@@ -86,9 +89,7 @@ fun AddProductPage(navController: NavHostController) {
         /* TODO: finish up product button and validation logic */
         Button(
             onClick = {
-                if (productName.isNotEmpty()
-                    && productDescription.isNotEmpty()
-                    && productSize != ProductSizes.SELECT_SIZE) {
+                if (productName.isNotEmpty() && productSize != ProductSizes.SELECT_SIZE) {
                     val newProduct = Product(
                         productType = ProductType.SHOES,
                         productGender = ProductGender.NON_BINARY,
@@ -99,21 +100,33 @@ fun AddProductPage(navController: NavHostController) {
                         productDescription = productDescription,
                         productImage = productImage,
                     )
-                    /* TODO: save new product to db or use a list to hold products (ex: List<Product>) */
+                    /* TODO: Save the new product to the database or use a list to hold products */
+                    // Set toast message to show success
+                    toastMessage = "Product added successfully"
                 } else {
                     /* TODO: show error message for empty fields */
+                    // Set the toast message for an error
+                    toastMessage = "Please fill in all fields"
                 }
             },
             modifier = Modifier
                 .padding(16.dp)
                 .width(200.dp)
                 .align(Alignment.CenterHorizontally)
-        )
-        {
+        ) {
             Text(text = "Add Product")
         }
     }
-
+    // Display the toast message and reset it
+    if (toastMessage.isNotEmpty()) {
+        Toast.makeText(
+            LocalContext.current,
+            toastMessage,
+            Toast.LENGTH_SHORT
+        ).show()
+        // Reset toast message
+        toastMessage = ""
+    }
 }
 
 @Composable
