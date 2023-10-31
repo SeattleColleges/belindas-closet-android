@@ -33,6 +33,7 @@ import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
 import com.example.belindas_closet.model.Product
+import com.example.belindas_closet.model.ProductType
 
 
 @Composable
@@ -91,15 +92,15 @@ fun HomePage(navController: NavController) {
             Text(text = "Add Product")
         }
             // TODO Delete later. Just for testing purpose
-            TextButton(
-                onClick = {
-                    MainActivity.getPref().edit().clear().commit()
-                }
-            ) {
-                Text(text = "Reset Deleted Products (testing purposes only)")
-            }
+//            TextButton(
+//                onClick = {
+//                    MainActivity.getPref().edit().clear().commit()
+//                }
+//            ) {
+//                Text(text = "Reset Deleted Products (testing purposes only)")
+//            }
 
-            ProductList(products = Datasource().loadProducts(), navController = navController)
+            ProductTypeList(products = Datasource().loadProducts(), navController = navController)
         }
     }
 
@@ -121,11 +122,13 @@ fun CustomTextField(text: String, fontSize: TextUnit = 20.sp) {
 }
 
 @Composable
-fun ProductCard(product: Product, navController: NavController) {
+fun TypeCard(productType: ProductType, navController: NavController) {
     Card(
         modifier = Modifier
             .clickable {
-                navController.navigate(Routes.ProductDetail.route)
+                MainActivity.setProductType(productType.type)
+                navController.navigate(
+                    Routes.ProductDetail.route)
             },
     ) {
         Column(
@@ -135,15 +138,15 @@ fun ProductCard(product: Product, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = product.productImage.toInt()),
+                painter = painterResource(id = R.drawable.product1),
+//                TODO: use real product type images
                 contentDescription = stringResource(id = R.string.product_image_description),
                 modifier = Modifier
                     .size(200.dp)
                     .padding(16.dp),
-
                 )
             Text(
-                text = product.productType.type,
+                text = productType.type,
                 style = TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
@@ -158,15 +161,15 @@ fun ProductCard(product: Product, navController: NavController) {
 
 
 @Composable
-fun ProductList(products: List<Product>, navController: NavController) {
-    val hidden = MainActivity.getPref().getStringSet("hidden", setOf(""))
+fun ProductTypeList(products: List<Product>, navController: NavController) {
+    val typeList = ProductType.values().sortedWith(compareBy { it.type });
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products.filter { !hidden!!.contains(it.productType.name) }) { product ->
-            ProductCard(product = product, navController = navController)
+        items(typeList){productType ->
+            TypeCard(productType = productType, navController = navController)
             Spacer(modifier = Modifier.padding(16.dp))
         }
     }

@@ -27,6 +27,18 @@ class Datasource {
         )
         productList.add(
             Product(
+                ProductType.DRESS,
+                ProductGender.FEMALE,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.XS,
+                ProductSizePantsWaist.XS,
+                ProductSizePantsInseam.XS,
+                "This is ALSO a beautiful dress",
+                R.drawable.product1.toString()
+            )
+        )
+        productList.add(
+            Product(
                 ProductType.SHOES,
                 ProductGender.MALE,
                 ProductSizeShoes.M,

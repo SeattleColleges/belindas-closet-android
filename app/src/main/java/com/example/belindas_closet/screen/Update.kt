@@ -166,7 +166,7 @@ fun TextFieldEditable(
 
 @Composable
 fun UpdateProductCard(product: Product, navController: NavController) {
-    var isEditing by remember { mutableStateOf(false) }
+    var isEditing by remember { mutableStateOf(true) }
     var isDelete by remember { mutableStateOf(false) }
     var isSave by remember { mutableStateOf(false) }
     var isCancel by remember { mutableStateOf(false) }
@@ -363,7 +363,9 @@ fun UpdateProductList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products.filter { !hidden!!.contains(it.productType.name) }) { product ->
+        items(products
+            .filter { it.productType.type == MainActivity.getProductType() }
+            .filter { !hidden!!.contains(it.productType.name) }) { product ->
             UpdateProductCard(product = product, navController = navController)
         }
     }
