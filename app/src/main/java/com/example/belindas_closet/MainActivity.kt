@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
 }
 
 // comment to test out ci/cd
+// comment number two testing out ci/cd
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
