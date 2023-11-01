@@ -1,6 +1,7 @@
 package com.example.belindas_closet.screen
 
 import android.content.Context
+import android.util.Base64
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -60,6 +61,7 @@ import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.network.auth.LoginService
 import com.example.belindas_closet.data.network.dto.auth_dto.LoginRequest
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -188,7 +190,9 @@ fun LoginPage(navController: NavHostController) {
                 // Login button
                 Button(
                     onClick = {
+                        // Check if email and password are valid
                         if (isEmailValid && isPasswordValid) {
+                            // Login with valid credentials
                             coroutineScope.launch {
                                 loginWithValidCredentials(email, password, navController, current)
                             }
@@ -284,6 +288,7 @@ fun NSCMascot() {
 }
 
 suspend fun loginWithValidCredentials(email: String, password: String, navController: NavHostController, current: Context) {
+    // login with valid credentials
     try {
         val loginRequest = LoginRequest(email, password)
         val loginResponse = LoginService.create().login(loginRequest)
@@ -292,7 +297,7 @@ suspend fun loginWithValidCredentials(email: String, password: String, navContro
             navController.navigate(Routes.AddProduct.route)
             Toast.makeText(
                 current,
-                "Login successful",
+                "Welcome ${getName(loginResponse.token)} to Belinda's Closet!",
                 Toast.LENGTH_SHORT
             ).show()
         } else {
@@ -308,5 +313,18 @@ suspend fun loginWithValidCredentials(email: String, password: String, navContro
             "Invalid email or password",
             Toast.LENGTH_SHORT
         ).show()
+    }
+}
+
+fun getName(token: String): String? {
+    // decode jwt token to get name
+    return try {
+        val payload = token.split(".")[1]
+        val decodedPayload = String(Base64.decode(payload, Base64.DEFAULT))
+        val jsonObject = JSONObject(decodedPayload)
+        jsonObject.getString("name")
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
     }
 }
