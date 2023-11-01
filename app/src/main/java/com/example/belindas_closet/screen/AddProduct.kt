@@ -1,6 +1,10 @@
 package com.example.belindas_closet.screen
 
 
+import android.graphics.ImageDecoder
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,10 +33,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
+import androidx.compose.ui.platform.LocalContext
 import com.example.belindas_closet.model.ProductGender
 import com.example.belindas_closet.model.ProductSizes
 import com.example.belindas_closet.model.ProductSizePantsInseam
@@ -44,19 +51,39 @@ import com.example.belindas_closet.model.ProductType
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductPage(navController: NavHostController) {
+
+    var selectedProductType by remember { mutableStateOf(ProductType.SHOES) }
     var productName by remember { mutableStateOf("") }
     var productDescription by remember { mutableStateOf("") }
     var productSize by remember { mutableStateOf(ProductSizes.SELECT_SIZE) } /* Default size set */
     val productImage by remember { mutableStateOf("") }
     var toastMessage by remember { mutableStateOf("") }
+    
+    /* // todo: button for inserting an image, need to change productImage type to BitImage everywhere it exists
+    val context = LocalContext.current
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) {
+        uri: Uri? ->
+        uri?.let {
+            imageUri = it
+            val source = ImageDecoder.createSource(context.contentResolver, it)
+            val bitmap = ImageDecoder.decodeBitmap(source)
+            productImage = bitmap.asImageBitmap()
+        }
+    }
+    */
+
 
     /* Back arrow that navigates back to login page */
     TopAppBar(
-        title = { Text("Login") }, /* todo: change destination where arrow navigates to */
+        title = { Text("Home") }, /* todo: change destination where arrow navigates to */
         navigationIcon = {
             IconButton(
                 onClick = {
-                    navController.navigate(Routes.Login.route) /* Navigate back to login page */
+                    navController.navigate(Routes.Home.route) /* Navigate back to home page */
                 }
             ) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
@@ -71,9 +98,20 @@ fun AddProductPage(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         ProductInfoField(
             productName = productName,
             onProductChange = { newName -> productName = newName }
+        )
+
+        ProductTypeDropdown(
+            selectedProductType = selectedProductType,
+            onProductTypeChange = { newType -> selectedProductType = newType }
+        )
+
+        ProductSizeField(
+            productSize = productSize,
+            onSizeChange = { newSize -> productSize = newSize }
         )
 
         ProductDescriptionField(
@@ -81,10 +119,6 @@ fun AddProductPage(navController: NavHostController) {
             onDescriptionChange = { newDescription -> productDescription = newDescription }
         )
 
-        ProductSizeField(
-            productSize = productSize,
-            onSizeChange = { newSize -> productSize = newSize }
-        )
 
         /* TODO: finish up product button and validation logic */
         Button(
@@ -129,6 +163,7 @@ fun AddProductPage(navController: NavHostController) {
     }
 }
 
+
 @Composable
 fun ProductInfoField(productName: String, onProductChange: (String) -> Unit) {
     TextField(
@@ -141,6 +176,45 @@ fun ProductInfoField(productName: String, onProductChange: (String) -> Unit) {
             .padding(16.dp)
     )
 }
+
+
+
+@Composable
+fun ProductTypeDropdown(selectedProductType: ProductType, onProductTypeChange: (ProductType) -> Unit) {
+    val productTypes = ProductType.values()
+    var currentProductType by remember { mutableStateOf(selectedProductType) }
+    var isDropdownMenuExpanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { isDropdownMenuExpanded = !isDropdownMenuExpanded }
+    ) {
+        Text(
+            text = "Type: ${currentProductType.type}",
+            modifier = Modifier.padding(16.dp)
+        )
+        DropdownMenu(
+            expanded = isDropdownMenuExpanded,
+            onDismissRequest = { isDropdownMenuExpanded = false }
+        ) {
+            productTypes.forEach { productType ->
+                DropdownMenuItem(
+                    text = { Text(productType.type) },
+                    onClick = {
+                        currentProductType = productType
+                        isDropdownMenuExpanded = false
+                        onProductTypeChange(productType)
+                    }
+                )
+
+            }
+
+        }
+
+    }
+}
+
 
 @Composable
 fun ProductDescriptionField(productDescription: String, onDescriptionChange: (String) -> Unit) {
