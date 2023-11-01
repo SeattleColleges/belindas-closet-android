@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.31'
 }
 
 android {
@@ -68,4 +69,20 @@ dependencies {
 
     // Material Design
     implementation "androidx.compose.material3:material3:1.2.0-alpha03"
+
+    // Ktor
+    def ktor_version = "2.3.5"
+    implementation "io.ktor:ktor-client-android:$ktor_version"
+    implementation "io.ktor:ktor-client-core:$ktor_version"
+    implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
+    implementation "io.ktor:ktor-client-serialization:$ktor_version"
+    implementation "io.ktor:ktor-client-logging:$ktor_version"
+    implementation "io.ktor:ktor-client-json:$ktor_version"
+    implementation "io.ktor:ktor-serialization-kotlinx-json:$ktor_version"
+
+    // Logging
+    implementation 'ch.qos.logback:logback-classic:1.2.6'
+
+    // Kotlin Reflection
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.22"
 }
