@@ -39,9 +39,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -63,7 +65,7 @@ import com.example.belindas_closet.data.network.dto.auth_dto.LoginRequest
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun LoginPage(navController: NavHostController) {
     var email by remember { mutableStateOf("") }
@@ -72,6 +74,7 @@ fun LoginPage(navController: NavHostController) {
     var isPasswordValid by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
     val current = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     /* Back arrow that navigates back to login page */
     TopAppBar(
@@ -190,6 +193,7 @@ fun LoginPage(navController: NavHostController) {
                 // Login button
                 Button(
                     onClick = {
+                        keyboardController?.hide()
                         // Check if email and password are valid
                         if (isEmailValid && isPasswordValid) {
                             // Login with valid credentials
