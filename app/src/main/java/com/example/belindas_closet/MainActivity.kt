@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// comment to test out ci/cd
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
