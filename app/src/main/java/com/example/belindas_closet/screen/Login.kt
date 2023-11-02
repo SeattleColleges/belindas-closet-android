@@ -1,6 +1,9 @@
 package com.example.belindas_closet.screen
 
+import android.content.Context
+import android.util.Base64
 import android.util.Patterns
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -33,10 +36,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -50,16 +57,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
+import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
+import com.example.belindas_closet.data.network.auth.LoginService
+import com.example.belindas_closet.data.network.dto.auth_dto.LoginRequest
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun LoginPage(navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isEmailValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
+    val coroutineScope = rememberCoroutineScope()
+    val current = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     /* Back arrow that navigates back to login page */
     TopAppBar(
@@ -178,10 +193,13 @@ fun LoginPage(navController: NavHostController) {
                 // Login button
                 Button(
                     onClick = {
-                        try {
-                            // TODO: Add login functionality after verifying email and password
-                        } catch (e: Exception) {
-                            // TODO: Add error handling
+                        keyboardController?.hide()
+                        // Check if email and password are valid
+                        if (isEmailValid && isPasswordValid) {
+                            // Login with valid credentials
+                            coroutineScope.launch {
+                                loginWithValidCredentials(email, password, navController, current)
+                            }
                         }
                     },
                     modifier = Modifier
@@ -202,7 +220,6 @@ fun LoginPage(navController: NavHostController) {
                 ClickableText(
                     text = AnnotatedString("Forgot password?"),
                     onClick = {
-                        // TODO: Add forgot password functionality
                         navController.navigate(Routes.ForgotPassword.route)
                     },
                     style = TextStyle(
@@ -274,3 +291,44 @@ fun NSCMascot() {
     )
 }
 
+suspend fun loginWithValidCredentials(email: String, password: String, navController: NavHostController, current: Context) {
+    // login with valid credentials
+    try {
+        val loginRequest = LoginRequest(email, password)
+        val loginResponse = LoginService.create().login(loginRequest)
+        if (loginResponse != null) {
+            MainActivity.getPref().edit().putString("token", loginResponse.token).apply()
+            navController.navigate(Routes.AddProduct.route)
+            Toast.makeText(
+                current,
+                "Welcome ${getName(loginResponse.token)} to Belinda's Closet!",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            Toast.makeText(
+                current,
+                "Invalid email or password",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    } catch (e: Exception) {
+        Toast.makeText(
+            current,
+            "Invalid email or password",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+}
+
+fun getName(token: String): String? {
+    // decode jwt token to get name
+    return try {
+        val payload = token.split(".")[1]
+        val decodedPayload = String(Base64.decode(payload, Base64.DEFAULT))
+        val jsonObject = JSONObject(decodedPayload)
+        jsonObject.getString("name")
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
