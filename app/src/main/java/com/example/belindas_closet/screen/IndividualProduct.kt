@@ -79,29 +79,6 @@ fun IndividualProductPage(navController: NavController, productId: String) {
                     ) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                     }
-                    TabRow(
-                        selectedTabIndex = selectedTabIndex,
-                        contentColor = MaterialTheme.colorScheme.primary,
-                        indicator = { tabPositions ->
-                            TabRowDefaults.Indicator(
-                                modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                                height = 2.dp,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                    ) {
-                        tabs.forEachIndexed { index, tabText ->
-                            Tab(
-                                selected = selectedTabIndex == index,
-                                onClick = {
-                                    selectedTabIndex = index
-                                    // Handle tab selection as needed
-                                },
-                            ) {
-                                Text(text = tabText)
-                            }
-                        }
-                    }
                 }
             )
         },
