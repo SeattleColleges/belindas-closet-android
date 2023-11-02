@@ -72,6 +72,11 @@ fun AddProductPage(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+      
+        ProductInfoField(
+            productName = productName,
+            onProductChange = { newName -> productName = newName }
+        )
 
         ProductInfoField(
             productName = productName,
@@ -174,6 +179,45 @@ fun ProductTypeDropdown(selectedProductType: ProductType, onProductTypeChange: (
             productTypes.forEach { productType ->
                 DropdownMenuItem(
                     text = { Text(productType.name) },
+                    onClick = {
+                        currentProductType = productType
+                        isDropdownMenuExpanded = false
+                        onProductTypeChange(productType)
+                    }
+                )
+
+            }
+
+        }
+
+    }
+}
+
+
+
+
+@Composable
+fun ProductTypeDropdown(selectedProductType: ProductType, onProductTypeChange: (ProductType) -> Unit) {
+    val productTypes = ProductType.values()
+    var currentProductType by remember { mutableStateOf(selectedProductType) }
+    var isDropdownMenuExpanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { isDropdownMenuExpanded = !isDropdownMenuExpanded }
+    ) {
+        Text(
+            text = "Type: ${currentProductType.type}",
+            modifier = Modifier.padding(16.dp)
+        )
+        DropdownMenu(
+            expanded = isDropdownMenuExpanded,
+            onDismissRequest = { isDropdownMenuExpanded = false }
+        ) {
+            productTypes.forEach { productType ->
+                DropdownMenuItem(
+                    text = { Text(productType.type) },
                     onClick = {
                         currentProductType = productType
                         isDropdownMenuExpanded = false
