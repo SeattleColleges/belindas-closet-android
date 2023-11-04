@@ -164,31 +164,6 @@ fun ForgotPasswordPage(navController: NavHostController) {
     }
 }
 
-// Validation functions
-/*
-fun validateEmail(email: String): Boolean {
-    return Patterns.EMAIL_ADDRESS.matcher(email)
-        .matches() && email.isNotEmpty() && email.isNotBlank() && email.length > 5 && email.length < 30 && email.contains(
-        "@"
-    )
-}
-
-// Error display function
-@Composable
-fun ErrorDisplay(text: String) {
-    Text(
-        text = text,
-        color = Color.Red,
-        style = TextStyle(
-            fontSize = 14.sp,
-            fontFamily = FontFamily.Default,
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 30.dp, end = 30.dp, bottom = 8.dp)
-    )
-}*/
-
 // Reset token function
 suspend fun resetToken(email: String, current: Context) {
     val forgotPasswordRequest = ForgotPasswordRequest(email)
