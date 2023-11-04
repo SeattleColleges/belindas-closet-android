@@ -12,6 +12,7 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun subtraction_isCorrect() {
-        assertEquals(2, 6 - 4)
+        // testing out test files in CI workflow
+        assertEquals(4, 2 + 2);
     }
 }

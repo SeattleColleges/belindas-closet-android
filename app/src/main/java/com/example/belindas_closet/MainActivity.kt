@@ -40,6 +40,8 @@ class MainActivity : ComponentActivity() {
 }
 
 
+// comment to test out changes in CI workflow
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingPreview() {
