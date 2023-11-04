@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -50,7 +51,7 @@ fun ProductDetailPage(navController: NavController) {
         topBar = {
             /* Back arrow that navigates back to login page */
             TopAppBar(
-                title = { Text("Home") },
+                title = { Text("Product Details") },
                 navigationIcon = {
                     IconButton(
                         onClick = {
@@ -73,6 +74,13 @@ fun ProductDetailPage(navController: NavController) {
                         }
                     ) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                    }
+                    IconButton(
+                        onClick = {
+                            //TODO: Create dropdown drawer menu of other product categories
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                     }
                 }
             )

@@ -48,9 +48,6 @@ import androidx.compose.runtime.*
 @Composable
 fun IndividualProductPage(navController: NavController, productId: String) {
 
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Tab 1", "Tab 2", "Tab 3")
-
     Scaffold(
 
         modifier = Modifier
@@ -58,7 +55,7 @@ fun IndividualProductPage(navController: NavController, productId: String) {
         topBar = {
             /* Back arrow that navigates back to login page */
             TopAppBar(
-                title = { Text("Home") },
+                title = { Text("Back") },
                 navigationIcon = {
                     IconButton(
                         onClick = {
@@ -67,7 +64,7 @@ fun IndividualProductPage(navController: NavController, productId: String) {
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back to Home page"
+                            contentDescription = "Back to Product page"
                         )
                     }
                 },
