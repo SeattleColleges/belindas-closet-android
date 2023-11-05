@@ -51,7 +51,7 @@ fun ProductDetailPage(navController: NavController) {
         topBar = {
             /* Back arrow that navigates back to login page */
             TopAppBar(
-                title = { Text("Product Details") },
+                title = { Text("Home") },
                 navigationIcon = {
                     IconButton(
                         onClick = {
