@@ -45,5 +45,8 @@
     <!--    Forgot Password Screen Strings    -->
     <string name="forgot_password">Forgot Password?</string>
     <string name="forgot_password_button">Submit</string>
+    <string name="forgot_password_success_reset_token">Check Log for the new token for now</string>
+    <string name="forgot_password_invalid_email">Invalid email!</string>
+    <string name="forgot_password_token_reset_failed">Token reset failed</string>
 
 </resources>
