@@ -1,6 +1,7 @@
 package com.example.belindas_closet.screen
 
-import android.util.Patterns
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -13,8 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -29,32 +28,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
+import com.example.belindas_closet.data.network.auth.ForgotPasswordService
+import com.example.belindas_closet.data.network.dto.auth_dto.ForgotPasswordRequest
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ForgotPasswordPage(navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isEmailValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
+    val coroutineScope = rememberCoroutineScope()
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val current = LocalContext.current
 
     /* Back arrow that navigates back to login page */
     TopAppBar(
@@ -130,10 +136,13 @@ fun ForgotPasswordPage(navController: NavHostController) {
                 // Submit button
                 Button(
                     onClick = {
-                        try {
-                            // TODO: Add login functionality after verifying email and password
-                        } catch (e: Exception) {
-                            // TODO: Add error handling
+                        keyboardController?.hide()
+                        if (isEmailValid) {
+                            coroutineScope.launch {
+                                if (isEmailValid) {
+                                    resetToken(email, current)
+                                }
+                            }
                         }
                     },
                     modifier = Modifier
@@ -155,27 +164,18 @@ fun ForgotPasswordPage(navController: NavHostController) {
     }
 }
 
-// Validation functions
-/*
-fun validateEmail(email: String): Boolean {
-    return Patterns.EMAIL_ADDRESS.matcher(email)
-        .matches() && email.isNotEmpty() && email.isNotBlank() && email.length > 5 && email.length < 30 && email.contains(
-        "@"
-    )
+// Reset token function
+suspend fun resetToken(email: String, current: Context) {
+    val forgotPasswordRequest = ForgotPasswordRequest(email)
+    val forgotPasswordResponse = ForgotPasswordService.create().forgotPassword(forgotPasswordRequest)
+    try {
+        if (forgotPasswordResponse != null) {
+            MainActivity.getPref().edit().putString("token", forgotPasswordResponse.newToken).apply()
+            Toast.makeText(current, R.string.forgot_password_success_reset_token, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(current, R.string.forgot_password_invalid_email, Toast.LENGTH_SHORT).show()
+        }
+    } catch (e: Exception) {
+        Toast.makeText(current, R.string.forgot_password_token_reset_failed, Toast.LENGTH_SHORT).show()
+    }
 }
-
-// Error display function
-@Composable
-fun ErrorDisplay(text: String) {
-    Text(
-        text = text,
-        color = Color.Red,
-        style = TextStyle(
-            fontSize = 14.sp,
-            fontFamily = FontFamily.Default,
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 30.dp, end = 30.dp, bottom = 8.dp)
-    )
-}*/
