@@ -102,53 +102,6 @@ fun HomePage(navController: NavController) {
             ProductList(products = Datasource().loadProducts(), navController = navController)
         }
     }
-
-//    Scaffold(
-//
-//        modifier = Modifier
-//            .fillMaxSize(),
-//        topBar = {
-//            /* Don't need back button on this page? */
-//            /* Back arrow that navigates back to different page? */
-//            TopAppBar(
-//                title = { Text("Belinda's Home Page") },
-//                navigationIcon = {
-//                    IconButton(
-//                        onClick = {
-//                            navController.navigate(Routes.Home.route)
-//                        }
-//                    ) {
-//
-//                        Icon(
-//                            imageVector = Icons.Default.ArrowBack,
-//                            contentDescription = "Back to Product page"
-//                        )
-//                    }
-//                },
-//                actions = {
-//                    Row(
-//                        horizontalArrangement = Arrangement.spacedBy(8.dp), // Adjust spacing as needed
-//                        modifier = Modifier.fillMaxWidth(),
-//                    ) {
-//                        IconButton(
-//                            onClick = { /*TO DO*/ }
-//                        ) {
-//                            Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-//                        }
-//                    }
-//                }
-//            )
-//        },
-//    ) { innerPadding ->
-//        val modifier = Modifier.padding(innerPadding)
-//        Column(
-//            modifier = modifier
-//                .fillMaxSize(),
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//        }
-//    }
 }
 
 
