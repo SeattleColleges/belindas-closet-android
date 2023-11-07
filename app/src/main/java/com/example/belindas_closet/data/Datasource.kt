@@ -61,8 +61,175 @@ class Datasource {
                 R.drawable.product2.toString()
             )
         )
+        productList.add(
+            Product(
+                ProductType.LONG_SLEEVE_SHIRT,
+                ProductGender.MALE,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a long sleeve shirt",
+                R.drawable.product5.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.SKIRT,
+                ProductGender.FEMALE,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a skirt",
+                R.drawable.product6.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.TIE,
+                ProductGender.NON_BINARY,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a tie",
+                R.drawable.product7.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.BELT,
+                ProductGender.NON_BINARY,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a belt",
+                R.drawable.product8.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.JACKETS,
+                ProductGender.MALE,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a jacket",
+                R.drawable.product9.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.HAT,
+                ProductGender.NON_BINARY,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a hat",
+                R.drawable.product10.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.SOCKS,
+                ProductGender.NON_BINARY,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a pair of socks",
+                R.drawable.product11.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.HANDBAG,
+                ProductGender.FEMALE,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a handbag",
+                R.drawable.product12.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.SCARF,
+                ProductGender.NON_BINARY,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a scarf",
+                R.drawable.product13.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.GOWN,
+                ProductGender.NON_BINARY,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a gown",
+                R.drawable.product14.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.HOODIE,
+                ProductGender.MALE,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a hoodie",
+                R.drawable.product15.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.SWEATER,
+                ProductGender.FEMALE,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a sweater",
+                R.drawable.product16.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.VEST,
+                ProductGender.MALE,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a vest",
+                R.drawable.product17.toString()
+            )
+        )
+        productList.add(
+            Product(
+                ProductType.OTHER,
+                ProductGender.NON_BINARY,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a pair of gloves",
+                R.drawable.product18.toString()
+            )
+        )
     }
-
 
     fun loadProducts(): List<Product> {
         return productList
