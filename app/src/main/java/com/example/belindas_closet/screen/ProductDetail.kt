@@ -55,9 +55,6 @@ import com.example.belindas_closet.data.Datasource
 fun ProductDetailPage(navController: NavController) {
 
     var drawerState by remember { mutableStateOf(DrawerValue.Closed) }
-    var expanded by remember { mutableStateOf(false) }
-
-    val items = listOf("Item 1", "Item 2", "Item 3")
 
     Scaffold(
         modifier = Modifier
@@ -77,14 +74,6 @@ fun ProductDetailPage(navController: NavController) {
                             contentDescription = "Back to Home page"
                         )
                     }
-                    IconButton(
-                        onClick = {
-                            drawerState = DrawerValue.Open
-                        }
-                    ) {
-                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-                    }
-
                 },
                 actions = {
                     IconButton(
@@ -96,6 +85,13 @@ fun ProductDetailPage(navController: NavController) {
                         }
                     ) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                    }
+                    IconButton(
+                        onClick = {
+                            drawerState = DrawerValue.Open
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                     }
 
                 }
