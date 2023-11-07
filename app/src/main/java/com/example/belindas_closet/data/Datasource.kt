@@ -64,7 +64,7 @@ class Datasource {
         productList.add(
             Product(
                 ProductType.LONG_SLEEVE_SHIRT,
-                ProductGender.FEMALE,
+                ProductGender.MALE,
                 ProductSizeShoes.SELECT_SIZE,
                 ProductSizes.M,
                 ProductSizePantsWaist.M,
@@ -230,7 +230,6 @@ class Datasource {
             )
         )
     }
-
 
     fun loadProducts(): List<Product> {
         return productList
