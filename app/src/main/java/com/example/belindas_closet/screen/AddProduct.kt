@@ -73,10 +73,11 @@ fun AddProductPage(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        ProductInfoField(
+        // temporarily commented out, testing ci workflow on pr
+        /*ProductInfoField(
             productName = productName,
             onProductChange = { newName -> productName = newName }
-        )
+        )*/
 
         ProductTypeDropdown(
             selectedProductType = selectedProductType,
