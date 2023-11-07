@@ -34,7 +34,7 @@ import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
 import com.example.belindas_closet.model.Product
 
-
+//adding comment for ci test
 @Composable
 fun HomePage(navController: NavController) {
     Row(
