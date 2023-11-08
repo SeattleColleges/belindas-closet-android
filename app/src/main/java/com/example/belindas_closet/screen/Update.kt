@@ -264,6 +264,7 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                         }
                     }
                 } else {
+                    Text("None Edit Mode")
                     Row(
                         modifier = Modifier
                             .size(200.dp)
