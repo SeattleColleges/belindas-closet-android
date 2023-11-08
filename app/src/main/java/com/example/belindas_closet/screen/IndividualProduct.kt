@@ -67,6 +67,7 @@ fun IndividualProductPage(navController: NavController, productId: String) {
                     ) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                     }
+                    /*To Do add IconButton for menu*/
                 }
             )
         },
