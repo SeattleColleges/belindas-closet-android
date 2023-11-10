@@ -52,11 +52,11 @@ fun AddProductPage(navController: NavHostController) {
     var productSize by remember { mutableStateOf(ProductSizes.SELECT_SIZE) } /* Default size set */
     val productImage by remember { mutableStateOf("") }
     var toastMessage by remember { mutableStateOf("") }
-    var newProduct by remember { mutableStateOf<Product?>(null) }
+    var newProduct by remember { mutableStateOf<Product?>(null) }    
+    /* // todo: button for inserting an image, need to change productImage type to BitImage everywhere it exists
     val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     
-    /* // todo: button for inserting an image, need to change productImage type to BitImage everywhere it exists
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) {
