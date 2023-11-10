@@ -15,7 +15,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -40,10 +43,17 @@ import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.data.Datasource
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.material3.rememberDrawerState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailPage(navController: NavController) {
+    var drawerState by remember { mutableStateOf(DrawerValue.Closed) }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -74,6 +84,13 @@ fun ProductDetailPage(navController: NavController) {
                     ) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                     }
+                    IconButton(
+                        onClick = {
+                            drawerState = DrawerValue.Open
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                    }
                 }
             )
         },
@@ -85,8 +102,8 @@ fun ProductDetailPage(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CustomTextField(text = stringResource(R.string.product_detail_page_title))
-
+            CustomTextField(text = MainActivity.getProductType().lowercase().capitalize())
+//            CustomTextField(text = stringResource(R.string.product_detail_page_title))
             ProductDetailList(products = Datasource().loadProducts(), navController = navController)
         }
     }
@@ -152,7 +169,9 @@ fun ProductDetailList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products.filter { !hidden!!.contains(it.productType.name) }) { product ->
+        items(products
+            .filter { it.productType.type == MainActivity.getProductType() }
+            .filter { !hidden!!.contains(it.productType.name) }) { product ->
             ProductDetailCard(product = product, navController = navController)
         }
     }
