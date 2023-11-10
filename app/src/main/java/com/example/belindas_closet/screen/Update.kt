@@ -199,6 +199,27 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                 Text(text = "Size: ${product.productSizes}")
                 Text(text = "Description: ${product.productDescription}")
 
+                // Add a delete icon and button
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Button(
+                        onClick = { isDelete = !isDelete },
+                        modifier = Modifier.padding(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete"
+                        )
+                    }
+                }
+
                 // Display the text fields and buttons
                 if (isEditing) {
                     TextFieldEditable(

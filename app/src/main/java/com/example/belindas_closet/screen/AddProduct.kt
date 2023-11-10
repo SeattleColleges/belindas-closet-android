@@ -1,10 +1,4 @@
 package com.example.belindas_closet.screen
-
-
-import android.graphics.ImageDecoder
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -77,6 +71,7 @@ fun AddProductPage(navController: NavHostController) {
     */
 
 
+
     /* Back arrow that navigates back to login page */
     TopAppBar(
         title = { Text("Home") }, /* todo: change destination where arrow navigates to */
@@ -99,6 +94,8 @@ fun AddProductPage(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+
+        // uncommented out, testing ci workflow on pr
         ProductInfoField(
             productName = productName,
             onProductChange = { newName -> productName = newName }
@@ -176,7 +173,6 @@ fun ProductInfoField(productName: String, onProductChange: (String) -> Unit) {
             .padding(16.dp)
     )
 }
-
 
 
 @Composable
