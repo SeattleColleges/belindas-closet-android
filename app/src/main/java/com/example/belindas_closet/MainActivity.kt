@@ -17,6 +17,7 @@ import com.example.belindas_closet.ui.theme.Belindas_closetTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         pref = getSharedPreferences("belindasHidden", Context.MODE_PRIVATE)
+        productType = String()
         super.onCreate(savedInstanceState)
         setContent {
             Belindas_closetTheme {
@@ -33,8 +34,17 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         private lateinit var pref: SharedPreferences
+        private lateinit var productType: String
         fun getPref(): SharedPreferences{
             return pref
+        }
+
+        fun getProductType(): String{
+            return productType
+        }
+
+        fun setProductType(newProductType: String): Unit{
+            productType = newProductType
         }
     }
 }
