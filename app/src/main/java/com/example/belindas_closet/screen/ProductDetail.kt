@@ -15,7 +15,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,10 +43,17 @@ import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.data.Datasource
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.material3.rememberDrawerState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailPage(navController: NavController) {
+    var drawerState by remember { mutableStateOf(DrawerValue.Closed) }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -74,6 +83,13 @@ fun ProductDetailPage(navController: NavController) {
                         }
                     ) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                    }
+                    IconButton(
+                        onClick = {
+                            drawerState = DrawerValue.Open
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                     }
                 }
             )
