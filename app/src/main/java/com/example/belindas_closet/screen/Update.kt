@@ -166,7 +166,7 @@ fun TextFieldEditable(
 
 @Composable
 fun UpdateProductCard(product: Product, navController: NavController) {
-    var isEditing by remember { mutableStateOf(false) }
+    var isEditing by remember { mutableStateOf(true) }
     var isDelete by remember { mutableStateOf(false) }
     var isSave by remember { mutableStateOf(false) }
     var isCancel by remember { mutableStateOf(false) }
@@ -198,27 +198,6 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                 )
                 Text(text = "Size: ${product.productSizes}")
                 Text(text = "Description: ${product.productDescription}")
-
-                // Add a delete icon and button
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    verticalArrangement = Arrangement.Center
-                ) {
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Button(
-                        onClick = { isDelete = !isDelete },
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete"
-                        )
-                    }
-                }
 
                 // Display the text fields and buttons
                 if (isEditing) {
@@ -264,22 +243,8 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                         }
                     }
                 } else {
-                    Row(
-                        modifier = Modifier
-                            .size(200.dp)
-                            .padding(16.dp),
-                    ) {
-                        Text(
-                            text = "Name: ${product.productType}", style = TextStyle(
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.Bold,
-                                fontFamily = FontFamily.Default,
-                            ), modifier = Modifier.wrapContentSize()
-                        )
-                        Text(text = "Size: ${product.productSizes}")
-                        Text(text = "Description: ${product.productDescription}")
 
-                        // Display the text fields and buttons
+                    // Display the text fields and buttons
                         if (isEditing) {
                             TextFieldEditable(
                                 initialName = product.productType.name,
@@ -372,7 +337,6 @@ fun UpdateProductCard(product: Product, navController: NavController) {
             }
         }
     }
-}
 
 @Composable
 fun UpdateProductList(products: List<Product>, navController: NavController) {
@@ -384,7 +348,9 @@ fun UpdateProductList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products.filter { !hidden!!.contains(it.productType.name) }) { product ->
+        items(products
+            .filter { it.productType.type == MainActivity.getProductType() }
+            .filter { !hidden!!.contains(it.productType.name) }) { product ->
             UpdateProductCard(product = product, navController = navController)
         }
     }

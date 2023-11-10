@@ -23,6 +23,9 @@
     <string name="signup_email_error">Invalid email!</string>
     <string name="signup_password_error">Invalid password!</string>
     <string name="signup_confirm_password_error">Passwords do not match!</string>
+    <string name="signup_successful_toast">Sign up successful!</string>
+    <string name="signup_failed_toast">Sign up failed, please try again!</string>
+    <string name="signup_fill_fields">Please fill all fields</string>
 
 
     <!--    Home Screen Strings    -->

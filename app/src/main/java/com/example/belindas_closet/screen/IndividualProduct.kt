@@ -32,21 +32,33 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.data.Datasource
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.*
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.runtime.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IndividualProductPage(navController: NavController, productId: String) {
+
+    var drawerState by remember { mutableStateOf(DrawerValue.Closed) }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
         topBar = {
             /* Back arrow that navigates back to login page */
             TopAppBar(
-                title = { Text("Home") },
+                title = { Text("Back") },
                 navigationIcon = {
                     IconButton(
                         onClick = {
@@ -55,7 +67,7 @@ fun IndividualProductPage(navController: NavController, productId: String) {
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back to Home page"
+                            contentDescription = "Back to Product page"
                         )
                     }
                 },
@@ -66,6 +78,13 @@ fun IndividualProductPage(navController: NavController, productId: String) {
                         }
                     ) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                    }
+                    IconButton(
+                        onClick = {
+                            drawerState = DrawerValue.Open
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                     }
                 }
             )
@@ -90,9 +109,6 @@ fun IndividualProductCard(product: Product, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .clickable {
-                navController.navigate(Routes.ProductDetail.route)
-            },
     ) {
         Column(
             modifier = Modifier
