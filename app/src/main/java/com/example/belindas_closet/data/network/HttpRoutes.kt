@@ -6,4 +6,5 @@ object HttpRoutes {
     const val PRODUCT = "$BASE_URL/products/{id}"
     const val LOGIN = "$BASE_URL/auth/login"
     const val FORGOT_PASSWORD = "$BASE_URL/auth/forgot-password"
+    const val SIGNUP = "$BASE_URL/auth/signup"
 }
