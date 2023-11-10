@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
@@ -108,9 +109,6 @@ fun IndividualProductCard(product: Product, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .clickable {
-                navController.navigate(Routes.ProductDetail.route)
-            },
     ) {
         Column(
             modifier = Modifier
