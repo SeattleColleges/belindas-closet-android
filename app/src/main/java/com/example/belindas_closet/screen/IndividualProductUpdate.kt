@@ -97,6 +97,7 @@ fun IndividualProductUpdatePage(navController: NavController, productId: String)
 fun UpdateIndividualProductCard(product: Product, navController: NavController) {
     var isEditing by remember { mutableStateOf(false) }
     var isDelete by remember { mutableStateOf(false) }
+    var isArchive by remember { mutableStateOf(false) }
     var isSave by remember { mutableStateOf(false) }
     var isCancel by remember { mutableStateOf(false) }
 
@@ -200,7 +201,32 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                             isDelete = false
                         })
                     }
-                    Spacer(modifier = Modifier.padding(16.dp))
+                    Spacer(modifier = Modifier.padding(14.dp))
+                    Button(onClick = {
+                        isArchive = !isArchive
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.archive_icon), contentDescription = "Archive",
+                            modifier = Modifier
+                                .size(20.dp)
+                        )
+                    }
+                    if (isArchive) {
+                        ConfirmationArchiveDialogIndividual(onConfirm = {
+                            val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.productType.name))
+                            hidden?.add(product.productType.name)
+                            val editor = MainActivity.getPref().edit()
+                            editor.putStringSet("hidden", hidden)
+                            editor.apply()
+                            navController.navigate(Routes.ProductDetail.route)
+                            // TODO: Add the product to "sold" collection in database
+                            // Remove the product from product page
+                            isArchive = false
+                        }, onDismiss = {
+                            isArchive = false
+                        })
+                    }
+                    Spacer(modifier = Modifier.padding(14.dp))
                     Button(onClick = {
                         isEditing = !isEditing
                     }) {
@@ -287,6 +313,50 @@ fun ConfirmationDialogIndividual(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(stringResource(R.string.update_delete_confirm_text))
+                Spacer(modifier = Modifier.padding(8.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        onClick = { onDismiss() }, modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text("No")
+                    }
+                    Button(
+                        onClick = { onConfirm() }, modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text("Yes")
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ConfirmationArchiveDialogIndividual(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    Dialog(onDismissRequest = {
+        onDismiss()
+    }) {
+        Card(
+            modifier = Modifier
+                .padding(16.dp)
+                .border(1.dp, Color.White)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(stringResource(R.string.update_confirm_confirm_text))
                 Spacer(modifier = Modifier.padding(8.dp))
                 Row(
                     modifier = Modifier
