@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -101,8 +102,8 @@ fun ProductDetailPage(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CustomTextField(text = stringResource(R.string.product_detail_page_title))
-
+            CustomTextField(text = MainActivity.getProductType().lowercase().capitalize())
+//            CustomTextField(text = stringResource(R.string.product_detail_page_title))
             ProductDetailList(products = Datasource().loadProducts(), navController = navController)
         }
     }
@@ -168,7 +169,9 @@ fun ProductDetailList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(products.filter { !hidden!!.contains(it.productType.name) }) { product ->
+        items(products
+            .filter { it.productType.type == MainActivity.getProductType() }
+            .filter { !hidden!!.contains(it.productType.name) }) { product ->
             ProductDetailCard(product = product, navController = navController)
         }
     }
