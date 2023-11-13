@@ -71,7 +71,7 @@ dependencies {
     implementation "androidx.compose.material3:material3:1.2.0-alpha03"
 
     // Ktor
-    def ktor_version = "2.3.5"
+    def ktor_version = "2.3.6"
     implementation "io.ktor:ktor-client-android:$ktor_version"
     implementation "io.ktor:ktor-client-core:$ktor_version"
     implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
