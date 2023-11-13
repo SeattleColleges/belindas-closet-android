@@ -41,6 +41,7 @@
 
     <!--    Product Update Screen Strings    -->
     <string name="update_delete_confirm_text">Are you sure you want to delete this product?</string>
+    <string name="update_confirm_confirm_text">Are you sure you want to archive this product?</string>
     <string name="update_save_confirm_text">Are you sure you want to save this product?</string>
     <string name="update_cancel_confirm_text">Are you sure you want to cancel this edit?</string>
     <string name="update_page_title">Update Product</string>
