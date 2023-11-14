@@ -86,7 +86,7 @@ fun IndividualProductUpdatePage(navController: NavController, productId: String)
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val product = Datasource().loadProducts().find { it.productType.name == productId }!!
+            val product = Datasource().loadProducts().find { it.id == productId }!!
             UpdateIndividualProductCard(product = product, navController = navController)
         }
     }
@@ -141,7 +141,7 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                         }, onDismiss = {
                             isCancel = false
                         }, navController = navController,
-                            productId = product.productType.name)
+                            productId = product.id)
                     }
 
                     Spacer(modifier = Modifier.padding(8.dp))

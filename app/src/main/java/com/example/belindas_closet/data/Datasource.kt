@@ -22,7 +22,8 @@ class Datasource {
                 ProductSizePantsWaist.XS,
                 ProductSizePantsInseam.XS,
                 "This is a beautiful dress",
-                R.drawable.product1.toString()
+                R.drawable.product1.toString(),
+                "1"
             )
         )
         productList.add(
@@ -34,7 +35,8 @@ class Datasource {
                 ProductSizePantsWaist.XS,
                 ProductSizePantsInseam.XS,
                 "This is ALSO a beautiful dress and everything past this is just content used to test the app!",
-                R.drawable.product1.toString()
+                R.drawable.product1.toString(),
+                "2"
             )
         )
         productList.add(
@@ -46,7 +48,8 @@ class Datasource {
                 ProductSizePantsWaist.SELECT_SIZE,
                 ProductSizePantsInseam.SELECT_SIZE,
                 "This is a pair of shoes",
-                R.drawable.product4.toString()
+                R.drawable.product4.toString(),
+                "3"
             )
         )
         productList.add(
@@ -58,7 +61,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a pair of pants",
-                R.drawable.product3.toString()
+                R.drawable.product3.toString(),
+                "4"
             )
         )
         productList.add(
@@ -70,7 +74,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a short sleeve shirt",
-                R.drawable.product2.toString()
+                R.drawable.product2.toString(),
+                "5"
             )
         )
         productList.add(
@@ -82,7 +87,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a long sleeve shirt",
-                R.drawable.product5.toString()
+                R.drawable.product5.toString(),
+                "6"
             )
         )
         productList.add(
@@ -94,7 +100,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a skirt",
-                R.drawable.product6.toString()
+                R.drawable.product6.toString(),
+                "7"
             )
         )
         productList.add(
@@ -106,7 +113,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a tie",
-                R.drawable.product7.toString()
+                R.drawable.product7.toString(),
+                "8"
             )
         )
         productList.add(
@@ -118,7 +126,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a belt",
-                R.drawable.product8.toString()
+                R.drawable.product8.toString(),
+                "9"
             )
         )
         productList.add(
@@ -130,7 +139,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a jacket",
-                R.drawable.product9.toString()
+                R.drawable.product9.toString(),
+                "10"
             )
         )
         productList.add(
@@ -142,7 +152,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a hat",
-                R.drawable.product10.toString()
+                R.drawable.product10.toString(),
+                "11"
             )
         )
         productList.add(
@@ -154,7 +165,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a pair of socks",
-                R.drawable.product11.toString()
+                R.drawable.product11.toString(),
+                "12"
             )
         )
         productList.add(
@@ -166,7 +178,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a handbag",
-                R.drawable.product12.toString()
+                R.drawable.product12.toString(),
+                "13"
             )
         )
         productList.add(
@@ -178,7 +191,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a scarf",
-                R.drawable.product13.toString()
+                R.drawable.product13.toString(),
+                "14"
             )
         )
         productList.add(
@@ -190,7 +204,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a gown",
-                R.drawable.product14.toString()
+                R.drawable.product14.toString(),
+                "15"
             )
         )
         productList.add(
@@ -202,7 +217,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a hoodie",
-                R.drawable.product15.toString()
+                R.drawable.product15.toString(),
+                "16"
             )
         )
         productList.add(
@@ -214,7 +230,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a sweater",
-                R.drawable.product16.toString()
+                R.drawable.product16.toString(),
+                "17"
             )
         )
         productList.add(
@@ -226,7 +243,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a vest",
-                R.drawable.product17.toString()
+                R.drawable.product17.toString(),
+                "18"
             )
         )
         productList.add(
@@ -238,7 +256,8 @@ class Datasource {
                 ProductSizePantsWaist.M,
                 ProductSizePantsInseam.M,
                 "This is a pair of gloves",
-                R.drawable.product18.toString()
+                R.drawable.product18.toString(),
+                "19"
             )
         )
     }

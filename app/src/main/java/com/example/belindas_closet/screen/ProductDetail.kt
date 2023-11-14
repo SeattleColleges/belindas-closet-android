@@ -147,7 +147,7 @@ fun ProductDetailCard(product: Product, navController: NavController) {
                 overflow = TextOverflow.Ellipsis)
             TextButton(
                 onClick = {
-                    navController.navigate(Routes.IndividualProduct.route+"/${product.productType}")
+                    navController.navigate(Routes.IndividualProduct.route+"/${product.id}")
                 }
             ) {
                 Text(text = "More Info")

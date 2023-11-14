@@ -45,4 +45,5 @@ data class Product(
     val productSizePantsInseam: ProductSizePantsInseam,
     val productDescription: String,
     val productImage: String,
+    val id: String = "0"
 )
