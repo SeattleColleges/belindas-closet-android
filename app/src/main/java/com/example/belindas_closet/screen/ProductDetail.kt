@@ -103,7 +103,6 @@ fun ProductDetailPage(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CustomTextField(text = MainActivity.getProductType().lowercase().capitalize())
-//            CustomTextField(text = stringResource(R.string.product_detail_page_title))
             ProductDetailList(products = Datasource().loadProducts(), navController = navController)
         }
     }
@@ -114,9 +113,6 @@ fun ProductDetailCard(product: Product, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .clickable {
-                navController.navigate(Routes.ProductDetail.route)
-            },
     ) {
         Column(
             modifier = Modifier
@@ -131,17 +127,6 @@ fun ProductDetailCard(product: Product, navController: NavController) {
                     .size(200.dp)
                     .padding(16.dp),
                 )
-//            Text(
-//                text = "Name: ${product.productType.type}",
-//                style = TextStyle(
-//                    fontSize = 15.sp,
-//                    fontWeight = FontWeight.Bold,
-//                    fontFamily = FontFamily.Default,
-//                    color = if (isSystemInDarkTheme()) Color.White else Color.Black
-//                ),
-//                modifier = Modifier
-//                    .wrapContentSize()
-//            )
             if (product.productType.type != "Shoes") {
                 Text(text = "Size: ${product.productSizes}")
             } else {
