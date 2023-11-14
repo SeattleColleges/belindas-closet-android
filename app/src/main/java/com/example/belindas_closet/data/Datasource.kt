@@ -33,7 +33,7 @@ class Datasource {
                 ProductSizes.XS,
                 ProductSizePantsWaist.XS,
                 ProductSizePantsInseam.XS,
-                "This is ALSO a beautiful dress",
+                "This is ALSO a beautiful dress and everything past this is just content used to test the app!",
                 R.drawable.product1.toString()
             )
         )

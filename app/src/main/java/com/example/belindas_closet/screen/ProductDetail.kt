@@ -1,6 +1,13 @@
 package com.example.belindas_closet.screen
 
 
+import android.app.Activity
+import android.content.res.Resources
+import android.util.DisplayMetrics
+import android.view.Display
+import android.view.Window
+import android.view.WindowManager
+import android.view.WindowMetrics
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -9,6 +16,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -113,6 +121,7 @@ fun ProductDetailCard(product: Product, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
+            .widthIn(0.dp, (Resources.getSystem().displayMetrics.widthPixels*0.3).dp)
     ) {
         Column(
             modifier = Modifier
