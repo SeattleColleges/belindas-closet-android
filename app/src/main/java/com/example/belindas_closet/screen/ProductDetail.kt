@@ -131,17 +131,17 @@ fun ProductDetailCard(product: Product, navController: NavController) {
                     .size(200.dp)
                     .padding(16.dp),
                 )
-            Text(
-                text = "Name: ${product.productType.type}",
-                style = TextStyle(
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Default,
-                    color = if (isSystemInDarkTheme()) Color.White else Color.Black
-                ),
-                modifier = Modifier
-                    .wrapContentSize()
-            )
+//            Text(
+//                text = "Name: ${product.productType.type}",
+//                style = TextStyle(
+//                    fontSize = 15.sp,
+//                    fontWeight = FontWeight.Bold,
+//                    fontFamily = FontFamily.Default,
+//                    color = if (isSystemInDarkTheme()) Color.White else Color.Black
+//                ),
+//                modifier = Modifier
+//                    .wrapContentSize()
+//            )
             if (product.productType.type != "Shoes") {
                 Text(text = "Size: ${product.productSizes}")
             } else {
