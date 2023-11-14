@@ -111,7 +111,7 @@ fun ProductDetailPage(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CustomTextField(text = MainActivity.getProductType().lowercase().capitalize())
+            CustomTextField(text = MainActivity.getProductType().lowercase().replaceFirstChar { it.uppercase() })
             ProductDetailList(products = Datasource().loadProducts(), navController = navController)
         }
     }
