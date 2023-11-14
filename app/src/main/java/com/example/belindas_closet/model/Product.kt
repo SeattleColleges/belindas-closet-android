@@ -1,6 +1,8 @@
 package com.example.belindas_closet.model
 
-enum class ProductType(val type: String) {
+import com.example.belindas_closet.R
+
+enum class ProductType(val type: String, val image: Int = R.drawable.placeholder) {
     SHOES("Shoes"), LONG_SLEEVE_SHIRT("Long Sleeve Shirt"), SHORT_SLEEVE_SHIRT("Short Sleeve Shirt"), PANT(
         "Pant"
     ),
@@ -44,6 +46,6 @@ data class Product(
     val productSizePantsWaist: ProductSizePantsWaist,
     val productSizePantsInseam: ProductSizePantsInseam,
     val productDescription: String,
-    val productImage: String,
+    val productImage: String = R.drawable.placeholder.toString(),
     val id: String = "0"
 )

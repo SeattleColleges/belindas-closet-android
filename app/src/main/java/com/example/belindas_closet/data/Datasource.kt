@@ -260,6 +260,18 @@ class Datasource {
                 "19"
             )
         )
+        productList.add(
+            Product(
+                ProductType.BELT,
+                ProductGender.NON_BINARY,
+                ProductSizeShoes.SELECT_SIZE,
+                ProductSizes.M,
+                ProductSizePantsWaist.M,
+                ProductSizePantsInseam.M,
+                "This is a belt with no image yet",
+                id = "20"
+            )
+        )
     }
 
     fun loadProducts(): List<Product> {
