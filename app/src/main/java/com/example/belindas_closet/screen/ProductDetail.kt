@@ -56,6 +56,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.ui.text.style.TextOverflow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -141,7 +142,9 @@ fun ProductDetailCard(product: Product, navController: NavController) {
             } else {
                 Text(text = "Size: ${product.productSizeShoe.size}")
             }
-            Text(text = "Description: ${product.productDescription}")
+            Text(text = "Description: ${product.productDescription}",
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis)
             TextButton(
                 onClick = {
                     navController.navigate(Routes.IndividualProduct.route+"/${product.productType}")
