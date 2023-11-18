@@ -17,12 +17,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.belindas_closet.R
-import com.example.belindas_closet.Routes
 
 @Composable
-fun AdminView(navController: NavController) {
+fun AdminView(navController: NavHostController) {
     Row(
         modifier = Modifier
             .size(125.dp)
@@ -56,25 +55,39 @@ fun AdminView(navController: NavController) {
                 text = stringResource(R.string.home_welcome),
                 fontSize = 30.sp
             )
-            Spacer(modifier = Modifier.padding(8.dp))
-            NavigateButtons(
-                navController = navController,
-                text = stringResource(R.string.home_login)
-            )
             Spacer(modifier = Modifier.padding(16.dp))
 
             // Add Product button (Temporary),
             // todo: will later be moved and protected for only admin access
             Button(
                 onClick = {
-                    /*TODO add navigation logic to the protected page only allowing Admin access*/
-                    navController.navigate(Routes.AddProduct.route)
+                    /*TODO add navigation to add product page*/
                 },
                 modifier = Modifier
                     .padding(4.dp)
                     .align(Alignment.CenterHorizontally)
             ) {
                 Text(text = "Add Product")
+            }
+            Button(
+                onClick = {
+                    /*TODO add navigation logic to view list of all products in db*/
+                },
+                modifier = Modifier
+                    .padding(4.dp)
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Text(text = "All Products")
+            }
+            Button(
+                onClick = {
+                    /*TODO add navigation logic to page to edit user roles*/
+                },
+                modifier = Modifier
+                    .padding(4.dp)
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Text(text = "Edit User Role")
             }
         }
     }
