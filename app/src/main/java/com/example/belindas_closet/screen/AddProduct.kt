@@ -127,7 +127,7 @@ fun AddProductPage(navController: NavHostController) {
                         productSizePantsWaist = ProductSizePantsWaist.S,
                         productSizePantsInseam = ProductSizePantsInseam.M,
                         productDescription = productDescription,
-                        productImage = productImage,
+                        productImage = productImage
                     )
                     /* TODO: Save the new product to the database or use a list to hold products */
                     // Set toast message to show success

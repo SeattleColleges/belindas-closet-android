@@ -97,8 +97,7 @@ fun IndividualProductPage(navController: NavController, productId: String) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CustomTextField(text = productId)
-            val product = Datasource().loadProducts().find { it.productType.name == productId }!!
+            val product = Datasource().loadProducts().find { it.id == productId }!!
             IndividualProductCard(product = product, navController = navController)
         }
     }

@@ -138,7 +138,7 @@ fun TypeCard(productType: ProductType, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.product1),
+                painter = painterResource(id = productType.image),
 //                TODO: use real product type images
                 contentDescription = stringResource(id = R.string.product_image_description),
                 modifier = Modifier

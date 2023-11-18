@@ -1,6 +1,13 @@
 package com.example.belindas_closet.screen
 
 
+import android.app.Activity
+import android.content.res.Resources
+import android.util.DisplayMetrics
+import android.view.Display
+import android.view.Window
+import android.view.WindowManager
+import android.view.WindowMetrics
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -9,6 +16,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -48,6 +56,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.ui.text.style.TextOverflow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,8 +111,7 @@ fun ProductDetailPage(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CustomTextField(text = MainActivity.getProductType().lowercase().capitalize())
-//            CustomTextField(text = stringResource(R.string.product_detail_page_title))
+            CustomTextField(text = MainActivity.getProductType().lowercase().replaceFirstChar { it.uppercase() })
             ProductDetailList(products = Datasource().loadProducts(), navController = navController)
         }
     }
@@ -114,9 +122,7 @@ fun ProductDetailCard(product: Product, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .clickable {
-                navController.navigate(Routes.ProductDetail.route)
-            },
+            .widthIn(0.dp, (Resources.getSystem().displayMetrics.widthPixels*0.3).dp)
     ) {
         Column(
             modifier = Modifier
@@ -131,26 +137,17 @@ fun ProductDetailCard(product: Product, navController: NavController) {
                     .size(200.dp)
                     .padding(16.dp),
                 )
-            Text(
-                text = "Name: ${product.productType.type}",
-                style = TextStyle(
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Default,
-                    color = if (isSystemInDarkTheme()) Color.White else Color.Black
-                ),
-                modifier = Modifier
-                    .wrapContentSize()
-            )
             if (product.productType.type != "Shoes") {
                 Text(text = "Size: ${product.productSizes}")
             } else {
                 Text(text = "Size: ${product.productSizeShoe.size}")
             }
-            Text(text = "Description: ${product.productDescription}")
+            Text(text = "Description: ${product.productDescription}",
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis)
             TextButton(
                 onClick = {
-                    navController.navigate(Routes.IndividualProduct.route+"/${product.productType}")
+                    navController.navigate(Routes.IndividualProduct.route+"/${product.id}")
                 }
             ) {
                 Text(text = "More Info")
