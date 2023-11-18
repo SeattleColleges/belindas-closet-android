@@ -23,7 +23,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -85,7 +85,7 @@ fun LoginPage(navController: NavHostController) {
                     navController.navigate(Routes.Home.route)
                 }
             ) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
         }
     )
@@ -298,7 +298,7 @@ suspend fun loginWithValidCredentials(email: String, password: String, navContro
         val loginResponse = LoginService.create().login(loginRequest)
         if (loginResponse != null) {
             MainActivity.getPref().edit().putString("token", loginResponse.token).apply()
-            navController.navigate(Routes.AddProduct.route)
+            navController.navigate(Routes.AdminView.route)
             Toast.makeText(
                 current,
                 "Welcome ${getName(loginResponse.token)} to Belinda's Closet!",
