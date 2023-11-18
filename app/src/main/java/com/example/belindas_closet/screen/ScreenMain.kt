@@ -38,26 +38,13 @@ fun ScreenMain() {
             ForgotPasswordPage(navController = navController)
         }
         composable(Routes.AdminView.route) {
-            ForgotPasswordPage(navController = navController)
+            AdminView(navController = navController)
         }
-//        composable(Routes.IndividualProduct.route+"/{productId}",
-//            arguments = listOf(navArgument("productId") { type = NavType.StringType })
-//        ) { backStackEntry ->
-//            IndividualProductPage(navController = navController,
-//                productId = backStackEntry.arguments!!.getInt("productId")!!,
-//            )
-//        }
+
         composable(Routes.IndividualProduct.route+"/{productId}",
             arguments = listOf(navArgument("productId") { type = NavType.StringType })
         ) { backStackEntry ->
             IndividualProductPage(navController = navController,
-                productId = backStackEntry.arguments!!.getString("productId")!!,
-            )
-        }
-        composable(Routes.IndividualProductUpdate.route+"/{productId}",
-            arguments = listOf(navArgument("productId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            IndividualProductUpdatePage(navController = navController,
                 productId = backStackEntry.arguments!!.getString("productId")!!,
             )
         }

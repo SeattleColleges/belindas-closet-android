@@ -86,8 +86,7 @@ fun IndividualProductUpdatePage(navController: NavController, productId: String)
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CustomTextField(text = productId)
-            val product = Datasource().loadProducts().find { it.productType.name == productId }!!
+            val product = Datasource().loadProducts().find { it.id == productId }!!
             UpdateIndividualProductCard(product = product, navController = navController)
         }
     }
@@ -97,6 +96,7 @@ fun IndividualProductUpdatePage(navController: NavController, productId: String)
 fun UpdateIndividualProductCard(product: Product, navController: NavController) {
     var isEditing by remember { mutableStateOf(false) }
     var isDelete by remember { mutableStateOf(false) }
+    var isArchive by remember { mutableStateOf(false) }
     var isSave by remember { mutableStateOf(false) }
     var isCancel by remember { mutableStateOf(false) }
 
@@ -116,20 +116,12 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                     .size(200.dp)
                     .padding(16.dp),
             )
-            Text(
-                text = "Name: ${product.productType}", style = TextStyle(
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Default,
-                ), modifier = Modifier.wrapContentSize()
-            )
             Text(text = "Size: ${product.productSizes}")
             Text(text = "Description: ${product.productDescription}")
 
             // Display the text fields and buttons
             if (isEditing) {
                 TextFieldEditableIndividual(
-                    initialName = product.productType.name,
                     initialDescription = product.productDescription,
                     initialSize = product.productSizes
                 )
@@ -149,7 +141,7 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                         }, onDismiss = {
                             isCancel = false
                         }, navController = navController,
-                            productId = product.productType.name)
+                            productId = product.id)
                     }
 
                     Spacer(modifier = Modifier.padding(8.dp))
@@ -200,7 +192,32 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                             isDelete = false
                         })
                     }
-                    Spacer(modifier = Modifier.padding(16.dp))
+                    Spacer(modifier = Modifier.padding(14.dp))
+                    Button(onClick = {
+                        isArchive = !isArchive
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.archive_icon), contentDescription = "Archive",
+                            modifier = Modifier
+                                .size(20.dp)
+                        )
+                    }
+                    if (isArchive) {
+                        ConfirmationArchiveDialogIndividual(onConfirm = {
+                            val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.productType.name))
+                            hidden?.add(product.productType.name)
+                            val editor = MainActivity.getPref().edit()
+                            editor.putStringSet("hidden", hidden)
+                            editor.apply()
+                            navController.navigate(Routes.ProductDetail.route)
+                            // TODO: Add the product to "sold" collection in database
+                            // Remove the product from product page
+                            isArchive = false
+                        }, onDismiss = {
+                            isArchive = false
+                        })
+                    }
+                    Spacer(modifier = Modifier.padding(14.dp))
                     Button(onClick = {
                         isEditing = !isEditing
                     }) {
@@ -216,24 +233,12 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
 
 @Composable
 fun TextFieldEditableIndividual(
-    initialName: String, initialDescription: String, initialSize: ProductSizes
+    initialDescription: String, initialSize: ProductSizes
 ) {
-    var updateName by remember { mutableStateOf(initialName) }
     var updateDescription by remember { mutableStateOf(initialDescription) }
     var selectedSize by remember { mutableStateOf(initialSize) }
     var isDropdownMenuExpanded by remember { mutableStateOf(false) }
     val sizes = ProductSizes.values()
-
-    TextField(
-        value = updateName,
-        onValueChange = { editName ->
-            updateName = editName
-        },
-        label = { Text("Name") },
-        singleLine = true,
-        modifier = Modifier
-            .padding(8.dp)
-    )
 
     TextField(
         value = updateDescription,
@@ -287,6 +292,50 @@ fun ConfirmationDialogIndividual(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(stringResource(R.string.update_delete_confirm_text))
+                Spacer(modifier = Modifier.padding(8.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        onClick = { onDismiss() }, modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text("No")
+                    }
+                    Button(
+                        onClick = { onConfirm() }, modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text("Yes")
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ConfirmationArchiveDialogIndividual(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    Dialog(onDismissRequest = {
+        onDismiss()
+    }) {
+        Card(
+            modifier = Modifier
+                .padding(16.dp)
+                .border(1.dp, Color.White)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(stringResource(R.string.update_confirm_confirm_text))
                 Spacer(modifier = Modifier.padding(8.dp))
                 Row(
                     modifier = Modifier
