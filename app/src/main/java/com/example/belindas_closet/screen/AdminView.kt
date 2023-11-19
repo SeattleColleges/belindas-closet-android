@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.belindas_closet.R
+import com.example.belindas_closet.Routes
 
 @Composable
 fun AdminView(navController: NavHostController) {
@@ -57,11 +58,10 @@ fun AdminView(navController: NavHostController) {
             )
             Spacer(modifier = Modifier.padding(16.dp))
 
-            // Add Product button (Temporary),
-            // todo: will later be moved and protected for only admin access
+            // Add Product button
             Button(
                 onClick = {
-                    /*TODO add navigation to add product page*/
+                    navController.navigate(Routes.AddProduct.route)
                 },
                 modifier = Modifier
                     .padding(4.dp)
