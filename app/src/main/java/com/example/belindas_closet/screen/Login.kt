@@ -298,7 +298,7 @@ suspend fun loginWithValidCredentials(email: String, password: String, navContro
         val loginResponse = LoginService.create().login(loginRequest)
         if (loginResponse != null) {
             MainActivity.getPref().edit().putString("token", loginResponse.token).apply()
-            navController.navigate(Routes.AddProduct.route)
+            navController.navigate(Routes.AdminView.route)
             Toast.makeText(
                 current,
                 "Welcome ${getName(loginResponse.token)} to Belinda's Closet!",
