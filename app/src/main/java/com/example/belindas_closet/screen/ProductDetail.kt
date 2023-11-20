@@ -119,10 +119,11 @@ fun ProductDetailPage(navController: NavController) {
 
 @Composable
 fun ProductDetailCard(product: Product, navController: NavController) {
+    val density = Resources.getSystem().displayMetrics.density
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .widthIn(0.dp, (Resources.getSystem().displayMetrics.widthPixels*0.3).dp)
+            .widthIn(0.dp, (Resources.getSystem().displayMetrics.widthPixels * .8/density).dp)
     ) {
         Column(
             modifier = Modifier
