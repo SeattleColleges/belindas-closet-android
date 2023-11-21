@@ -10,4 +10,5 @@ sealed class Routes (val route: String) {
     object ForgotPassword: Routes("Forgot Password")
     object IndividualProduct: Routes("Individual_Product")
     object IndividualProductUpdate: Routes("Individual_Product_Update")
+    object AdminView: Routes("Admin_View")
 }
