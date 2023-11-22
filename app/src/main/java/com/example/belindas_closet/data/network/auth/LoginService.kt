@@ -13,6 +13,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 interface LoginService {
+
     suspend fun login(loginRequest: LoginRequest) : LoginResponse?
 
     companion object {
