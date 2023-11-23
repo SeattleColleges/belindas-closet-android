@@ -60,7 +60,7 @@ fun IndividualProductPage(navController: NavController, productId: String) {
         actions = {
             IconButton(
                 onClick = {
-                    navController.navigate(Routes.IndividualProductUpdate.route + "/${productId}")
+                    navController.navigate(Routes.IndividualProductUpdatePage.route + "/$productId")
                 }
             ) {
                 Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
