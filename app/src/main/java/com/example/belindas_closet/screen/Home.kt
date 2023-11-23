@@ -14,8 +14,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDirection.Companion.Content
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,6 +41,22 @@ import com.example.belindas_closet.model.ProductType
 
 @Composable
 fun HomePage(navController: NavController) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(R.string.app_name))
+                },
+                actions = {
+                    ProductListButton(navController = navController)
+                }
+            )
+        },
+        content = {
+            Content(navController = navController)
+        }
+    )
+}
     Row(
         modifier = Modifier
             .size(125.dp)
@@ -198,5 +217,5 @@ fun NSCLogo() {
     Image(
         painter = painterResource(id = R.drawable.nsc_v_logo),
         contentDescription = stringResource(id = R.string.home_nsc_logo_description)
-    ) 
+    )
 }
