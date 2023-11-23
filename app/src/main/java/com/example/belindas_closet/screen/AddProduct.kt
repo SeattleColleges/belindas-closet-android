@@ -279,7 +279,7 @@ fun DisplayNewProduct(newProduct: Product) {
         // else show product size
         if (newProduct.productType == ProductType.SHOES) {
             Text(text = "Product Shoe Size: ${newProduct.productSizeShoe}")
-        } else if (newProduct.productType == ProductType.PANT) {
+        } else if (newProduct.productType == ProductType.PANTS) {
             Text(text = "Product Pants Waist Size: ${newProduct.productSizePantsWaist}")
             Text(text = "Product Pants Inseam Size: ${newProduct.productSizePantsInseam}")
         } else {
