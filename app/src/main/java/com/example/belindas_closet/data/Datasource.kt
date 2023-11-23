@@ -67,6 +67,7 @@ class Datasource {
         )
         productList.add(
             Product(
+                ProductType.JACKET_BLAZER,
                 ProductGender.MALE,
                 ProductSizeShoes.SELECT_SIZE,
                 ProductSizes.M,
