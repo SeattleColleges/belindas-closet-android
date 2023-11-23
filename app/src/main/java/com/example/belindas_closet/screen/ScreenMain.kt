@@ -48,5 +48,13 @@ fun ScreenMain() {
                 productId = backStackEntry.arguments!!.getString("productId")!!,
             )
         }
+
+        composable(Routes.IndividualProductUpdatePage.route+"/{productId}",
+            arguments = listOf(navArgument("productId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            IndividualProductUpdatePage(navController = navController,
+                productId = backStackEntry.arguments!!.getString("productId")!!,
+            )
+        }
     }
 }
