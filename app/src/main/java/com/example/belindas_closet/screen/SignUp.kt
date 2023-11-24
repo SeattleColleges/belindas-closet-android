@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -86,6 +87,15 @@ fun SignUpPage( navController: NavHostController) {
                 }
             ) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = {
+                    // Handle menu icon click
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
             }
         }
     )
