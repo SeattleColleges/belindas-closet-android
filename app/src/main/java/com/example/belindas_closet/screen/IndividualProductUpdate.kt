@@ -187,7 +187,7 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                     if (isDelete) {
                         ConfirmationDialogIndividual(onConfirm = {
                             val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.productType.name))
-                            hidden?.add(product.productType.name)
+                            hidden?.add(product.id)
                             val editor = MainActivity.getPref().edit()
                             editor.putStringSet("hidden", hidden)
                             editor.apply()
@@ -211,14 +211,15 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                     }
                     if (isArchive) {
                         ConfirmationArchiveDialogIndividual(onConfirm = {
-                            val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.productType.name))
-                            hidden?.add(product.productType.name)
-                            val editor = MainActivity.getPref().edit()
-                            editor.putStringSet("hidden", hidden)
-                            editor.apply()
-                            navController.navigate(Routes.ProductDetail.route)
                             coroutineScope.launch {
-                                archive(product.id, navController, current)
+                                val isArchiveSuccessful = archive(product.id, navController, current)
+                                if (isArchiveSuccessful) {
+                                    val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.id))
+                                    hidden?.add(product.id)
+                                    val editor = MainActivity.getPref().edit()
+                                    editor.putStringSet("hidden", hidden)
+                                    editor.apply()
+                                }
                             }
                             isArchive = false
                         }, onDismiss = {
@@ -457,25 +458,34 @@ fun ConfirmCancelDialogIndividual(
     }
 }
 
-suspend fun archive(productId: String, navController: NavController, current: Context) {
+suspend fun archive(productId: String, navController: NavController, current: Context): Boolean {
     return try {
+        val userRole = MainActivity.getPref().getString("userRole", Role.USER.name)?.let {
+            Role.valueOf(it) } ?: Role.USER
         val archiveRequest = ArchiveRequest(
             id = productId,
             role = Role.ADMIN
         )
         val archiveResponse = ArchiveService.create().archive(archiveRequest)
-        if (productId.count() != 24) {
-            Toast.makeText(current, R.string.archive_invalid_id, Toast.LENGTH_SHORT).show()
+        if (userRole != Role.ADMIN) {
+            Toast.makeText(current, R.string.unauthorized_toast, Toast.LENGTH_SHORT).show()
+            false
+        } else if (productId.count() != 24) {
+            Toast.makeText(current, R.string.invalid_id_toast, Toast.LENGTH_SHORT).show()
+            false
         } else if (archiveResponse != null) {
             MainActivity.getPref().edit().putBoolean("isSold", archiveResponse.isSold).apply()
             navController.navigate(Routes.ProductDetail.route)
             Toast.makeText(current, R.string.archive_successful_toast, Toast.LENGTH_SHORT).show()
+            true
         } else {
             Toast.makeText(current, R.string.archive_failed_toast, Toast.LENGTH_SHORT).show()
+            false
         }
     } catch (e: HttpException) {
         e.printStackTrace()
         println("Error: ${e.message}")
         Toast.makeText(current, "Archive failed. Error: ${e.message}", Toast.LENGTH_SHORT).show()
+        false
     }
 }
