@@ -1,5 +1,8 @@
 package com.example.belindas_closet.screen
 
+import android.content.Context
+import android.net.http.HttpException
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -34,25 +37,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
+import com.example.belindas_closet.data.network.auth.ArchiveService
+import com.example.belindas_closet.data.network.dto.auth_dto.ArchiveRequest
+import com.example.belindas_closet.data.network.dto.auth_dto.Role
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductSizes
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,6 +104,8 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
     var isArchive by remember { mutableStateOf(false) }
     var isSave by remember { mutableStateOf(false) }
     var isCancel by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val current = LocalContext.current
 
     Card(
         modifier = Modifier
@@ -210,8 +217,9 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                             editor.putStringSet("hidden", hidden)
                             editor.apply()
                             navController.navigate(Routes.ProductDetail.route)
-                            // TODO: Add the product to "sold" collection in database
-                            // Remove the product from product page
+                            coroutineScope.launch {
+                                archive(product.id, navController, current)
+                            }
                             isArchive = false
                         }, onDismiss = {
                             isArchive = false
@@ -335,7 +343,7 @@ fun ConfirmationArchiveDialogIndividual(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(stringResource(R.string.update_confirm_confirm_text))
+                Text(stringResource(R.string.update_archive_confirm_text))
                 Spacer(modifier = Modifier.padding(8.dp))
                 Row(
                     modifier = Modifier
@@ -446,5 +454,28 @@ fun ConfirmCancelDialogIndividual(
                 }
             }
         }
+    }
+}
+
+suspend fun archive(productId: String, navController: NavController, current: Context) {
+    return try {
+        val archiveRequest = ArchiveRequest(
+            id = productId,
+            role = Role.ADMIN
+        )
+        val archiveResponse = ArchiveService.create().archive(archiveRequest)
+        if (productId.count() != 24) {
+            Toast.makeText(current, R.string.archive_invalid_id, Toast.LENGTH_SHORT).show()
+        } else if (archiveResponse != null) {
+            MainActivity.getPref().edit().putBoolean("isSold", archiveResponse.isSold).apply()
+            navController.navigate(Routes.ProductDetail.route)
+            Toast.makeText(current, R.string.archive_successful_toast, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(current, R.string.archive_failed_toast, Toast.LENGTH_SHORT).show()
+        }
+    } catch (e: HttpException) {
+        e.printStackTrace()
+        println("Error: ${e.message}")
+        Toast.makeText(current, "Archive failed. Error: ${e.message}", Toast.LENGTH_SHORT).show()
     }
 }
