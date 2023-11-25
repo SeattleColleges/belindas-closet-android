@@ -9,7 +9,7 @@ sealed class Routes (val route: String) {
     object AddProduct: Routes("Add Product")
     object ForgotPassword: Routes("Forgot Password")
     object IndividualProduct: Routes("Individual_Product")
-    object IndividualProductUpdate: Routes("Individual_Product_Update")
+    object IndividualProductUpdatePage: Routes("Individual_Product_Update")
     object AdminView: Routes("Admin_View")
     object EditUserRole: Routes("Edit_User_Role")
 
