@@ -45,12 +45,13 @@
     <string name="update_save_confirm_text">Are you sure you want to save this product?</string>
     <string name="update_cancel_confirm_text">Are you sure you want to cancel this edit?</string>
     <string name="update_page_title">Update Product</string>
-    <string name="archive_successful_toast">Archival successful!</string>
-    <string name="archive_invalid_id">Invalid ID!</string>
-    <string name="archive_failed_toast">Archival failed, please try again!</string>
     <string name="delete_successful_toast">Deletion successful!</string>
-    <string name="delete_invalid_id">Invalid ID!</string>
+    <string name="archive_successful_toast">Archival successful!</string>
+    <string name="unauthorized_toast">Unauthorized!</string>
+    <string name="invalid_id">Invalid ID!</string>
     <string name="delete_failed_toast">Deletion failed, please try again!</string>
+    <string name="archive_failed_toast">Archival failed, please try again!</string>
+
 
     <!--    Forgot Password Screen Strings    -->
     <string name="forgot_password">Forgot Password?</string>

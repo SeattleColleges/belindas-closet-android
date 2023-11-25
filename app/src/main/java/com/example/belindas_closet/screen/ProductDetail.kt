@@ -153,7 +153,7 @@ fun ProductDetailList(products: List<Product>, navController: NavController) {
     ) {
         items(products
             .filter { it.productType.type == MainActivity.getProductType() }
-            .filter { !hidden!!.contains(it.productType.name) }) { product ->
+            .filter { !hidden!!.contains(it.id) }) { product ->
             ProductDetailCard(product = product, navController = navController)
         }
     }

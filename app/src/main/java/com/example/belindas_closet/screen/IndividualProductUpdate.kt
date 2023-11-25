@@ -188,16 +188,18 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                     }
                     if (isDelete) {
                         ConfirmationDialogIndividual(onConfirm = {
-                            val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.productType.name))
-                            hidden?.add(product.productType.name)
-                            val editor = MainActivity.getPref().edit()
-                            editor.putStringSet("hidden", hidden)
-                            editor.apply()
-                            navController.navigate(Routes.ProductDetail.route)
-                            // Remove the product from the database
                             coroutineScope.launch {
-                                delete(product.id, navController, current)
+                                val isDeleteSuccessful = delete(product.id, navController, current)
+                                if (isDeleteSuccessful) {
+                                    val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.id))
+                                    hidden?.add(product.id)
+                                    val editor = MainActivity.getPref().edit()
+                                    editor.putStringSet("hidden", hidden)
+                                    editor.apply()
+                                    navController.navigate(Routes.ProductDetail.route)
+                                }
                             }
+                            // Remove the product from the database
                             isDelete = false
                         }, onDismiss = {
                             isDelete = false
@@ -462,6 +464,38 @@ fun ConfirmCancelDialogIndividual(
     }
 }
 
+suspend fun delete(productId: String, navController: NavController, current: Context): Boolean {
+    return try {
+        val userRole = MainActivity.getPref().getString("userRole", Role.USER.name)?.let {
+            Role.valueOf(it) } ?: Role.USER
+        val deleteRequest = DeleteRequest(
+            id = productId,
+            role = Role.ADMIN
+        )
+        val deleteResponse = DeleteService.create().delete(deleteRequest)
+        if (userRole != Role.ADMIN) {
+            Toast.makeText(current, R.string.unauthorized_toast, Toast.LENGTH_SHORT).show()
+            false
+        } else if (productId.count() != 24) {
+            Toast.makeText(current, R.string.invalid_id, Toast.LENGTH_SHORT).show()
+            false
+        } else if (deleteResponse != null) {
+            MainActivity.getPref().edit().putBoolean("isHidden", deleteResponse.isHidden).apply()
+            navController.navigate(Routes.ProductDetail.route)
+            Toast.makeText(current, R.string.delete_successful_toast, Toast.LENGTH_SHORT).show()
+            true
+        } else {
+            Toast.makeText(current, R.string.delete_failed_toast, Toast.LENGTH_SHORT).show()
+            false
+        }
+    } catch (e: HttpException) {
+        e.printStackTrace()
+        println("Error: ${e.message}")
+        Toast.makeText(current, "Delete failed. Error: ${e.message}", Toast.LENGTH_SHORT).show()
+        false
+    }
+}
+
 suspend fun archive(productId: String, navController: NavController, current: Context) {
     return try {
         val archiveRequest = ArchiveRequest(
@@ -470,7 +504,7 @@ suspend fun archive(productId: String, navController: NavController, current: Co
         )
         val archiveResponse = ArchiveService.create().archive(archiveRequest)
         if (productId.count() != 24) {
-            Toast.makeText(current, R.string.archive_invalid_id, Toast.LENGTH_SHORT).show()
+            Toast.makeText(current, R.string.invalid_id, Toast.LENGTH_SHORT).show()
         } else if (archiveResponse != null) {
             MainActivity.getPref().edit().putBoolean("isSold", archiveResponse.isSold).apply()
             navController.navigate(Routes.ProductDetail.route)
@@ -485,25 +519,3 @@ suspend fun archive(productId: String, navController: NavController, current: Co
     }
 }
 
-suspend fun delete(productId: String, navController: NavController, current: Context) {
-    return try {
-        val deleteRequest = DeleteRequest(
-            id = productId,
-            role = Role.ADMIN
-        )
-        val deleteResponse = DeleteService.create().delete(deleteRequest)
-        if (productId.count() != 24) {
-            Toast.makeText(current, R.string.delete_invalid_id, Toast.LENGTH_SHORT).show()
-        } else if (deleteResponse != null) {
-            MainActivity.getPref().edit().putBoolean("isHidden", deleteResponse.isHidden).apply()
-            navController.navigate(Routes.ProductDetail.route)
-            Toast.makeText(current, R.string.delete_successful_toast, Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(current, R.string.delete_failed_toast, Toast.LENGTH_SHORT).show()
-        }
-    } catch (e: HttpException) {
-        e.printStackTrace()
-        println("Error: ${e.message}")
-        Toast.makeText(current, "Delete failed. Error: ${e.message}", Toast.LENGTH_SHORT).show()
-    }
-}
