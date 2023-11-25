@@ -8,9 +8,13 @@ import com.example.belindas_closet.model.ProductSizePantsInseam
 import com.example.belindas_closet.model.ProductSizePantsWaist
 import com.example.belindas_closet.model.ProductSizeShoes
 import com.example.belindas_closet.model.ProductType
+import com.example.belindas_closet.model.User
+import com.example.belindas_closet.model.UserRole
 
 class Datasource {
     private val productList = mutableListOf<Product>()
+    private val userList = mutableListOf<User>()
+
 
     init {
         productList.add(
@@ -195,9 +199,24 @@ class Datasource {
                 "9"
             )
         )
+
+        // Adding Users to UserList
+        userList.add(
+            User(
+                userFirstName = "John",
+                userLastName = "Smith",
+                userEmail = "hiJohn123@gmail.com",
+                UserRole.ADMIN,
+                userId = "1"
+            )
+        )
     }
 
     fun loadProducts(): List<Product> {
         return productList
+    }
+
+    fun loadUsers(): List<User> {
+        return userList
     }
 }

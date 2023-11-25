@@ -81,7 +81,7 @@ fun AdminView(navController: NavHostController) {
             }
             Button(
                 onClick = {
-                    /*TODO add navigation logic to page to edit user roles*/
+                    navController.navigate(Routes.EditUserRole.route)
                 },
                 modifier = Modifier
                     .padding(4.dp)

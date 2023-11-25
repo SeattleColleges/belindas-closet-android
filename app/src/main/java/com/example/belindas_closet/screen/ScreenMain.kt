@@ -41,7 +41,7 @@ fun ScreenMain() {
             AdminView(navController = navController)
         }
         composable(Routes.EditUserRole.route) {
-            AdminView(navController = navController)
+            EditUserRole(navController = navController)
         }
 
         composable(Routes.IndividualProduct.route+"/{productId}",
