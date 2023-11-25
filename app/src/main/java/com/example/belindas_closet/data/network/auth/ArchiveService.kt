@@ -1,7 +1,8 @@
 package com.example.belindas_closet.data.network.auth
 
-import com.example.belindas_closet.data.network.dto.auth_dto.LoginRequest
-import com.example.belindas_closet.data.network.dto.auth_dto.LoginResponse
+import com.example.belindas_closet.MainActivity
+import com.example.belindas_closet.data.network.dto.auth_dto.ArchiveRequest
+import com.example.belindas_closet.data.network.dto.auth_dto.ArchiveResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -12,13 +13,12 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-interface LoginService {
-
-    suspend fun login(loginRequest: LoginRequest) : LoginResponse?
+interface ArchiveService {
+    suspend fun archive(archiveRequest: ArchiveRequest) : ArchiveResponse?
 
     companion object {
-        fun create() : LoginService {
-            return LoginServiceImpl(
+        fun create() : ArchiveService {
+            return ArchiveServiceImpl(
                 client = HttpClient(Android) {
                     install(ContentNegotiation) {
                         json(Json {
@@ -31,8 +31,12 @@ interface LoginService {
                         level = LogLevel.ALL
                         logger = Logger.DEFAULT
                     }
+                },
+                getToken = suspend {
+                    MainActivity.getPref().getString("token", "") ?: ""
                 }
             )
         }
     }
+
 }

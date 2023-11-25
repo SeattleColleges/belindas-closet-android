@@ -3,10 +3,10 @@ package com.example.belindas_closet.data
 import com.example.belindas_closet.R
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductGender
-import com.example.belindas_closet.model.ProductSizes
 import com.example.belindas_closet.model.ProductSizePantsInseam
 import com.example.belindas_closet.model.ProductSizePantsWaist
 import com.example.belindas_closet.model.ProductSizeShoes
+import com.example.belindas_closet.model.ProductSizes
 import com.example.belindas_closet.model.ProductType
 
 class Datasource {
@@ -140,7 +140,7 @@ class Datasource {
                 ProductSizePantsInseam.XS,
                 "This is a handbag",
                 R.drawable.product12.toString(),
-                "13"
+                "655b46baa82ef869be176174"
             )
         )
         productList.add(
