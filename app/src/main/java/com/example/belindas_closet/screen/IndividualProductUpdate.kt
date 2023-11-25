@@ -53,7 +53,9 @@ import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
 import com.example.belindas_closet.data.network.auth.ArchiveService
+import com.example.belindas_closet.data.network.auth.DeleteService
 import com.example.belindas_closet.data.network.dto.auth_dto.ArchiveRequest
+import com.example.belindas_closet.data.network.dto.auth_dto.DeleteRequest
 import com.example.belindas_closet.data.network.dto.auth_dto.Role
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductSizes
@@ -192,8 +194,10 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                             editor.putStringSet("hidden", hidden)
                             editor.apply()
                             navController.navigate(Routes.ProductDetail.route)
-                            // TODO: Delete the product from the database
                             // Remove the product from the database
+                            coroutineScope.launch {
+                                delete(product.id, navController, current)
+                            }
                             isDelete = false
                         }, onDismiss = {
                             isDelete = false
@@ -366,6 +370,7 @@ fun ConfirmationArchiveDialogIndividual(
         }
     }
 }
+
 @Composable
 fun ConfirmSaveDialogIndividual(
     onConfirm: () -> Unit,
@@ -477,5 +482,28 @@ suspend fun archive(productId: String, navController: NavController, current: Co
         e.printStackTrace()
         println("Error: ${e.message}")
         Toast.makeText(current, "Archive failed. Error: ${e.message}", Toast.LENGTH_SHORT).show()
+    }
+}
+
+suspend fun delete(productId: String, navController: NavController, current: Context) {
+    return try {
+        val deleteRequest = DeleteRequest(
+            id = productId,
+            role = Role.ADMIN
+        )
+        val deleteResponse = DeleteService.create().delete(deleteRequest)
+        if (productId.count() != 24) {
+            Toast.makeText(current, R.string.delete_invalid_id, Toast.LENGTH_SHORT).show()
+        } else if (deleteResponse != null) {
+            MainActivity.getPref().edit().putBoolean("isHidden", deleteResponse.isHidden).apply()
+            navController.navigate(Routes.ProductDetail.route)
+            Toast.makeText(current, R.string.delete_successful_toast, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(current, R.string.delete_failed_toast, Toast.LENGTH_SHORT).show()
+        }
+    } catch (e: HttpException) {
+        e.printStackTrace()
+        println("Error: ${e.message}")
+        Toast.makeText(current, "Delete failed. Error: ${e.message}", Toast.LENGTH_SHORT).show()
     }
 }
