@@ -8,8 +8,8 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ServerResponseException
+import io.ktor.client.request.delete
 import io.ktor.client.request.header
-import io.ktor.client.request.put
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -24,7 +24,7 @@ class DeleteServiceImpl (
     override suspend fun delete(deleteRequest: DeleteRequest): DeleteResponse? {
         return try {
             val token = getToken()
-            val response = client.put {
+            val response = client.delete {
                 url("${HttpRoutes.DELETE}/${deleteRequest.id}")
                 header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                 header(HttpHeaders.Authorization, "Bearer $token")
