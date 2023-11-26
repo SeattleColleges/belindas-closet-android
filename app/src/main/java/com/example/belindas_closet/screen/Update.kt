@@ -68,6 +68,7 @@ fun UpdatePage(navController: NavController) {
         modifier = Modifier
             .fillMaxSize(),
         topBar = {
+            // add navigation here in issue 194
             /* Back arrow that navigates back to login page */
             TopAppBar(
                 title = { Text("Product Detail") },
