@@ -127,7 +127,7 @@ fun AddProductPage(navController: NavHostController) {
                         productSizePantsWaist = ProductSizePantsWaist.S,
                         productSizePantsInseam = ProductSizePantsInseam.M,
                         productDescription = productDescription,
-                        productImage = productImage,
+                        productImage = productImage
                     )
                     /* TODO: Save the new product to the database or use a list to hold products */
                     // Set toast message to show success
@@ -279,7 +279,7 @@ fun DisplayNewProduct(newProduct: Product) {
         // else show product size
         if (newProduct.productType == ProductType.SHOES) {
             Text(text = "Product Shoe Size: ${newProduct.productSizeShoe}")
-        } else if (newProduct.productType == ProductType.PANT) {
+        } else if (newProduct.productType == ProductType.PANTS) {
             Text(text = "Product Pants Waist Size: ${newProduct.productSizePantsWaist}")
             Text(text = "Product Pants Inseam Size: ${newProduct.productSizePantsInseam}")
         } else {

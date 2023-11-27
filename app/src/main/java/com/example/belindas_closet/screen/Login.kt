@@ -24,6 +24,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -86,6 +87,14 @@ fun LoginPage(navController: NavHostController) {
                 }
             ) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = {
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
             }
         }
     )
@@ -292,18 +301,20 @@ fun NSCMascot() {
 }
 
 suspend fun loginWithValidCredentials(email: String, password: String, navController: NavHostController, current: Context) {
-    // login with valid credentials
     try {
         val loginRequest = LoginRequest(email, password)
         val loginResponse = LoginService.create().login(loginRequest)
         if (loginResponse != null) {
+            val token = loginResponse.token
+            saveToken(token)
             MainActivity.getPref().edit().putString("token", loginResponse.token).apply()
-            navController.navigate(Routes.AddProduct.route)
+            navController.navigate(Routes.AdminView.route)
             Toast.makeText(
                 current,
                 "Welcome ${getName(loginResponse.token)} to Belinda's Closet!",
                 Toast.LENGTH_SHORT
             ).show()
+            loginResponse.token
         } else {
             Toast.makeText(
                 current,
@@ -331,4 +342,8 @@ fun getName(token: String): String? {
         e.printStackTrace()
         null
     }
+}
+
+fun saveToken(token: String) {
+    MainActivity.getPref().edit().putString("token", token).apply()
 }

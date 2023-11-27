@@ -113,25 +113,12 @@ fun UpdatePage(navController: NavController) {
 
 @Composable
 fun TextFieldEditable(
-    initialName: String, initialDescription: String, initialSize: ProductSizes
+    initialDescription: String, initialSize: ProductSizes
 ) {
-    var updateName by remember { mutableStateOf(initialName) }
     var updateDescription by remember { mutableStateOf(initialDescription) }
     var selectedSize by remember { mutableStateOf(initialSize) }
     var isDropdownMenuExpanded by remember { mutableStateOf(false) }
     val sizes = ProductSizes.values()
-
-    TextField(
-        value = updateName,
-        onValueChange = { editName ->
-            updateName = editName
-        },
-        label = { Text("Name") },
-        singleLine = true,
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxSize()
-    )
 
     TextField(
         value = updateDescription,
@@ -190,20 +177,12 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                         .size(200.dp)
                         .padding(16.dp),
                 )
-                Text(
-                    text = "Name: ${product.productType}", style = TextStyle(
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.Default,
-                    ), modifier = Modifier.wrapContentSize()
-                )
                 Text(text = "Size: ${product.productSizes}")
                 Text(text = "Description: ${product.productDescription}")
 
                 // Display the text fields and buttons
                 if (isEditing) {
                     TextFieldEditable(
-                        initialName = product.productType.name,
                         initialDescription = product.productDescription,
                         initialSize = product.productSizes
                     )
@@ -248,7 +227,6 @@ fun UpdateProductCard(product: Product, navController: NavController) {
                     // Display the text fields and buttons
                         if (isEditing) {
                             TextFieldEditable(
-                                initialName = product.productType.name,
                                 initialDescription = product.productDescription,
                                 initialSize = product.productSizes
                             )

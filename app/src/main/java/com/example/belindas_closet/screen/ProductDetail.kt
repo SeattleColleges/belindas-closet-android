@@ -1,15 +1,14 @@
 package com.example.belindas_closet.screen
 
 
+import android.content.res.Resources
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -26,28 +25,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.example.belindas_closet.MainActivity
-import com.example.belindas_closet.R
-import com.example.belindas_closet.Routes
-import com.example.belindas_closet.model.Product
-import com.example.belindas_closet.data.Datasource
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.material3.rememberDrawerState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.belindas_closet.MainActivity
+import com.example.belindas_closet.R
+import com.example.belindas_closet.Routes
+import com.example.belindas_closet.data.Datasource
+import com.example.belindas_closet.model.Product
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,8 +95,7 @@ fun ProductDetailPage(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CustomTextField(text = MainActivity.getProductType().lowercase().capitalize())
-//            CustomTextField(text = stringResource(R.string.product_detail_page_title))
+            CustomTextField(text = MainActivity.getProductType().lowercase().replaceFirstChar { it.uppercase() })
             ProductDetailList(products = Datasource().loadProducts(), navController = navController)
         }
     }
@@ -111,12 +103,11 @@ fun ProductDetailPage(navController: NavController) {
 
 @Composable
 fun ProductDetailCard(product: Product, navController: NavController) {
+    val density = Resources.getSystem().displayMetrics.density
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .clickable {
-                navController.navigate(Routes.ProductDetail.route)
-            },
+            .widthIn(0.dp, (Resources.getSystem().displayMetrics.widthPixels * .8/density).dp)
     ) {
         Column(
             modifier = Modifier
@@ -131,26 +122,17 @@ fun ProductDetailCard(product: Product, navController: NavController) {
                     .size(200.dp)
                     .padding(16.dp),
                 )
-            Text(
-                text = "Name: ${product.productType.type}",
-                style = TextStyle(
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Default,
-                    color = if (isSystemInDarkTheme()) Color.White else Color.Black
-                ),
-                modifier = Modifier
-                    .wrapContentSize()
-            )
             if (product.productType.type != "Shoes") {
                 Text(text = "Size: ${product.productSizes}")
             } else {
                 Text(text = "Size: ${product.productSizeShoe.size}")
             }
-            Text(text = "Description: ${product.productDescription}")
+            Text(text = "Description: ${product.productDescription}",
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis)
             TextButton(
                 onClick = {
-                    navController.navigate(Routes.IndividualProduct.route+"/${product.productType}")
+                    navController.navigate(Routes.IndividualProduct.route+"/${product.id}")
                 }
             ) {
                 Text(text = "More Info")

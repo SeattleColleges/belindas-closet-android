@@ -1,15 +1,11 @@
 package com.example.belindas_closet.model
 
-enum class ProductType(val type: String) {
-    SHOES("Shoes"), LONG_SLEEVE_SHIRT("Long Sleeve Shirt"), SHORT_SLEEVE_SHIRT("Short Sleeve Shirt"), PANT(
-        "Pant"
-    ),
-    SKIRT("Skirt"), TIE("Tie"), BELT("Belt"), JACKETS("Jackets"), DRESS("Dress"), HAT("Hat"), SOCKS(
-        "Socks"
-    ),
-    HANDBAG("Handbag"), SCARF("Scarf"), GOWN("Gown"), HOODIE("Hoodie"), SWEATER("Sweater"), VEST("Vest"), OTHER(
-        "Other"
-    )
+import com.example.belindas_closet.R
+
+enum class ProductType(val type: String, val image: Int = R.drawable.placeholder) {
+    SHOES("Shoes"), SHIRTS("Shirts"), PANTS("Pants"),
+    SKIRT("Skirt"), JACKET_BLAZER("Jacket/Blazer"), DRESS("Dress"),
+    CASUAL_WEAR("Casual Wear"), SUITS("Suits"), ACCESSORIES("Accessories")
 }
 
 enum class ProductGender {
@@ -44,5 +40,6 @@ data class Product(
     val productSizePantsWaist: ProductSizePantsWaist,
     val productSizePantsInseam: ProductSizePantsInseam,
     val productDescription: String,
-    val productImage: String,
+    val productImage: String = R.drawable.placeholder.toString(),
+    val id: String = "0"
 )

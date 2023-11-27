@@ -41,10 +41,13 @@
 
     <!--    Product Update Screen Strings    -->
     <string name="update_delete_confirm_text">Are you sure you want to delete this product?</string>
-    <string name="update_confirm_confirm_text">Are you sure you want to archive this product?</string>
+    <string name="update_archive_confirm_text">Are you sure you want to archive this product?</string>
     <string name="update_save_confirm_text">Are you sure you want to save this product?</string>
     <string name="update_cancel_confirm_text">Are you sure you want to cancel this edit?</string>
     <string name="update_page_title">Update Product</string>
+    <string name="archive_successful_toast">Archival successful!</string>
+    <string name="archive_invalid_id">Invalid ID!</string>
+    <string name="archive_failed_toast">Archival failed, please try again!</string>
 
     <!--    Forgot Password Screen Strings    -->
     <string name="forgot_password">Forgot Password?</string>
