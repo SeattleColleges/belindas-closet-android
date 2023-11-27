@@ -63,8 +63,10 @@ import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.network.auth.LoginService
 import com.example.belindas_closet.data.network.dto.auth_dto.LoginRequest
+import com.example.belindas_closet.data.network.dto.auth_dto.Role
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -307,6 +309,11 @@ suspend fun loginWithValidCredentials(email: String, password: String, navContro
         if (loginResponse != null) {
             val token = loginResponse.token
             saveToken(token)
+
+            //Extract and store user role
+            val userRole = getUserRole(token)
+            MainActivity.getPref().edit().putString("userRole", userRole.name).apply()
+
             MainActivity.getPref().edit().putString("token", loginResponse.token).apply()
             navController.navigate(Routes.AdminView.route)
             Toast.makeText(
@@ -341,6 +348,19 @@ fun getName(token: String): String? {
     } catch (e: Exception) {
         e.printStackTrace()
         null
+    }
+}
+
+fun getUserRole(token: String): Role {
+    return try {
+        val payload = token.split(".")[1]
+        val decodedPayload = String(Base64.decode(payload, Base64.DEFAULT))
+        val jsonObject = JSONObject(decodedPayload)
+        val roleString = jsonObject.getString("role")
+        Role.valueOf(roleString.uppercase(Locale.ROOT))
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Role.USER
     }
 }
 
