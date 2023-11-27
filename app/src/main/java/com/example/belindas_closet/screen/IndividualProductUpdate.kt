@@ -478,7 +478,7 @@ suspend fun delete(productId: String, navController: NavController, current: Con
             Toast.makeText(current, R.string.unauthorized_toast, Toast.LENGTH_SHORT).show()
             false
         } else if (productId.count() != 24) {
-            Toast.makeText(current, R.string.invalid_id, Toast.LENGTH_SHORT).show()
+            Toast.makeText(current, R.string.invalid_id_toast, Toast.LENGTH_SHORT).show()
             false
         } else if (deleteResponse != null) {
             MainActivity.getPref().edit().putBoolean("isHidden", deleteResponse.isHidden).apply()
