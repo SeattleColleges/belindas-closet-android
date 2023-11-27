@@ -48,7 +48,7 @@
     <string name="delete_successful_toast">Deletion successful!</string>
     <string name="archive_successful_toast">Archival successful!</string>
     <string name="unauthorized_toast">Unauthorized!</string>
-    <string name="invalid_id">Invalid ID!</string>
+    <string name="invalid_id_toast">Invalid ID!</string>
     <string name="delete_failed_toast">Deletion failed, please try again!</string>
     <string name="archive_failed_toast">Archival failed, please try again!</string>
 
