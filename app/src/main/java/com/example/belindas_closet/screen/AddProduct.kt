@@ -72,7 +72,7 @@ fun AddProductPage(navController: NavHostController) {
     */
 
     /* Back arrow that navigates back to login page */
-
+//comment for CI
     TopAppBar(
         title = { Text("Home") }, /* todo: change destination where arrow navigates to */
         navigationIcon = {
