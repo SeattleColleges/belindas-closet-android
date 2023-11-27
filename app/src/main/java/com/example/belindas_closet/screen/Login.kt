@@ -310,7 +310,7 @@ suspend fun loginWithValidCredentials(email: String, password: String, navContro
             val token = loginResponse.token
             saveToken(token)
 
-            // Extract and store user role
+            //Extract and store user role
             val userRole = getUserRole(token)
             MainActivity.getPref().edit().putString("userRole", userRole.name).apply()
 

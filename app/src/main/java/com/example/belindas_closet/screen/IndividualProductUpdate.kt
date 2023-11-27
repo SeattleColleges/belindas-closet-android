@@ -53,7 +53,9 @@ import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
 import com.example.belindas_closet.data.network.auth.ArchiveService
+import com.example.belindas_closet.data.network.auth.DeleteService
 import com.example.belindas_closet.data.network.dto.auth_dto.ArchiveRequest
+import com.example.belindas_closet.data.network.dto.auth_dto.DeleteRequest
 import com.example.belindas_closet.data.network.dto.auth_dto.Role
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductSizes
@@ -186,13 +188,17 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                     }
                     if (isDelete) {
                         ConfirmationDialogIndividual(onConfirm = {
-                            val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.productType.name))
-                            hidden?.add(product.id)
-                            val editor = MainActivity.getPref().edit()
-                            editor.putStringSet("hidden", hidden)
-                            editor.apply()
-                            navController.navigate(Routes.ProductDetail.route)
-                            // TODO: Delete the product from the database
+                            coroutineScope.launch {
+                                val isDeleteSuccessful = delete(product.id, navController, current)
+                                if (isDeleteSuccessful) {
+                                    val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.id))
+                                    hidden?.add(product.id)
+                                    val editor = MainActivity.getPref().edit()
+                                    editor.putStringSet("hidden", hidden)
+                                    editor.apply()
+                                    navController.navigate(Routes.ProductDetail.route)
+                                }
+                            }
                             // Remove the product from the database
                             isDelete = false
                         }, onDismiss = {
@@ -367,6 +373,7 @@ fun ConfirmationArchiveDialogIndividual(
         }
     }
 }
+
 @Composable
 fun ConfirmSaveDialogIndividual(
     onConfirm: () -> Unit,
@@ -458,6 +465,38 @@ fun ConfirmCancelDialogIndividual(
     }
 }
 
+suspend fun delete(productId: String, navController: NavController, current: Context): Boolean {
+    return try {
+        val userRole = MainActivity.getPref().getString("userRole", Role.USER.name)?.let {
+            Role.valueOf(it) } ?: Role.USER
+        val deleteRequest = DeleteRequest(
+            id = productId,
+            role = Role.ADMIN
+        )
+        val deleteResponse = DeleteService.create().delete(deleteRequest)
+        if (userRole != Role.ADMIN) {
+            Toast.makeText(current, R.string.unauthorized_toast, Toast.LENGTH_SHORT).show()
+            false
+        } else if (productId.count() != 24) {
+            Toast.makeText(current, R.string.invalid_id, Toast.LENGTH_SHORT).show()
+            false
+        } else if (deleteResponse != null) {
+            MainActivity.getPref().edit().putBoolean("isHidden", deleteResponse.isHidden).apply()
+            navController.navigate(Routes.ProductDetail.route)
+            Toast.makeText(current, R.string.delete_successful_toast, Toast.LENGTH_SHORT).show()
+            true
+        } else {
+            Toast.makeText(current, R.string.delete_failed_toast, Toast.LENGTH_SHORT).show()
+            false
+        }
+    } catch (e: HttpException) {
+        e.printStackTrace()
+        println("Error: ${e.message}")
+        Toast.makeText(current, "Delete failed. Error: ${e.message}", Toast.LENGTH_SHORT).show()
+        false
+    }
+}
+
 suspend fun archive(productId: String, navController: NavController, current: Context): Boolean {
     return try {
         val userRole = MainActivity.getPref().getString("userRole", Role.USER.name)?.let {
@@ -489,3 +528,4 @@ suspend fun archive(productId: String, navController: NavController, current: Co
         false
     }
 }
+
