@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
@@ -76,6 +77,14 @@ fun UpdatePage(navController: NavController) {
                         navController.navigate(Routes.ProductDetail.route)
                     }) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back to Product Detail")
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                     }
                 })
         },
