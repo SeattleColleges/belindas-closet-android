@@ -17,6 +17,8 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,11 +43,13 @@ import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
 import com.example.belindas_closet.model.Product
+import com.example.belindas_closet.model.ProductType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailPage(navController: NavController) {
     var drawerState by remember { mutableStateOf(DrawerValue.Closed) }
+    var expanded by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier
@@ -80,9 +84,13 @@ fun ProductDetailPage(navController: NavController) {
                     IconButton(
                         onClick = {
                             drawerState = DrawerValue.Open
+                            expanded = true;
                         }
                     ) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                    }
+                    DropDownCategoryList(expanded, navController) {
+                        expanded = false
                     }
                 }
             )
@@ -155,6 +163,28 @@ fun ProductDetailList(products: List<Product>, navController: NavController) {
             .filter { it.productType.type == MainActivity.getProductType() }
             .filter { !hidden!!.contains(it.id) }) { product ->
             ProductDetailCard(product = product, navController = navController)
+        }
+    }
+}
+@Composable
+fun DropDownCategoryList(expanded: Boolean, navController: NavController, onDismissRequest: () -> Unit = {}) {
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismissRequest,
+        modifier = Modifier
+            .padding(8.dp)
+    ) {
+        ProductType.values().forEach { productType ->
+            DropdownMenuItem(
+                text = { Text(productType.type) },
+                onClick = {
+                    onDismissRequest()
+                    // navigate to product type page
+                    MainActivity.setProductType(productType.type)
+                    navController.navigate(
+                        Routes.ProductDetail.route)
+                }
+            )
         }
     }
 }
