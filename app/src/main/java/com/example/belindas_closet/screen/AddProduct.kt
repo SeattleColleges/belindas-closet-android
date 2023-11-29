@@ -21,25 +21,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.navigation.NavHostController
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
-import androidx.compose.ui.platform.LocalContext
 import com.example.belindas_closet.model.ProductGender
-import com.example.belindas_closet.model.ProductSizes
 import com.example.belindas_closet.model.ProductSizePantsInseam
 import com.example.belindas_closet.model.ProductSizePantsWaist
 import com.example.belindas_closet.model.ProductSizeShoes
+import com.example.belindas_closet.model.ProductSizes
 import com.example.belindas_closet.model.ProductType
 
 
@@ -106,11 +103,6 @@ fun AddProductPage(navController: NavHostController) {
 
 
         // uncommented out, testing ci workflow on pr
-        ProductInfoField(
-            productName = productName,
-            onProductChange = { newName -> productName = newName }
-        )
-
         ProductTypeDropdown(
             selectedProductType = selectedProductType,
             onProductTypeChange = { newType -> selectedProductType = newType }
