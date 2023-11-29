@@ -35,6 +35,9 @@ import androidx.compose.ui.unit.dp
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
+import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.model.ProductGender
 import com.example.belindas_closet.model.ProductSizes
 import com.example.belindas_closet.model.ProductSizePantsInseam
@@ -74,11 +77,11 @@ fun AddProductPage(navController: NavHostController) {
     /* Back arrow that navigates back to login page */
 //comment for CI
     TopAppBar(
-        title = { Text("Home") }, /* todo: change destination where arrow navigates to */
+        title = { Text("Back") },
         navigationIcon = {
             IconButton(
                 onClick = {
-                    navController.navigate(Routes.Home.route) /* Navigate back to home page */
+                    navController.popBackStack();
                 }
             ) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
