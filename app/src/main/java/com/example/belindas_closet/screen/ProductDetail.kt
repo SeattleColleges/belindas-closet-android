@@ -49,7 +49,6 @@ import com.example.belindas_closet.model.ProductType
 @Composable
 fun ProductDetailPage(navController: NavController) {
     var drawerState by remember { mutableStateOf(DrawerValue.Closed) }
-    var expanded by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier
@@ -84,13 +83,12 @@ fun ProductDetailPage(navController: NavController) {
                     IconButton(
                         onClick = {
                             drawerState = DrawerValue.Open
-                            expanded = true;
                         }
                     ) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                     }
-                    DropDownCategoryList(expanded, navController) {
-                        expanded = false
+                    DropDownCategoryList(drawerState, navController) {
+                        drawerState = DrawerValue.Closed
                     }
                 }
             )
@@ -167,9 +165,9 @@ fun ProductDetailList(products: List<Product>, navController: NavController) {
     }
 }
 @Composable
-fun DropDownCategoryList(expanded: Boolean, navController: NavController, onDismissRequest: () -> Unit = {}) {
+fun DropDownCategoryList(drawerState: DrawerValue, navController: NavController, onDismissRequest: () -> Unit = {}) {
     DropdownMenu(
-        expanded = expanded,
+        drawerState == DrawerValue.Open,
         onDismissRequest = onDismissRequest,
         modifier = Modifier
             .padding(8.dp)
