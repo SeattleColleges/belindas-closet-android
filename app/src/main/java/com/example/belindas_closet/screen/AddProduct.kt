@@ -359,7 +359,7 @@ fun ImageUploadButton(onImagePicked: (Uri?) -> Unit) {
     val boxSize = Modifier
         .fillMaxWidth()
         .padding(12.dp)
-        .height(350.dp)
+        .height(200.dp)
 
     Box(
         modifier = boxSize
@@ -390,7 +390,7 @@ fun ImageUploadButton(onImagePicked: (Uri?) -> Unit) {
                     painter = rememberAsyncImagePainter(model = uri),
                     contentDescription = stringResource(id = R.string.product_image_picker_product_image),
                     modifier = boxSize,
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Fit
                 )
             }
         }
