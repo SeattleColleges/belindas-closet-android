@@ -71,7 +71,7 @@ fun AdminView(navController: NavHostController) {
             }
             Button(
                 onClick = {
-                    /*TODO add navigation logic to view list of all products in db*/
+                    navController.navigate(Routes.Home.route)
                 },
                 modifier = Modifier
                     .padding(4.dp)
