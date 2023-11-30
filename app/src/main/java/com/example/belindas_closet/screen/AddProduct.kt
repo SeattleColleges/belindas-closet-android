@@ -55,7 +55,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.belindas_closet.R
-import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductGender
 import com.example.belindas_closet.model.ProductSizePantsInseam
@@ -70,7 +69,6 @@ import com.example.belindas_closet.model.ProductType
 fun AddProductPage(navController: NavHostController) {
 
     var selectedProductType by remember { mutableStateOf(ProductType.SHOES) }
-    var productName by remember { mutableStateOf("") }
     var productDescription by remember { mutableStateOf("") }
     var productSize by remember { mutableStateOf(ProductSizes.SELECT_SIZE) } /* Default size set */
     var productImage by remember { mutableStateOf("") }
@@ -103,7 +101,7 @@ fun AddProductPage(navController: NavHostController) {
               navigationIcon = {
                   IconButton(
                       onClick = {
-                          navController.popBackStack();
+                          navController.popBackStack()
                       }
                   ) {
                       Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
@@ -130,13 +128,6 @@ fun AddProductPage(navController: NavHostController) {
         ) {
 
             // uncommented out, testing ci workflow on pr
-            item {
-                ProductInfoField(
-                    productName = productName,
-                    onProductChange = { newName -> productName = newName }
-                )
-            }
-
             item {
                 ProductTypeDropdown(
                     selectedProductType = selectedProductType,
@@ -168,7 +159,7 @@ fun AddProductPage(navController: NavHostController) {
                 /* TODO: finish up product button and validation logic */
                 Button(
                     onClick = {
-                        if (productName.isNotEmpty() && productSize != ProductSizes.SELECT_SIZE) {
+                        if (productSize != ProductSizes.SELECT_SIZE) {
                             newProduct = Product(
                                 productType = selectedProductType,
                                 productGender = ProductGender.NON_BINARY,
@@ -215,21 +206,6 @@ fun AddProductPage(navController: NavHostController) {
         toastMessage = ""
     }
 }
-
-
-@Composable
-fun ProductInfoField(productName: String, onProductChange: (String) -> Unit) {
-    TextField(
-        value = productName,
-        onValueChange = onProductChange,
-        label = { Text(text = "Product name") },
-        singleLine = true,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    )
-}
-
 
 @Composable
 fun ProductTypeDropdown(selectedProductType: ProductType, onProductTypeChange: (ProductType) -> Unit) {
