@@ -64,4 +64,12 @@
     <string name="product_image_picker_upload_icon">Upload Icon</string>
     <string name="product_image_picker_upload_product_image">Upload Product Image</string>
     <string name="product_image_picker_product_image">Product Image</string>
+    <string name="product_type_label">Product Type</string>
+    <string name="product_gender_label">Product Gender</string>
+    <string name="product_size_shoe_label">Product Size Shoe</string>
+    <string name="product_size_label">Product Size</string>
+    <string name="product_size_pants_waist_label">Product Size Pants Waist</string>
+    <string name="product_size_pants_inseam_label">Product Size Pants Inseam</string>
+    <string name="product_add_product_title">Add Product</string>
+    <string name="product_image_uploaded_successfully">Image uploaded successfully</string>
 </resources>
