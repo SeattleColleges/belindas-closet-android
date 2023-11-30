@@ -223,6 +223,15 @@ fun AddProductPage(navController: NavHostController) {
                             productImage = productImage
                         )
                         toastMessage = "Product added successfully"
+                        // Reset fields
+                        selectedProductType = ProductType.SHOES
+                        selectedProductGender = ProductGender.NON_BINARY
+                        selectedProductSizeShoe = ProductSizeShoes.SELECT_SIZE
+                        selectedProductSize = ProductSizes.SELECT_SIZE
+                        selectedProductSizePantsWaist = ProductSizePantsWaist.SELECT_SIZE
+                        selectedProductSizePantsInseam = ProductSizePantsInseam.SELECT_SIZE
+                        productDescription = ""
+                        productImage = ""
                     },
                     modifier = Modifier
                         .padding(16.dp)
