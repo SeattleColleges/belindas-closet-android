@@ -60,4 +60,8 @@
     <string name="forgot_password_invalid_email">Invalid email!</string>
     <string name="forgot_password_token_reset_failed">Token reset failed</string>
 
+    <!--    Add Product Screen Strings    -->
+    <string name="product_image_picker_upload_icon">Upload Icon</string>
+    <string name="product_image_picker_upload_product_image">Upload Product Image</string>
+    <string name="product_image_picker_product_image">Product Image</string>
 </resources>
