@@ -129,7 +129,6 @@ fun AddProductPage(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-
             // uncommented out, testing ci workflow on pr
             item {
                 ProductInfoField(
