@@ -297,7 +297,7 @@ fun ErrorDisplay(text: String) {
 @Composable
 fun NSCMascot() {
     Image(
-        painter = painterResource(id = R.drawable.nsc_mascot_blue_cropped),
+        painter = painterResource(id = R.drawable.nsc_mascot_green_cropped),
         contentDescription = stringResource(id = R.string.login_nsc_mascot)
     )
 }

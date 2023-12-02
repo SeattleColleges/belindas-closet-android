@@ -92,27 +92,27 @@ fun AddProductPage(navController: NavHostController) {
         }
     }
     */
-
+    
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
         topBar = {
-            /* Back arrow that navigates back to login page */
-            TopAppBar(
-                title = { Text("Home") }, /* todo: change destination where arrow navigates to */
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            navController.navigate(Routes.Home.route) /* Navigate back to home page */
-                        }
-                    ) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    IconButton(
-                        onClick = {
-                            // Handle menu icon click
+      /* Back arrow that navigates back to login page */
+          TopAppBar(
+              title = { Text("Back") },
+              navigationIcon = {
+                  IconButton(
+                      onClick = {
+                          navController.popBackStack();
+                      }
+                  ) {
+                      Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                  }
+              },
+                  actions = {
+                      IconButton(
+                          onClick = {
+                              // Handle menu icon click
                         }
                     ) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
@@ -128,7 +128,6 @@ fun AddProductPage(navController: NavHostController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
 
             // uncommented out, testing ci workflow on pr
             item {
