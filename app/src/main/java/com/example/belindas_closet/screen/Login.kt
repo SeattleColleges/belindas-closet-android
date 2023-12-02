@@ -129,7 +129,7 @@ fun LoginPage(navController: NavHostController) {
             Spacer(modifier = Modifier.height(25.dp))
         }
 
-        // Mascot image
+        // mascot image
         Box(
             modifier = Modifier
                 .fillMaxWidth()
