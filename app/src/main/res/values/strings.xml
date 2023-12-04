@@ -64,4 +64,7 @@
     <string name="product_image_picker_upload_icon">Upload Icon</string>
     <string name="product_image_picker_upload_product_image">Upload Product Image</string>
     <string name="product_image_picker_product_image">Product Image</string>
+
+    <!--    DonationInfo Screen Strings    -->
+    <string name="donation_info">Donation Info</string>
 </resources>
