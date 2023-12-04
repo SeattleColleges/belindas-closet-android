@@ -11,4 +11,5 @@ sealed class Routes (val route: String) {
     object IndividualProduct: Routes("Individual_Product")
     object IndividualProductUpdatePage: Routes("Individual_Product_Update")
     object AdminView: Routes("Admin_View")
+    object DonationInfo: Routes("Donation_Info")
 }

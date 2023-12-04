@@ -40,6 +40,9 @@ fun ScreenMain() {
         composable(Routes.AdminView.route) {
             AdminView(navController = navController)
         }
+        composable(Routes.DonationInfo.route) {
+            DonationInfoPage(navController = navController)
+        }
 
         composable(Routes.IndividualProduct.route+"/{productId}",
             arguments = listOf(navArgument("productId") { type = NavType.StringType })
