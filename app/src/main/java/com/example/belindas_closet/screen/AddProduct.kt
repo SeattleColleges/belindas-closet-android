@@ -1,14 +1,25 @@
 package com.example.belindas_closet.screen
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
@@ -17,29 +28,40 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.navigation.NavHostController
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
+import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
-import androidx.compose.ui.platform.LocalContext
 import com.example.belindas_closet.model.ProductGender
-import com.example.belindas_closet.model.ProductSizes
 import com.example.belindas_closet.model.ProductSizePantsInseam
 import com.example.belindas_closet.model.ProductSizePantsWaist
 import com.example.belindas_closet.model.ProductSizeShoes
+import com.example.belindas_closet.model.ProductSizes
 import com.example.belindas_closet.model.ProductType
 
 
@@ -51,7 +73,7 @@ fun AddProductPage(navController: NavHostController) {
     var productName by remember { mutableStateOf("") }
     var productDescription by remember { mutableStateOf("") }
     var productSize by remember { mutableStateOf(ProductSizes.SELECT_SIZE) } /* Default size set */
-    val productImage by remember { mutableStateOf("") }
+    var productImage by remember { mutableStateOf("") }
     var toastMessage by remember { mutableStateOf("") }
     var newProduct by remember { mutableStateOf<Product?>(null) }    
     /* // todo: button for inserting an image, need to change productImage type to BitImage everywhere it exists
@@ -70,98 +92,118 @@ fun AddProductPage(navController: NavHostController) {
         }
     }
     */
-
-    /* Back arrow that navigates back to login page */
-//comment for CI
-    TopAppBar(
-        title = { Text("Home") }, /* todo: change destination where arrow navigates to */
-        navigationIcon = {
-            IconButton(
-                onClick = {
-                    navController.navigate(Routes.Home.route) /* Navigate back to home page */
-                }
-            ) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
-            }
-        },
-            actions = {
-                IconButton(
-                    onClick = {
-                        // Handle menu icon click
-                    }
-                ) {
-                    Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-                }
-        }
-
-    )
-
-    Column(
+    
+    Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-
-        // uncommented out, testing ci workflow on pr
-        ProductInfoField(
-            productName = productName,
-            onProductChange = { newName -> productName = newName }
-        )
-
-        ProductTypeDropdown(
-            selectedProductType = selectedProductType,
-            onProductTypeChange = { newType -> selectedProductType = newType }
-        )
-
-        ProductSizeField(
-            productSize = productSize,
-            onSizeChange = { newSize -> productSize = newSize }
-        )
-
-        ProductDescriptionField(
-            productDescription = productDescription,
-            onDescriptionChange = { newDescription -> productDescription = newDescription }
-        )
-
-
-        /* TODO: finish up product button and validation logic */
-        Button(
-            onClick = {
-                if (productName.isNotEmpty() && productSize != ProductSizes.SELECT_SIZE) {
-                     newProduct = Product(
-                        productType = selectedProductType,
-                        productGender = ProductGender.NON_BINARY,
-                        productSizeShoe = ProductSizeShoes.SELECT_SIZE,
-                        productSizes = productSize,
-                        productSizePantsWaist = ProductSizePantsWaist.S,
-                        productSizePantsInseam = ProductSizePantsInseam.M,
-                        productDescription = productDescription,
-                        productImage = productImage
-                    )
-                    /* TODO: Save the new product to the database or use a list to hold products */
-                    // Set toast message to show success
-                    toastMessage = "Product added successfully"
-                } else {
-                    /* TODO: show error message for empty fields */
-                    // Set the toast message for an error
-                    toastMessage = "Please fill in all fields"
+            .fillMaxSize(),
+        topBar = {
+      /* Back arrow that navigates back to login page */
+          TopAppBar(
+              title = { Text("Back") },
+              navigationIcon = {
+                  IconButton(
+                      onClick = {
+                          navController.popBackStack();
+                      }
+                  ) {
+                      Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                  }
+              },
+                  actions = {
+                      IconButton(
+                          onClick = {
+                              // Handle menu icon click
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                    }
                 }
-            },
+            )
+        },
+    ) { innerPadding ->
+        LazyColumn(
             modifier = Modifier
-                .padding(16.dp)
-                .width(200.dp)
-                .align(Alignment.CenterHorizontally)
+                .fillMaxSize()
+                .padding(innerPadding),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Add Product")
-        }
-        // Display the new product
-        if (newProduct != null) {
-            DisplayNewProduct(newProduct!!)
+
+            // uncommented out, testing ci workflow on pr
+            item {
+                ProductInfoField(
+                    productName = productName,
+                    onProductChange = { newName -> productName = newName }
+                )
+            }
+
+            item {
+                ProductTypeDropdown(
+                    selectedProductType = selectedProductType,
+                    onProductTypeChange = { newType -> selectedProductType = newType }
+                )
+            }
+
+            item {
+                ProductSizeField(
+                    productSize = productSize,
+                    onSizeChange = { newSize -> productSize = newSize }
+                )
+            }
+
+            item {
+                ProductDescriptionField(
+                    productDescription = productDescription,
+                    onDescriptionChange = { newDescription -> productDescription = newDescription }
+                )
+            }
+
+            item {
+                ImageUploadButton(
+                    onImagePicked = { uri -> productImage = uri.toString() }
+                )
+            }
+
+            item {
+                /* TODO: finish up product button and validation logic */
+                Button(
+                    onClick = {
+                        if (productName.isNotEmpty() && productSize != ProductSizes.SELECT_SIZE) {
+                            newProduct = Product(
+                                productType = selectedProductType,
+                                productGender = ProductGender.NON_BINARY,
+                                productSizeShoe = ProductSizeShoes.SELECT_SIZE,
+                                productSizes = productSize,
+                                productSizePantsWaist = ProductSizePantsWaist.S,
+                                productSizePantsInseam = ProductSizePantsInseam.M,
+                                productDescription = productDescription,
+                                productImage = productImage
+                            )
+                            /* TODO: Save the new product to the database or use a list to hold products */
+                            // Set toast message to show success
+                            toastMessage = "Product added successfully"
+                        } else {
+                            /* TODO: show error message for empty fields */
+                            // Set the toast message for an error
+                            toastMessage = "Please fill in all fields"
+                        }
+                    },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .width(200.dp)
+                ) {
+                    Text(text = "Add Product")
+                }
+            }
+            item {
+                // Display the new product
+                if (newProduct != null) {
+                    DisplayNewProduct(newProduct!!)
+                }
+            }
         }
     }
+
     // Display the toast message and reset it
     if (toastMessage.isNotEmpty()) {
         Toast.makeText(
@@ -300,4 +342,83 @@ fun DisplayNewProduct(newProduct: Product) {
         Text(text = "Product Description: ${newProduct.productDescription}")
         // Add more fields as needed
     }
+}
+
+// Image Picker
+@Composable
+fun ImageUploadButton(onImagePicked: (Uri?) -> Unit) {
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri = uri
+        onImagePicked(imageUri)
+    }
+
+    val boxSize = Modifier
+        .fillMaxWidth()
+        .padding(12.dp)
+        .height(200.dp)
+
+    Box(
+        modifier = boxSize
+            .background(Color.White, shape = RoundedCornerShape(16.dp))
+            .clickable {
+                launcher.launch("image/*")
+            }
+            .clip(RoundedCornerShape(4.dp))
+            .drawDottedBorder(2.dp, Color.DarkGray, 12.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        if (imageUri == null) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(id = R.string.product_image_picker_upload_icon),
+                    tint = Color.Gray,
+                    modifier = Modifier.size(36.dp)
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = stringResource(id = R.string.product_image_picker_upload_product_image), fontSize = 16.sp, color = Color.Black)
+                Spacer(modifier = Modifier.height(4.dp))
+            }
+        } else {
+            imageUri?.let { uri ->
+                Image(
+                    painter = rememberAsyncImagePainter(model = uri),
+                    contentDescription = stringResource(id = R.string.product_image_picker_product_image),
+                    modifier = boxSize,
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
+    }
+}
+fun Modifier.drawDottedBorder(
+    strokeWidth: Dp,
+    color: Color,
+    dashWidth: Dp
+): Modifier = composed {
+    this.then(
+        drawWithContent {
+            drawContent()
+            val pathEffect =
+                PathEffect.dashPathEffect(floatArrayOf(dashWidth.toPx(), dashWidth.toPx()), 0f)
+            val halfStrokeWidth = strokeWidth.toPx() / 3
+            translate(top = halfStrokeWidth, left = halfStrokeWidth) {
+                drawRoundRect(
+                    color = color,
+                    size = size.copy(
+                        width = size.width - strokeWidth.toPx(),
+                        height = size.height - strokeWidth.toPx()
+                    ),
+                    style = Stroke(
+                        width = strokeWidth.toPx(),
+                        pathEffect = pathEffect as PathEffect?
+                    )
+                )
+            }
+        }
+    )
 }
