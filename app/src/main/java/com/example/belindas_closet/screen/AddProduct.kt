@@ -130,12 +130,7 @@ fun AddProductPage(navController: NavHostController) {
         ) {
 
             // uncommented out, testing ci workflow on pr
-            item {
-                ProductInfoField(
-                    productName = productName,
-                    onProductChange = { newName -> productName = newName }
-                )
-            }
+
 
             item {
                 ProductTypeDropdown(
@@ -217,18 +212,6 @@ fun AddProductPage(navController: NavHostController) {
 }
 
 
-@Composable
-fun ProductInfoField(productName: String, onProductChange: (String) -> Unit) {
-    TextField(
-        value = productName,
-        onValueChange = onProductChange,
-        label = { Text(text = "Product name") },
-        singleLine = true,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    )
-}
 
 
 @Composable

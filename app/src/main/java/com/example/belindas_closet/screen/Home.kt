@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -12,10 +11,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,23 +41,36 @@ import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductType
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(navController: NavController) {
-    Row(
-        modifier = Modifier
-            .size(125.dp)
-            .padding(top = 10.dp, start = 10.dp),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.Start
-    ) {
-        NSCLogo()
-    }
-    Row(
+    Scaffold(
         modifier = Modifier
             .fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ){
+        topBar = {
+            TopAppBar(
+                title = { },
+                navigationIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.nsc_v_logo),
+                        contentDescription = stringResource(id = R.string.home_nsc_logo_description),
+                        modifier = Modifier
+                            .size(100.dp)
+                            .padding(top = 10.dp, start = 10.dp),
+                    )
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                    }
+                }
+            )
+        },
+    ) { innerPadding ->
+        val modifier = Modifier.padding(innerPadding)
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -78,19 +96,19 @@ fun HomePage(navController: NavController) {
             )
             Spacer(modifier = Modifier.padding(16.dp))
 
-        // Add Product button (Temporary),
-        // todo: will later be moved and protected for only admin access
-        Button(
-            onClick = {
-                /*TODO add navigation logic to the protected page only allowing Admin access*/
-                navController.navigate(Routes.AddProduct.route)
-            },
-            modifier = Modifier
-                .padding(4.dp)
-                .align(Alignment.CenterHorizontally)
-        ) {
-            Text(text = "Add Product")
-        }
+            // Add Product button (Temporary),
+            // todo: will later be moved and protected for only admin access
+            Button(
+                onClick = {
+                    /*TODO add navigation logic to the protected page only allowing Admin access*/
+                    navController.navigate(Routes.AddProduct.route)
+                },
+                modifier = Modifier
+                    .padding(4.dp)
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Text(text = "Add Product")
+            }
             // TODO Delete later. Just for testing purpose
 //            TextButton(
 //                onClick = {
@@ -144,7 +162,7 @@ fun TypeCard(productType: ProductType, navController: NavController) {
                 modifier = Modifier
                     .size(200.dp)
                     .padding(16.dp),
-                )
+            )
             Text(
                 text = productType.type,
                 style = TextStyle(
@@ -198,5 +216,5 @@ fun NSCLogo() {
     Image(
         painter = painterResource(id = R.drawable.nsc_v_logo),
         contentDescription = stringResource(id = R.string.home_nsc_logo_description)
-    ) 
+    )
 }
