@@ -12,10 +12,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,12 +41,36 @@ import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductType
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(navController: NavController) {
+    TopAppBar(
+        title = { Text("") },
+        actions = {
+            IconButton(
+                onClick = {
+                    navController.navigate(Routes.DonationInfo.route)
+                }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.info_icon),
+                    contentDescription =  "Donation Info page",
+                    modifier = Modifier.padding(10.dp)
+                )
+            }
+            IconButton(
+                onClick = {
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+            }
+        }
+
+    )
     Row(
         modifier = Modifier
-            .size(125.dp)
-            .padding(top = 10.dp, start = 10.dp),
+            .size(75.dp)
+            .padding(top = 20.dp, start = 10.dp),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Start
     ) {
