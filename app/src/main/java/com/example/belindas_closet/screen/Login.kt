@@ -11,6 +11,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -79,6 +81,7 @@ fun LoginPage(navController: NavHostController) {
     val coroutineScope = rememberCoroutineScope()
     val current = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val creatorChecked = remember { mutableStateOf(false) }
 
     /* Back arrow that navigates back to login page */
     TopAppBar(
@@ -210,7 +213,8 @@ fun LoginPage(navController: NavHostController) {
                         if (isEmailValid && isPasswordValid) {
                             // Login with valid credentials
                             coroutineScope.launch {
-                                loginWithValidCredentials(email, password, navController, current)
+                                loginWithValidCredentials(email, password, navController, current,
+                                    creatorChecked.value)
                             }
                         }
                     },
@@ -242,6 +246,12 @@ fun LoginPage(navController: NavHostController) {
                         .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                         .align(Alignment.CenterHorizontally)
                 )
+                Row (verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = creatorChecked.value,
+                        onCheckedChange = {isChecked -> creatorChecked.value = isChecked}
+                    )
+                    Text(text = "Log in as User")
+                }
             }
         }
 
@@ -303,7 +313,10 @@ fun NSCMascot() {
     )
 }
 
-suspend fun loginWithValidCredentials(email: String, password: String, navController: NavHostController, current: Context) {
+suspend fun loginWithValidCredentials(email: String, password: String,
+                                      navController: NavHostController,
+                                      current: Context,
+                                      user: Boolean) {
     try {
         val loginRequest = LoginRequest(email, password)
         val loginResponse = LoginService.create().login(loginRequest)
@@ -312,14 +325,15 @@ suspend fun loginWithValidCredentials(email: String, password: String, navContro
             saveToken(token)
 
             //Extract and store user role
-            val userRole = getUserRole(token)
+            var userRole = getUserRole(token)
             MainActivity.getPref().edit().putString("userRole", userRole.name).apply()
+            MainActivity.getPref().edit().putString("userRole", "USER").apply()
 
             MainActivity.getPref().edit().putString("token", loginResponse.token).apply()
-            if (userRole.name == "ADMIN") {
-                navController.navigate(Routes.AdminView.route)
-            } else {
+            if ( user == true) {
                 navController.navigate(Routes.CreatorView.route)
+            } else {
+                navController.navigate(Routes.AdminView.route)
             }
             Toast.makeText(
                 current,
