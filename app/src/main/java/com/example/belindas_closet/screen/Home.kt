@@ -197,7 +197,7 @@ fun ProductTypeList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(typeList){productType ->
+        items(typeList){ productType ->
             TypeCard(productType = productType, navController = navController)
             Spacer(modifier = Modifier.padding(16.dp))
         }
