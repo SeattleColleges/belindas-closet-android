@@ -72,4 +72,12 @@
     <string name="product_size_pants_inseam_label">Product Size Pants Inseam</string>
     <string name="product_add_product_title">Add Product</string>
     <string name="product_image_uploaded_successfully">Image uploaded successfully</string>
+
+    <!--    Reset Password Screen Strings    -->
+    <string name="reset_password_title">Reset Password</string>
+    <string name="reset_new_password_label">New Password</string>
+    <string name="reset_password_error">New password is invalid, please try again!</string>
+    <string name="reset_confirm_new_password_label">Confirm New Password</string>
+    <string name="reset_password_submit_button">Reset Password</string>
+    <string name="reset_new_password_to_login_back_button_description">Back to Login</string>
 </resources>
