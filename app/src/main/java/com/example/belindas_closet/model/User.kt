@@ -36,6 +36,7 @@ data class User(
         const val userLastName: String = "User Last Name"
         const val userEmail: String = "test@email.com"
         val userRole: UserRole = UserRole.STANDARD
+        val userId: String ="00"
     }
 }
 

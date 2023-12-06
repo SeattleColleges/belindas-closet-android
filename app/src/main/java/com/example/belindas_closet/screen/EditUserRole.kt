@@ -13,12 +13,17 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,53 +45,66 @@ import com.example.belindas_closet.model.ProductType
 import com.example.belindas_closet.model.User
 import com.example.belindas_closet.model.UserRole
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditUserRole(navController: NavController) {
-    Row(
-        modifier = Modifier
-            .size(125.dp)
-            .padding(top = 10.dp, start = 10.dp),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.Start
-    ) {
-        NSCLogo()
-    }
-    Row(
+
+    Scaffold(
         modifier = Modifier
             .fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ){
-        Column(
+        topBar = {
+            /* Back arrow that navigates back to login page */
+            TopAppBar(
+                title = { Text("Back") },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navController.navigate(Routes.AdminView.route)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back to Home page"
+                        )
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        val modifier = Modifier.padding(innerPadding)
+        Row(
+            modifier = Modifier
+                .size(125.dp)
+                .padding(top = 10.dp, start = 10.dp),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            NSCLogo()
+        }
+        Row(
             modifier = Modifier
                 .fillMaxSize(),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Spacer(modifier = Modifier.padding(50.dp))
-            UserList(users = Datasource().loadUsers(), navController = navController)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.padding(50.dp))
+                UserList(users = Datasource().loadUsers(), navController = navController)
+            }
         }
     }
 }
 
 @Composable
-fun userTextField(text: String, fontSize: TextUnit = 20.sp) {
-    Text(
-        text = text,
-        style = TextStyle(
-            fontSize = fontSize,
-            fontWeight = FontWeight.Bold,
-            fontFamily = FontFamily.Default,
-        ),
-        modifier = Modifier
-            .wrapContentSize()
-    )
-}
-
-@Composable
-fun UserCard(userRole: UserRole, navController: NavController) {
+fun UserCard(user: User, navController: NavController) {
     Card(
         modifier = Modifier
+        /** To Do: Make clickable **/
         /** To Do: Make clickable **/
     ) {
         Column(
@@ -96,7 +114,7 @@ fun UserCard(userRole: UserRole, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = User.userFirstName,
+                text = user.userFirstName + " " + user.userLastName,
                 style = TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
@@ -106,7 +124,7 @@ fun UserCard(userRole: UserRole, navController: NavController) {
                     .wrapContentSize()
             )
             Text(
-                text = User.userLastName,
+                text = "Current Role: " + user.userRole,
                 style = TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
@@ -115,32 +133,28 @@ fun UserCard(userRole: UserRole, navController: NavController) {
                 modifier = Modifier
                     .wrapContentSize()
             )
-            Text(
-                text = userRole.userType,
-                style = TextStyle(
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Default,
-                ),
-                modifier = Modifier
-                    .wrapContentSize()
-            )
-            Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+            IconButton(
+                onClick = {
+                    //TO DO: make icon functional and able to edit role.
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+            }
         }
     }
 }
 
 @Composable
 fun UserList(users: List<User>, navController: NavController) {
-    val typeList = UserRole.values();
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(typeList) { userRole ->
-            UserCard(userRole = userRole, navController = navController)
-            Spacer(modifier = Modifier.padding(16.dp))
+        items(users) { User ->
+            UserCard(user = User, navController = navController)
         }
     }
 }

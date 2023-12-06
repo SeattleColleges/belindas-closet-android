@@ -231,6 +231,33 @@ class Datasource {
                 userId = "3"
             )
         )
+        userList.add(
+            User(
+                userFirstName = "Kim",
+                userLastName = "Johnson",
+                userEmail = "KimJohnson@gmail.com",
+                UserRole.ADMIN,
+                userId = "4"
+            )
+        )
+        userList.add(
+            User(
+                userFirstName = "Ellen",
+                userLastName = "Jones",
+                userEmail = "Ellen_J@gmail.com",
+                UserRole.STANDARD,
+                userId = "5"
+            )
+        )
+        userList.add(
+            User(
+                userFirstName = "Taylor",
+                userLastName = "Wright",
+                userEmail = "TayW265@gmail.com",
+                UserRole.STANDARD,
+                userId = "6"
+            )
+        )
     }
 
     fun loadProducts(): List<Product> {

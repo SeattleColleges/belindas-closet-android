@@ -20,7 +20,6 @@ fun ScreenMain() {
         }
         composable(Routes.ProductDetail.route) {
             ProductDetailPage(navController = navController)
-
         }
         composable(Routes.Update.route) {
             UpdatePage(navController = navController)
