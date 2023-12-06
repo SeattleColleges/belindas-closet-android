@@ -200,6 +200,9 @@ class Datasource {
             )
         )
 
+    }
+    init {
+
         // Adding Users to UserList
         userList.add(
             User(
@@ -208,6 +211,24 @@ class Datasource {
                 userEmail = "hiJohn123@gmail.com",
                 UserRole.ADMIN,
                 userId = "1"
+            )
+        )
+        userList.add(
+            User(
+                userFirstName = "Alex",
+                userLastName = "Brown",
+                userEmail = "AlexB@gmail.com",
+                UserRole.STANDARD,
+                userId = "2"
+            )
+        )
+        userList.add(
+            User(
+                userFirstName = "Jason",
+                userLastName = "Ni",
+                userEmail = "JNi@gmail.com",
+                UserRole.ADMIN,
+                userId = "3"
             )
         )
     }

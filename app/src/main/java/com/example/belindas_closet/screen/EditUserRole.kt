@@ -105,6 +105,26 @@ fun UserCard(userRole: UserRole, navController: NavController) {
                 modifier = Modifier
                     .wrapContentSize()
             )
+            Text(
+                text = User.userLastName,
+                style = TextStyle(
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Default,
+                ),
+                modifier = Modifier
+                    .wrapContentSize()
+            )
+            Text(
+                text = userRole.userType,
+                style = TextStyle(
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Default,
+                ),
+                modifier = Modifier
+                    .wrapContentSize()
+            )
             Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
         }
     }

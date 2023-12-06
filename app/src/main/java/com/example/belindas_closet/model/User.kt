@@ -4,8 +4,8 @@ import android.view.View
 import com.example.belindas_closet.R
 
 // saving template of product variables in case of editing user variables similarly
-enum class UserRole {
-    ADMIN, STANDARD
+enum class UserRole(val userType: String) {
+    ADMIN("Admin"), STANDARD("Standard")
 }
 //
 //// Shoes sizes
