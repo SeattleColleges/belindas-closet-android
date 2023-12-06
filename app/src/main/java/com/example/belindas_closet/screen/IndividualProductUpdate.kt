@@ -1,5 +1,8 @@
 package com.example.belindas_closet.screen
 
+import android.content.Context
+import android.net.http.HttpException
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,6 +22,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
@@ -34,25 +38,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
+import com.example.belindas_closet.data.network.auth.ArchiveService
+import com.example.belindas_closet.data.network.auth.DeleteService
+import com.example.belindas_closet.data.network.dto.auth_dto.ArchiveRequest
+import com.example.belindas_closet.data.network.dto.auth_dto.DeleteRequest
+import com.example.belindas_closet.data.network.dto.auth_dto.Role
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductSizes
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,6 +82,14 @@ fun IndividualProductUpdatePage(navController: NavController, productId: String)
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Back to Home page"
                         )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                     }
                 }
             )
@@ -99,6 +115,8 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
     var isArchive by remember { mutableStateOf(false) }
     var isSave by remember { mutableStateOf(false) }
     var isCancel by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val current = LocalContext.current
 
     Card(
         modifier = Modifier
@@ -179,13 +197,17 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                     }
                     if (isDelete) {
                         ConfirmationDialogIndividual(onConfirm = {
-                            val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.productType.name))
-                            hidden?.add(product.productType.name)
-                            val editor = MainActivity.getPref().edit()
-                            editor.putStringSet("hidden", hidden)
-                            editor.apply()
-                            navController.navigate(Routes.ProductDetail.route)
-                            // TODO: Delete the product from the database
+                            coroutineScope.launch {
+                                val isDeleteSuccessful = delete(product.id, navController, current)
+                                if (isDeleteSuccessful) {
+                                    val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.id))
+                                    hidden?.add(product.id)
+                                    val editor = MainActivity.getPref().edit()
+                                    editor.putStringSet("hidden", hidden)
+                                    editor.apply()
+                                    navController.navigate(Routes.ProductDetail.route)
+                                }
+                            }
                             // Remove the product from the database
                             isDelete = false
                         }, onDismiss = {
@@ -204,14 +226,16 @@ fun UpdateIndividualProductCard(product: Product, navController: NavController) 
                     }
                     if (isArchive) {
                         ConfirmationArchiveDialogIndividual(onConfirm = {
-                            val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.productType.name))
-                            hidden?.add(product.productType.name)
-                            val editor = MainActivity.getPref().edit()
-                            editor.putStringSet("hidden", hidden)
-                            editor.apply()
-                            navController.navigate(Routes.ProductDetail.route)
-                            // TODO: Add the product to "sold" collection in database
-                            // Remove the product from product page
+                            coroutineScope.launch {
+                                val isArchiveSuccessful = archive(product.id, navController, current)
+                                if (isArchiveSuccessful) {
+                                    val hidden = MainActivity.getPref().getStringSet("hidden", mutableSetOf(product.id))
+                                    hidden?.add(product.id)
+                                    val editor = MainActivity.getPref().edit()
+                                    editor.putStringSet("hidden", hidden)
+                                    editor.apply()
+                                }
+                            }
                             isArchive = false
                         }, onDismiss = {
                             isArchive = false
@@ -335,7 +359,7 @@ fun ConfirmationArchiveDialogIndividual(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(stringResource(R.string.update_confirm_confirm_text))
+                Text(stringResource(R.string.update_archive_confirm_text))
                 Spacer(modifier = Modifier.padding(8.dp))
                 Row(
                     modifier = Modifier
@@ -358,6 +382,7 @@ fun ConfirmationArchiveDialogIndividual(
         }
     }
 }
+
 @Composable
 fun ConfirmSaveDialogIndividual(
     onConfirm: () -> Unit,
@@ -448,3 +473,68 @@ fun ConfirmCancelDialogIndividual(
         }
     }
 }
+
+suspend fun delete(productId: String, navController: NavController, current: Context): Boolean {
+    return try {
+        val userRole = MainActivity.getPref().getString("userRole", Role.USER.name)?.let {
+            Role.valueOf(it) } ?: Role.USER
+        val deleteRequest = DeleteRequest(
+            id = productId,
+            role = Role.ADMIN
+        )
+        val deleteResponse = DeleteService.create().delete(deleteRequest)
+        if (userRole != Role.ADMIN) {
+            Toast.makeText(current, R.string.unauthorized_toast, Toast.LENGTH_SHORT).show()
+            false
+        } else if (productId.count() != 24) {
+            Toast.makeText(current, R.string.invalid_id_toast, Toast.LENGTH_SHORT).show()
+            false
+        } else if (deleteResponse != null) {
+            MainActivity.getPref().edit().putBoolean("isHidden", deleteResponse.isHidden).apply()
+            navController.navigate(Routes.ProductDetail.route)
+            Toast.makeText(current, R.string.delete_successful_toast, Toast.LENGTH_SHORT).show()
+            true
+        } else {
+            Toast.makeText(current, R.string.delete_failed_toast, Toast.LENGTH_SHORT).show()
+            false
+        }
+    } catch (e: HttpException) {
+        e.printStackTrace()
+        println("Error: ${e.message}")
+        Toast.makeText(current, "Delete failed. Error: ${e.message}", Toast.LENGTH_SHORT).show()
+        false
+    }
+}
+
+suspend fun archive(productId: String, navController: NavController, current: Context): Boolean {
+    return try {
+        val userRole = MainActivity.getPref().getString("userRole", Role.USER.name)?.let {
+            Role.valueOf(it) } ?: Role.USER
+        val archiveRequest = ArchiveRequest(
+            id = productId,
+            role = Role.ADMIN
+        )
+        val archiveResponse = ArchiveService.create().archive(archiveRequest)
+        if (userRole != Role.ADMIN) {
+            Toast.makeText(current, R.string.unauthorized_toast, Toast.LENGTH_SHORT).show()
+            false
+        } else if (productId.count() != 24) {
+            Toast.makeText(current, R.string.invalid_id_toast, Toast.LENGTH_SHORT).show()
+            false
+        } else if (archiveResponse != null) {
+            MainActivity.getPref().edit().putBoolean("isSold", archiveResponse.isSold).apply()
+            navController.navigate(Routes.ProductDetail.route)
+            Toast.makeText(current, R.string.archive_successful_toast, Toast.LENGTH_SHORT).show()
+            true
+        } else {
+            Toast.makeText(current, R.string.archive_failed_toast, Toast.LENGTH_SHORT).show()
+            false
+        }
+    } catch (e: HttpException) {
+        e.printStackTrace()
+        println("Error: ${e.message}")
+        Toast.makeText(current, "Archive failed. Error: ${e.message}", Toast.LENGTH_SHORT).show()
+        false
+    }
+}
+

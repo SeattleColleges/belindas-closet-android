@@ -15,6 +15,7 @@ on:
       - '**.kt'
       - '**/*.xml'  # Matches all XML files in any directory
       - '**/*.png'  # Matches all PNG files in any directory
+      - '**/*.md'  # Matches all MD files in any directory
       # Add any other file patterns you need to include
 
 jobs:

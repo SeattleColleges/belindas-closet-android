@@ -36,11 +36,17 @@ fun ScreenMain() {
         composable(Routes.ForgotPassword.route) {
             ForgotPasswordPage(navController = navController)
         }
+        composable(Routes.ResetPassword.route) {
+            ResetPasswordPage(navController = navController)
+        }
         composable(Routes.AdminView.route) {
             AdminView(navController = navController)
         }
         composable(Routes.EditUserRole.route) {
             EditUserRole(navController = navController)
+        }
+        composable(Routes.DonationInfo.route) {
+            DonationInfoPage(navController = navController)
         }
 
         composable(Routes.IndividualProduct.route+"/{productId}",

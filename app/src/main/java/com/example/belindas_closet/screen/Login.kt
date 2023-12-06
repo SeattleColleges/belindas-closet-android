@@ -63,8 +63,10 @@ import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.network.auth.LoginService
 import com.example.belindas_closet.data.network.dto.auth_dto.LoginRequest
+import com.example.belindas_closet.data.network.dto.auth_dto.Role
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -127,7 +129,7 @@ fun LoginPage(navController: NavHostController) {
             Spacer(modifier = Modifier.height(25.dp))
         }
 
-        // Mascot image
+        // mascot image
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -295,17 +297,23 @@ fun ErrorDisplay(text: String) {
 @Composable
 fun NSCMascot() {
     Image(
-        painter = painterResource(id = R.drawable.nsc_mascot_blue_cropped),
+        painter = painterResource(id = R.drawable.nsc_mascot_green_cropped),
         contentDescription = stringResource(id = R.string.login_nsc_mascot)
     )
 }
 
 suspend fun loginWithValidCredentials(email: String, password: String, navController: NavHostController, current: Context) {
-    // login with valid credentials
     try {
         val loginRequest = LoginRequest(email, password)
         val loginResponse = LoginService.create().login(loginRequest)
         if (loginResponse != null) {
+            val token = loginResponse.token
+            saveToken(token)
+
+            //Extract and store user role
+            val userRole = getUserRole(token)
+            MainActivity.getPref().edit().putString("userRole", userRole.name).apply()
+
             MainActivity.getPref().edit().putString("token", loginResponse.token).apply()
             navController.navigate(Routes.AdminView.route)
             Toast.makeText(
@@ -313,6 +321,7 @@ suspend fun loginWithValidCredentials(email: String, password: String, navContro
                 "Welcome ${getName(loginResponse.token)} to Belinda's Closet!",
                 Toast.LENGTH_SHORT
             ).show()
+            loginResponse.token
         } else {
             Toast.makeText(
                 current,
@@ -340,4 +349,21 @@ fun getName(token: String): String? {
         e.printStackTrace()
         null
     }
+}
+
+fun getUserRole(token: String): Role {
+    return try {
+        val payload = token.split(".")[1]
+        val decodedPayload = String(Base64.decode(payload, Base64.DEFAULT))
+        val jsonObject = JSONObject(decodedPayload)
+        val roleString = jsonObject.getString("role")
+        Role.valueOf(roleString.uppercase(Locale.ROOT))
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Role.USER
+    }
+}
+
+fun saveToken(token: String) {
+    MainActivity.getPref().edit().putString("token", token).apply()
 }
