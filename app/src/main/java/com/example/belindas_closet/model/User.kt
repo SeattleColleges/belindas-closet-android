@@ -1,7 +1,6 @@
 package com.example.belindas_closet.model
 
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
 import com.example.belindas_closet.R
 
 // saving template of product variables in case of editing user variables similarly
@@ -31,5 +30,9 @@ data class User(
     val userEmail: String,
     val userRole: UserRole,
     val userId: String = "0"
-)
+) {
+    companion object {
+        val userFirstName: String = "No Name User"
+    }
+}
 

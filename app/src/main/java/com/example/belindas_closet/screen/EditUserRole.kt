@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -66,6 +70,46 @@ fun EditUserRole(navController: NavController) {
 }
 
 @Composable
+fun userTextField(text: String, fontSize: TextUnit = 20.sp) {
+    Text(
+        text = text,
+        style = TextStyle(
+            fontSize = fontSize,
+            fontWeight = FontWeight.Bold,
+            fontFamily = FontFamily.Default,
+        ),
+        modifier = Modifier
+            .wrapContentSize()
+    )
+}
+
+@Composable
+fun UserCard(userRole: UserRole, navController: NavController) {
+    Card(
+        modifier = Modifier
+        /** To Do: Make clickable **/
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = User.userFirstName,
+                style = TextStyle(
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Default,
+                ),
+                modifier = Modifier
+                    .wrapContentSize()
+            )
+        }
+    }
+}
+
+@Composable
 fun UserList(users: List<User>, navController: NavController) {
     val typeList = UserRole.values();
     LazyColumn(
@@ -73,7 +117,8 @@ fun UserList(users: List<User>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(typeList) { UserRole ->
+        items(typeList) { userRole ->
+            UserCard(userRole = userRole, navController = navController)
             Spacer(modifier = Modifier.padding(16.dp))
         }
     }
