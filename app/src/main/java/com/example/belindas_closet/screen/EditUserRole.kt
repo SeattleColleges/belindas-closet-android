@@ -105,6 +105,7 @@ fun UserCard(userRole: UserRole, navController: NavController) {
                 modifier = Modifier
                     .wrapContentSize()
             )
+            Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
         }
     }
 }

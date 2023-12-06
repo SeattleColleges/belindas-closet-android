@@ -32,7 +32,10 @@ data class User(
     val userId: String = "0"
 ) {
     companion object {
-        val userFirstName: String = "No Name User"
+        const val userFirstName: String = "User First Name"
+        const val userLastName: String = "User Last Name"
+        const val userEmail: String = "test@email.com"
+        val userRole: UserRole = UserRole.STANDARD
     }
 }
 
