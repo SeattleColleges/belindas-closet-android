@@ -8,9 +8,13 @@ import com.example.belindas_closet.model.ProductSizePantsWaist
 import com.example.belindas_closet.model.ProductSizeShoes
 import com.example.belindas_closet.model.ProductSizes
 import com.example.belindas_closet.model.ProductType
+import com.example.belindas_closet.model.User
+import com.example.belindas_closet.model.UserRole
 
 class Datasource {
     private val productList = mutableListOf<Product>()
+    private val userList = mutableListOf<User>()
+
 
     init {
         productList.add(
@@ -195,9 +199,72 @@ class Datasource {
                 "9"
             )
         )
+
+    }
+    init {
+
+        // Adding Users to UserList
+        userList.add(
+            User(
+                userFirstName = "John",
+                userLastName = "Smith",
+                userEmail = "hiJohn123@gmail.com",
+                UserRole.ADMIN,
+                userId = "1"
+            )
+        )
+        userList.add(
+            User(
+                userFirstName = "Alex",
+                userLastName = "Brown",
+                userEmail = "AlexB@gmail.com",
+                UserRole.STANDARD,
+                userId = "2"
+            )
+        )
+        userList.add(
+            User(
+                userFirstName = "Jason",
+                userLastName = "Ni",
+                userEmail = "JNi@gmail.com",
+                UserRole.ADMIN,
+                userId = "3"
+            )
+        )
+        userList.add(
+            User(
+                userFirstName = "Kim",
+                userLastName = "Johnson",
+                userEmail = "KimJohnson@gmail.com",
+                UserRole.ADMIN,
+                userId = "4"
+            )
+        )
+        userList.add(
+            User(
+                userFirstName = "Ellen",
+                userLastName = "Jones",
+                userEmail = "Ellen_J@gmail.com",
+                UserRole.STANDARD,
+                userId = "5"
+            )
+        )
+        userList.add(
+            User(
+                userFirstName = "Taylor",
+                userLastName = "Wright",
+                userEmail = "TayW265@gmail.com",
+                UserRole.STANDARD,
+                userId = "6"
+            )
+        )
     }
 
     fun loadProducts(): List<Product> {
         return productList
+    }
+
+    fun loadUsers(): List<User> {
+        return userList
     }
 }
