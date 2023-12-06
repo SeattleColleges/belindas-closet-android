@@ -73,6 +73,9 @@
     <string name="product_add_product_title">Add Product</string>
     <string name="product_image_uploaded_successfully">Image uploaded successfully</string>
 
+    <!--    DonationInfo Screen Strings    -->
+    <string name="donation_info">Donation Info</string>
+
     <!--    Reset Password Screen Strings    -->
     <string name="reset_password_title">Reset Password</string>
     <string name="reset_new_password_label">New Password</string>
