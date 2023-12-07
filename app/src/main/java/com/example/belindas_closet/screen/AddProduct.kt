@@ -1,4 +1,5 @@
 package com.example.belindas_closet.screen
+
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -26,6 +27,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -55,7 +58,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.belindas_closet.R
-import com.example.belindas_closet.Routes
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductGender
 import com.example.belindas_closet.model.ProductSizePantsInseam
@@ -70,49 +72,36 @@ import com.example.belindas_closet.model.ProductType
 fun AddProductPage(navController: NavHostController) {
 
     var selectedProductType by remember { mutableStateOf(ProductType.SHOES) }
-    var productName by remember { mutableStateOf("") }
+    var selectedProductGender by remember { mutableStateOf(ProductGender.NON_BINARY) }
+    var selectedProductSizeShoe by remember { mutableStateOf(ProductSizeShoes.SELECT_SIZE) }
+    var selectedProductSize by remember { mutableStateOf(ProductSizes.SELECT_SIZE) }
+    var selectedProductSizePantsWaist by remember { mutableStateOf(ProductSizePantsWaist.SELECT_SIZE) }
+    var selectedProductSizePantsInseam by remember { mutableStateOf(ProductSizePantsInseam.SELECT_SIZE) }
     var productDescription by remember { mutableStateOf("") }
-    var productSize by remember { mutableStateOf(ProductSizes.SELECT_SIZE) } /* Default size set */
     var productImage by remember { mutableStateOf("") }
     var toastMessage by remember { mutableStateOf("") }
-    var newProduct by remember { mutableStateOf<Product?>(null) }    
-    /* // todo: button for inserting an image, need to change productImage type to BitImage everywhere it exists
-    val context = LocalContext.current
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-    
-    val imagePickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) {
-        uri: Uri? ->
-        uri?.let {
-            imageUri = it
-            val source = ImageDecoder.createSource(context.contentResolver, it)
-            val bitmap = ImageDecoder.decodeBitmap(source)
-            productImage = bitmap.asImageBitmap()
-        }
-    }
-    */
-    
+    var newProduct by remember { mutableStateOf<Product?>(null) }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
         topBar = {
-      /* Back arrow that navigates back to login page */
-          TopAppBar(
-              title = { Text("Back") },
-              navigationIcon = {
-                  IconButton(
-                      onClick = {
-                          navController.popBackStack();
-                      }
-                  ) {
-                      Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
-                  }
-              },
-                  actions = {
-                      IconButton(
-                          onClick = {
-                              // Handle menu icon click
+            /* Back arrow that navigates back to login page */
+            TopAppBar(
+                title = { Text("Back") },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navController.popBackStack();
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            // Handle menu icon click
                         }
                     ) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
@@ -123,31 +112,87 @@ fun AddProductPage(navController: NavHostController) {
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
                 .padding(innerPadding),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // uncommented out, testing ci workflow on pr
             item {
-                ProductInfoField(
-                    productName = productName,
-                    onProductChange = { newName -> productName = newName }
+                CustomTextField(
+                    text = stringResource(R.string.product_add_product_title)
+                )
+            }
+
+            // Product Type Dropdown
+            item {
+                ProductDropDownMenu(
+                    selectedValue = selectedProductType.type,
+                    values = ProductType.values().map { it.type },
+                    label = stringResource(R.string.product_type_label),
+                    onValueChange = { newType ->
+                        selectedProductType = ProductType.values().find { it.type == newType }!!
+                    }
+                )
+            }
+
+            // Product Gender Dropdown
+            item {
+                ProductDropDownMenu(
+                    selectedValue = selectedProductGender.name,
+                    values = ProductGender.values().map { it.name },
+                    label = stringResource(R.string.product_gender_label),
+                    onValueChange = { newGender ->
+                        selectedProductGender =
+                            ProductGender.values().find { it.name == newGender }!!
+                    }
+                )
+            }
+
+            // Product Size Shoe Dropdown
+            item {
+                ProductDropDownMenu(
+                    selectedValue = selectedProductSizeShoe.size,
+                    values = ProductSizeShoes.values().map { it.size },
+                    label = stringResource(R.string.product_size_shoe_label),
+                    onValueChange = { newSizeShoe ->
+                        selectedProductSizeShoe =
+                            ProductSizeShoes.values().find { it.size == newSizeShoe }!!
+                    }
                 )
             }
 
             item {
-                ProductTypeDropdown(
-                    selectedProductType = selectedProductType,
-                    onProductTypeChange = { newType -> selectedProductType = newType }
+                ProductDropDownMenu(
+                    selectedValue = selectedProductSize.name,
+                    values = ProductSizes.values().map { it.name },
+                    label = stringResource(R.string.product_size_label),
+                    onValueChange = { newSize ->
+                        selectedProductSize = ProductSizes.values().find { it.name == newSize }!!
+                    }
                 )
             }
 
             item {
-                ProductSizeField(
-                    productSize = productSize,
-                    onSizeChange = { newSize -> productSize = newSize }
+                ProductDropDownMenu(
+                    selectedValue = selectedProductSizePantsWaist.size,
+                    values = ProductSizePantsWaist.values().map { it.size },
+                    label = stringResource(R.string.product_size_pants_waist_label),
+                    onValueChange = { newSizePantsWaist ->
+                        selectedProductSizePantsWaist = ProductSizePantsWaist.values()
+                            .find { it.size == newSizePantsWaist }!!
+                    }
+                )
+            }
+
+            item {
+                ProductDropDownMenu(
+                    selectedValue = selectedProductSizePantsInseam.size,
+                    values = ProductSizePantsInseam.values().map { it.size },
+                    label = stringResource(R.string.product_size_pants_inseam_label),
+                    onValueChange = { newSizePantsInseam ->
+                        selectedProductSizePantsInseam = ProductSizePantsInseam.values()
+                            .find { it.size == newSizePantsInseam }!!
+                    }
                 )
             }
 
@@ -165,28 +210,28 @@ fun AddProductPage(navController: NavHostController) {
             }
 
             item {
-                /* TODO: finish up product button and validation logic */
                 Button(
                     onClick = {
-                        if (productName.isNotEmpty() && productSize != ProductSizes.SELECT_SIZE) {
-                            newProduct = Product(
-                                productType = selectedProductType,
-                                productGender = ProductGender.NON_BINARY,
-                                productSizeShoe = ProductSizeShoes.SELECT_SIZE,
-                                productSizes = productSize,
-                                productSizePantsWaist = ProductSizePantsWaist.S,
-                                productSizePantsInseam = ProductSizePantsInseam.M,
-                                productDescription = productDescription,
-                                productImage = productImage
-                            )
-                            /* TODO: Save the new product to the database or use a list to hold products */
-                            // Set toast message to show success
-                            toastMessage = "Product added successfully"
-                        } else {
-                            /* TODO: show error message for empty fields */
-                            // Set the toast message for an error
-                            toastMessage = "Please fill in all fields"
-                        }
+                        newProduct = Product(
+                            productType = selectedProductType,
+                            productGender = selectedProductGender,
+                            productSizeShoe = selectedProductSizeShoe,
+                            productSizes = selectedProductSize,
+                            productSizePantsWaist = selectedProductSizePantsWaist,
+                            productSizePantsInseam = selectedProductSizePantsInseam,
+                            productDescription = productDescription,
+                            productImage = productImage
+                        )
+                        toastMessage = "Product added successfully"
+                        // Reset fields
+                        selectedProductType = ProductType.SHOES
+                        selectedProductGender = ProductGender.NON_BINARY
+                        selectedProductSizeShoe = ProductSizeShoes.SELECT_SIZE
+                        selectedProductSize = ProductSizes.SELECT_SIZE
+                        selectedProductSizePantsWaist = ProductSizePantsWaist.SELECT_SIZE
+                        selectedProductSizePantsInseam = ProductSizePantsInseam.SELECT_SIZE
+                        productDescription = ""
+                        productImage = ""
                     },
                     modifier = Modifier
                         .padding(16.dp)
@@ -216,57 +261,54 @@ fun AddProductPage(navController: NavHostController) {
     }
 }
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductInfoField(productName: String, onProductChange: (String) -> Unit) {
-    TextField(
-        value = productName,
-        onValueChange = onProductChange,
-        label = { Text(text = "Product name") },
-        singleLine = true,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    )
-}
-
-
-@Composable
-fun ProductTypeDropdown(selectedProductType: ProductType, onProductTypeChange: (ProductType) -> Unit) {
-    val productTypes = ProductType.values()
-    var currentProductType by remember { mutableStateOf(selectedProductType) }
+fun <T> ProductDropDownMenu(
+    selectedValue: T,
+    values: List<T>,
+    label: String,
+    onValueChange: (T) -> Unit,
+) {
     var isDropdownMenuExpanded by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable { isDropdownMenuExpanded = !isDropdownMenuExpanded }
+            .padding(8.dp)
     ) {
-        Text(
-            text = "Type: ${currentProductType.type}",
-            modifier = Modifier.padding(16.dp)
-        )
-        DropdownMenu(
+        ExposedDropdownMenuBox(
             expanded = isDropdownMenuExpanded,
-            onDismissRequest = { isDropdownMenuExpanded = false }
+            onExpandedChange = { isDropdownMenuExpanded = it },
         ) {
-            productTypes.forEach { productType ->
-                DropdownMenuItem(
-                    text = { Text(productType.type) },
-                    onClick = {
-                        currentProductType = productType
-                        isDropdownMenuExpanded = false
-                        onProductTypeChange(productType)
-                    }
-                )
-
+            TextField(
+                value = selectedValue.toString(),
+                onValueChange = {},
+                label = { Text(text = label) },
+                readOnly = true,
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(
+                        expanded = isDropdownMenuExpanded
+                    )
+                },
+                singleLine = true,
+                modifier = Modifier.menuAnchor()
+            )
+            DropdownMenu(
+                expanded = isDropdownMenuExpanded,
+                onDismissRequest = { isDropdownMenuExpanded = false }
+            ) {
+                values.forEach { value ->
+                    DropdownMenuItem(
+                        text = { Text(value.toString()) },
+                        onClick = {
+                            isDropdownMenuExpanded = false
+                            onValueChange(value)
+                        }
+                    )
+                }
             }
-
         }
-
     }
 }
-
 
 @Composable
 fun ProductDescriptionField(productDescription: String, onDescriptionChange: (String) -> Unit) {
@@ -279,40 +321,6 @@ fun ProductDescriptionField(productDescription: String, onDescriptionChange: (St
             .fillMaxWidth()
             .padding(16.dp)
     )
-}
-
-@Composable
-fun ProductSizeField(productSize: ProductSizes, onSizeChange: (ProductSizes) -> Unit) {
-    val sizes = ProductSizes.values() /* using enum values directly */
-    var selectedSize by remember { mutableStateOf(productSize) }
-    var isDropdownMenuExpanded by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { isDropdownMenuExpanded = !isDropdownMenuExpanded }
-    ) {
-        Text(
-            text = "Size: ${selectedSize.name}",
-            modifier = Modifier.padding(16.dp)
-        )
-        DropdownMenu(
-            expanded = isDropdownMenuExpanded,
-            onDismissRequest = { isDropdownMenuExpanded = false }
-        ) {
-            sizes.forEach { size ->
-                DropdownMenuItem(
-                    text = { Text(size.name) },
-                    onClick = {
-                        selectedSize = size
-                        isDropdownMenuExpanded = false
-                        onSizeChange(size) /* passing selected size using callback*/
-                    }
-                )
-            }
-        }
-
-    }
 }
 
 @Composable
@@ -332,10 +340,10 @@ fun DisplayNewProduct(newProduct: Product) {
         // if product type is pants, show waist and inseam size
         // else show product size
         if (newProduct.productType == ProductType.SHOES) {
-            Text(text = "Product Shoe Size: ${newProduct.productSizeShoe}")
+            Text(text = "Product Shoe Size: ${newProduct.productSizeShoe.size}")
         } else if (newProduct.productType == ProductType.PANTS) {
-            Text(text = "Product Pants Waist Size: ${newProduct.productSizePantsWaist}")
-            Text(text = "Product Pants Inseam Size: ${newProduct.productSizePantsInseam}")
+            Text(text = "Product Pants Waist Size: ${newProduct.productSizePantsWaist.size}")
+            Text(text = "Product Pants Inseam Size: ${newProduct.productSizePantsInseam.size}")
         } else {
             Text(text = "Product Size: ${newProduct.productSizes}")
         }
@@ -354,6 +362,7 @@ fun ImageUploadButton(onImagePicked: (Uri?) -> Unit) {
         imageUri = uri
         onImagePicked(imageUri)
     }
+    val context = LocalContext.current
 
     val boxSize = Modifier
         .fillMaxWidth()
@@ -380,7 +389,11 @@ fun ImageUploadButton(onImagePicked: (Uri?) -> Unit) {
                     modifier = Modifier.size(36.dp)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = stringResource(id = R.string.product_image_picker_upload_product_image), fontSize = 16.sp, color = Color.Black)
+                Text(
+                    text = stringResource(id = R.string.product_image_picker_upload_product_image),
+                    fontSize = 16.sp,
+                    color = Color.Black
+                )
                 Spacer(modifier = Modifier.height(4.dp))
             }
         } else {
@@ -391,10 +404,13 @@ fun ImageUploadButton(onImagePicked: (Uri?) -> Unit) {
                     modifier = boxSize,
                     contentScale = ContentScale.Fit
                 )
+                Toast.makeText(context,
+                    stringResource(R.string.product_image_uploaded_successfully), Toast.LENGTH_SHORT).show()
             }
         }
     }
 }
+
 fun Modifier.drawDottedBorder(
     strokeWidth: Dp,
     color: Color,

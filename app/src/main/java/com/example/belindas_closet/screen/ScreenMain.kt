@@ -20,7 +20,6 @@ fun ScreenMain() {
         }
         composable(Routes.ProductDetail.route) {
             ProductDetailPage(navController = navController)
-
         }
         composable(Routes.Update.route) {
             UpdatePage(navController = navController)
@@ -42,6 +41,12 @@ fun ScreenMain() {
         }
         composable(Routes.AdminView.route) {
             AdminView(navController = navController)
+        }
+        composable(Routes.EditUserRole.route) {
+            EditUserRole(navController = navController)
+        }
+        composable(Routes.DonationInfo.route) {
+            DonationInfoPage(navController = navController)
         }
 
         composable(Routes.CreatorView.route) {
