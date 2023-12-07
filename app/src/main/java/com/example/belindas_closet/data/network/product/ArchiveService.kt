@@ -1,8 +1,8 @@
-package com.example.belindas_closet.data.network.auth
+package com.example.belindas_closet.data.network.product
 
 import com.example.belindas_closet.MainActivity
-import com.example.belindas_closet.data.network.dto.auth_dto.ArchiveRequest
-import com.example.belindas_closet.data.network.dto.auth_dto.ArchiveResponse
+import com.example.belindas_closet.data.network.dto.product_dto.ArchiveRequest
+import com.example.belindas_closet.data.network.dto.product_dto.ArchiveResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
