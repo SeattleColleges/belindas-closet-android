@@ -42,6 +42,7 @@ import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
+import com.example.belindas_closet.data.network.dto.auth_dto.Role
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductType
 
@@ -70,15 +71,18 @@ fun ProductDetailPage(navController: NavController) {
                     }
                 },
                 actions = {
-                    IconButton(
-                        onClick = {
-                            //TODO: verify that the user is an admin or the owner of the product
-                            //If yes, then navigate to the update page
-                            navController.navigate(Routes.Update.route)
-                            //Else, navigate to the login page
+                    /*  Edit option visibility */
+                    val userRole = MainActivity.getPref().getString("userRole", Role.USER.name)?.let {
+                        Role.valueOf(it)
+                    } ?: Role.USER
+                    if (userRole == Role.ADMIN || userRole == Role.CREATOR) {
+                        IconButton(
+                            onClick = {
+                                navController.navigate(Routes.Update.route)
+                            }
+                        ) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                         }
-                    ) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
                     }
                     IconButton(
                         onClick = {
@@ -186,5 +190,4 @@ fun DropDownCategoryList(drawerState: DrawerValue, navController: NavController,
         }
     }
 }
-
 
