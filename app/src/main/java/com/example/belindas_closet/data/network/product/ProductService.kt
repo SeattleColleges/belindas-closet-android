@@ -14,9 +14,9 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 interface ProductService {
-    suspend fun getProduct(productRequest: ProductRequest): ProductRequest?
+    suspend fun getProduct(productRequest: ProductRequest): ProductResponse?
 
-    suspend fun getProducts(productRequest: ProductRequest): List<ProductRequest>?
+    suspend fun getProducts(): List<ProductResponse>?
 
     suspend fun addProduct(productRequest: ProductRequest): ProductResponse?
 

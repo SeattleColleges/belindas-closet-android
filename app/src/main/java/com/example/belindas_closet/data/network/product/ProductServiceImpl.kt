@@ -22,33 +22,28 @@ class ProductServiceImpl (
     private val client: HttpClient,
     private val getToken: suspend () -> String
 ) : ProductService {
-    override suspend fun getProduct(productRequest: ProductRequest): ProductRequest? {
+    override suspend fun getProduct(productRequest: ProductRequest): ProductResponse? {
         TODO("Not yet implemented")
     }
 
-    @OptIn(InternalAPI::class)
-    override suspend fun getProducts(productRequest: ProductRequest): List<ProductRequest>? {
+    override suspend fun getProducts(): List<ProductResponse>? {
         return try {
-            val token = getToken()
-            val response = client.get {
+            client.get {
                 url (HttpRoutes.PRODUCTS)
-                header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
-                header(HttpHeaders.Authorization, "Bearer $token")
-                body = Json.encodeToString(ProductRequest.serializer(), productRequest)
             }
-            response.body()
+            emptyList()
         } catch (e: RedirectResponseException) {
             println("Error: ${e.response.status.description}")
-            null
+            emptyList()
         } catch (e: ClientRequestException) {
             println("Error: ${e.response.status.description}")
-            null
+            emptyList()
         } catch (e: ServerResponseException) {
             println("Error: ${e.response.status.description}")
-            null
+            emptyList()
         } catch (e: Exception) {
             println("Error: ${e.message}")
-            null
+            emptyList()
         }
     }
 
