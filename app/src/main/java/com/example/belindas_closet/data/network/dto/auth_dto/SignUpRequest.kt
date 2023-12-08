@@ -8,6 +8,9 @@ enum class Role(val role: String) {
     @SerialName("admin")
     ADMIN("admin"),
 
+    @SerialName("creator")
+    CREATOR("creator"),
+
     @SerialName("user")
     USER("user")
 }
