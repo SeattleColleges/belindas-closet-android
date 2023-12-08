@@ -49,6 +49,10 @@ fun ScreenMain() {
             DonationInfoPage(navController = navController)
         }
 
+        composable(Routes.CreatorView.route) {
+            CreatorView(navController = navController)
+        }
+
         composable(Routes.IndividualProduct.route+"/{productId}",
             arguments = listOf(navArgument("productId") { type = NavType.StringType })
         ) { backStackEntry ->

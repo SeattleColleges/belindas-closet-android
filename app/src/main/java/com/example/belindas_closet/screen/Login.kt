@@ -2,6 +2,7 @@ package com.example.belindas_closet.screen
 
 import android.content.Context
 import android.util.Base64
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -315,7 +316,11 @@ suspend fun loginWithValidCredentials(email: String, password: String, navContro
             MainActivity.getPref().edit().putString("userRole", userRole.name).apply()
 
             MainActivity.getPref().edit().putString("token", loginResponse.token).apply()
-            navController.navigate(Routes.AdminView.route)
+            if (userRole.name == "ADMIN") {
+                navController.navigate(Routes.AdminView.route)
+            } else {
+                navController.navigate(Routes.CreatorView.route)
+            }
             Toast.makeText(
                 current,
                 "Welcome ${getName(loginResponse.token)} to Belinda's Closet!",
