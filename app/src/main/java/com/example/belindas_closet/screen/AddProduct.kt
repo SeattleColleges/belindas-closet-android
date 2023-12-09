@@ -466,7 +466,7 @@ suspend fun addProduct(newProduct: Product, navController: NavHostController, co
             productImage = newProduct.productImage,
         )
         ProductService.create().addProduct(productRequest)
-        if (userRole != Role.ADMIN) {
+        if (userRole != Role.ADMIN && userRole != Role.CREATOR) {
             // Unauthorized user
             Toast.makeText(
                 context,
