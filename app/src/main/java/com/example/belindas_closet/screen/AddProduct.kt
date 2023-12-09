@@ -473,8 +473,6 @@ suspend fun addProduct(newProduct: Product, navController: NavHostController, co
                 context.getString(R.string.product_unauthorized_user),
                 Toast.LENGTH_SHORT
             ).show()
-            // Navigate to the login page
-            navController.navigate(Routes.Login.route)
         } else {
             // Product added successfully
             Toast.makeText(

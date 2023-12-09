@@ -72,7 +72,7 @@
     <string name="product_size_pants_inseam_label">Product Size Pants Inseam</string>
     <string name="product_add_product_title">Add Product</string>
     <string name="product_image_uploaded_successfully">Image uploaded successfully</string>
-    <string name="product_unauthorized_user">Unauthorized user, please log in!</string>
+    <string name="product_unauthorized_user">Unauthorized user, please login or contact admin</string>
     <string name="product_added_successfully">Product added successfully</string>
     <string name="product_error_adding_product">Error adding product</string>
 
