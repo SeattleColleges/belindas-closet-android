@@ -1,5 +1,6 @@
 package com.example.belindas_closet.screen
 
+import android.content.Context
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -57,7 +58,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
+import com.example.belindas_closet.data.network.dto.auth_dto.Role
+import com.example.belindas_closet.data.network.dto.product_dto.ProductRequest
+import com.example.belindas_closet.data.network.product.ProductService
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductGender
 import com.example.belindas_closet.model.ProductSizePantsInseam
@@ -65,6 +70,9 @@ import com.example.belindas_closet.model.ProductSizePantsWaist
 import com.example.belindas_closet.model.ProductSizeShoes
 import com.example.belindas_closet.model.ProductSizes
 import com.example.belindas_closet.model.ProductType
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
+import com.example.belindas_closet.Routes
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,8 +87,9 @@ fun AddProductPage(navController: NavHostController) {
     var selectedProductSizePantsInseam by remember { mutableStateOf(ProductSizePantsInseam.SELECT_SIZE) }
     var productDescription by remember { mutableStateOf("") }
     var productImage by remember { mutableStateOf("") }
-    var toastMessage by remember { mutableStateOf("") }
     var newProduct by remember { mutableStateOf<Product?>(null) }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         modifier = Modifier
@@ -92,7 +101,7 @@ fun AddProductPage(navController: NavHostController) {
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            navController.popBackStack();
+                            navController.popBackStack()
                         }
                     ) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
@@ -161,17 +170,19 @@ fun AddProductPage(navController: NavHostController) {
                 )
             }
 
+            // Product Size Dropdown
             item {
                 ProductDropDownMenu(
-                    selectedValue = selectedProductSize.name,
-                    values = ProductSizes.values().map { it.name },
+                    selectedValue = selectedProductSize,
+                    values = ProductSizes.values().map { it },
                     label = stringResource(R.string.product_size_label),
                     onValueChange = { newSize ->
-                        selectedProductSize = ProductSizes.values().find { it.name == newSize }!!
+                        selectedProductSize = ProductSizes.values().find { it == newSize }!!
                     }
                 )
             }
 
+            // Product Size Pants Waist Dropdown
             item {
                 ProductDropDownMenu(
                     selectedValue = selectedProductSizePantsWaist.size,
@@ -184,6 +195,7 @@ fun AddProductPage(navController: NavHostController) {
                 )
             }
 
+            // Product Size Pants Inseam Dropdown
             item {
                 ProductDropDownMenu(
                     selectedValue = selectedProductSizePantsInseam.size,
@@ -196,6 +208,7 @@ fun AddProductPage(navController: NavHostController) {
                 )
             }
 
+            // Product Description TextField
             item {
                 ProductDescriptionField(
                     productDescription = productDescription,
@@ -203,12 +216,14 @@ fun AddProductPage(navController: NavHostController) {
                 )
             }
 
+            // Product Image Upload
             item {
                 ImageUploadButton(
                     onImagePicked = { uri -> productImage = uri.toString() }
                 )
             }
 
+            // Add Product Button
             item {
                 Button(
                     onClick = {
@@ -222,7 +237,7 @@ fun AddProductPage(navController: NavHostController) {
                             productDescription = productDescription,
                             productImage = productImage
                         )
-                        toastMessage = "Product added successfully"
+
                         // Reset fields
                         selectedProductType = ProductType.SHOES
                         selectedProductGender = ProductGender.NON_BINARY
@@ -232,6 +247,11 @@ fun AddProductPage(navController: NavHostController) {
                         selectedProductSizePantsInseam = ProductSizePantsInseam.SELECT_SIZE
                         productDescription = ""
                         productImage = ""
+
+                        // Add the product
+                        coroutineScope.launch {
+                            addProduct(newProduct!!, navController, context)
+                        }
                     },
                     modifier = Modifier
                         .padding(16.dp)
@@ -247,17 +267,6 @@ fun AddProductPage(navController: NavHostController) {
                 }
             }
         }
-    }
-
-    // Display the toast message and reset it
-    if (toastMessage.isNotEmpty()) {
-        Toast.makeText(
-            LocalContext.current,
-            toastMessage,
-            Toast.LENGTH_SHORT
-        ).show()
-        // Reset toast message
-        toastMessage = ""
     }
 }
 
@@ -437,4 +446,51 @@ fun Modifier.drawDottedBorder(
             }
         }
     )
+}
+
+suspend fun addProduct(newProduct: Product, navController: NavHostController, context: Context) {
+    return try {
+        // Get the user role
+        val userRole = MainActivity.getPref().getString("userRole", Role.USER.name)?.let {
+            Role.valueOf(it) } ?: Role.USER
+
+        // Create the product request
+        val productRequest = ProductRequest(
+            productType = newProduct.productType.type,
+            productGender = newProduct.productGender,
+            productSizeShoe = newProduct.productSizeShoe.size,
+            productSizes = newProduct.productSizes,
+            productSizePantsWaist = newProduct.productSizePantsWaist.size,
+            productSizePantsInseam = newProduct.productSizePantsInseam.size,
+            productDescription = newProduct.productDescription,
+            productImage = newProduct.productImage,
+        )
+        ProductService.create().addProduct(productRequest)
+        if (userRole != Role.ADMIN && userRole != Role.CREATOR) {
+            // Unauthorized user
+            Toast.makeText(
+                context,
+                context.getString(R.string.product_unauthorized_user),
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            // Product added successfully
+            Toast.makeText(
+                context,
+                context.getString(R.string.product_added_successfully),
+                Toast.LENGTH_SHORT
+            ).show()
+            // Navigate to the product detail page
+            MainActivity.setProductType(newProduct.productType.type)
+            navController.navigate(
+                Routes.ProductDetail.route)
+        }
+    } catch (e: Exception) {
+        // Error adding product
+        Toast.makeText(
+            context,
+            context.getString(R.string.product_error_adding_product),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
 }
