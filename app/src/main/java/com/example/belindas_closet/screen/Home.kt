@@ -20,10 +20,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -47,6 +49,15 @@ fun HomePage(navController: NavController) {
     TopAppBar(
         title = { Text("") },
         actions = {
+            // Login button
+            TextButton(onClick = { navController.navigate(Routes.Login.route) }) {
+                Text(
+                    "Login", style = TextStyle(
+                        fontSize = 18.sp,
+                        color = Color.Black
+                    )
+                )
+            }
             IconButton(
                 onClick = {
                     navController.navigate(Routes.DonationInfo.route)
@@ -54,7 +65,7 @@ fun HomePage(navController: NavController) {
             ) {
                 Icon(
                     painter = painterResource(R.drawable.info_icon),
-                    contentDescription =  "Donation Info page",
+                    contentDescription = "Donation Info page",
                     modifier = Modifier.padding(10.dp)
                 )
             }
@@ -81,7 +92,7 @@ fun HomePage(navController: NavController) {
             .fillMaxSize(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -139,7 +150,8 @@ fun TypeCard(productType: ProductType, navController: NavController) {
             .clickable {
                 MainActivity.setProductType(productType.type)
                 navController.navigate(
-                    Routes.ProductDetail.route)
+                    Routes.ProductDetail.route
+                )
             },
     ) {
         Column(
@@ -155,7 +167,7 @@ fun TypeCard(productType: ProductType, navController: NavController) {
                 modifier = Modifier
                     .size(200.dp)
                     .padding(16.dp),
-                )
+            )
             Text(
                 text = productType.type,
                 style = TextStyle(
@@ -179,7 +191,7 @@ fun ProductTypeList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(typeList){ productType ->
+        items(typeList) { productType ->
             TypeCard(productType = productType, navController = navController)
             Spacer(modifier = Modifier.padding(16.dp))
         }
@@ -209,5 +221,5 @@ fun NSCLogo() {
     Image(
         painter = painterResource(id = R.drawable.nsc_v_logo),
         contentDescription = stringResource(id = R.string.home_nsc_logo_description)
-    ) 
+    )
 }
