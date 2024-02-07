@@ -1,148 +1,166 @@
 package com.example.belindas_closet.screen
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
-import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
-import com.example.belindas_closet.model.Product
-import com.example.belindas_closet.model.ProductType
 import com.example.belindas_closet.model.User
-import com.example.belindas_closet.model.UserRole
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditUserRole(navController: NavController) {
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
-        topBar = {
-            /* Back arrow that navigates back to login page */
-            TopAppBar(
-                title = { Text("Back") },
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            navController.navigate(Routes.AdminView.route)
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back to Home page"
-                        )
-                    }
-                }
-            )
-        }
-    ) { innerPadding ->
-        val modifier = Modifier.padding(innerPadding)
-        Row(
-            modifier = Modifier
-                .size(125.dp)
-                .padding(top = 10.dp, start = 10.dp),
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.Start
-        ) {
-            NSCLogo()
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.padding(50.dp))
-                UserList(users = Datasource().loadUsers(), navController = navController)
+    Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
+        /* Back arrow that navigates back to login page */
+        TopAppBar(title = { Text("Back") }, navigationIcon = {
+            IconButton(onClick = {
+                navController.navigate(Routes.AdminView.route)
+            }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack, contentDescription = "Back to Home page"
+                )
             }
+        })
+    }) { innerPadding ->
+        val modifier = Modifier.padding(innerPadding)
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CustomTextField(text = stringResource(R.string.edit_user_role_title))
+            UserList(users = Datasource().loadUsers(), navController = navController)
         }
     }
 }
 
 @Composable
 fun UserCard(user: User, navController: NavController) {
+    var isEditingRole by remember { mutableStateOf(false) }
+    var selectedRole by remember { mutableStateOf(user.userRole.role) }
+    var isCancel by remember { mutableStateOf(false) }
+    var isSave by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
-        /** To Do: Make clickable **/
-        /** To Do: Make clickable **/
     ) {
         Column(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(16.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = user.userFirstName + " " + user.userLastName,
-                style = TextStyle(
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Default,
-                ),
-                modifier = Modifier
-                    .wrapContentSize()
-            )
-            Text(
-                text = "Current Role: " + user.userRole,
-                style = TextStyle(
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Default,
-                ),
-                modifier = Modifier
-                    .wrapContentSize()
-            )
-            IconButton(
-                onClick = {
-                    //TO DO: make icon functional and able to edit role.
-                }
+            CustomTextField(text = user.userFirstName + " " + user.userLastName)
+            CustomTextField(text = user.userEmail)
+            CustomTextField(
+                text = user.userRole.role.lowercase().replaceFirstChar { it.uppercase() })
+            Row(
+                modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                IconButton(onClick = {
+                    isEditingRole = true
+                }) {
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                }
+                if (isEditingRole) {
+                    RoleSelectionDialog(selectedRole = selectedRole, onRoleSelected = {
+                        selectedRole = it
+                        isEditingRole = false
+                    }, onDismiss = { isEditingRole = false })
+                }
             }
         }
     }
 }
+
+@Composable
+fun RoleSelectionDialog(
+    selectedRole: String, onRoleSelected: (String) -> Unit, onDismiss: () -> Unit
+) {
+    Dialog(onDismissRequest = {
+        onDismiss()
+    }) {
+        Card(
+            modifier = Modifier
+                .padding(16.dp)
+                .border(1.dp, Color.White)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Select Role")
+                Spacer(modifier = Modifier.padding(8.dp))
+                Column(
+                    modifier = Modifier.padding(8.dp),
+                    verticalArrangement = Arrangement.Top,
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = selectedRole == "Admin",
+                            onClick = { onRoleSelected("Admin") })
+                        Text("Admin")
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = selectedRole == "Creator",
+                            onClick = { onRoleSelected("Creator") })
+                        Text("Creator")
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = selectedRole == "User",
+                            onClick = { onRoleSelected("User") })
+                        Text("User")
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 fun UserList(users: List<User>, navController: NavController) {
@@ -153,8 +171,9 @@ fun UserList(users: List<User>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(users) { User ->
-            UserCard(user = User, navController = navController)
+        items(users) { user ->
+            UserCard(user = user, navController = navController)
+            Spacer(modifier = Modifier.padding(8.dp))
         }
     }
 }
