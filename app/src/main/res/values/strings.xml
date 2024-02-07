@@ -86,4 +86,7 @@
     <string name="reset_confirm_new_password_label">Confirm New Password</string>
     <string name="reset_password_submit_button">Reset Password</string>
     <string name="reset_new_password_to_login_back_button_description">Back to Login</string>
+
+    <!--    Edit User Role Strings  -->
+    <string name="edit_user_role_title">User Role Manager</string>
 </resources>
