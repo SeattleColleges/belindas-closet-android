@@ -123,7 +123,7 @@ fun IndividualProductPage(navController: NavController, productId: String) {
                 text = "Gender: ${product.productGender}",
                 modifier = Modifier.padding(vertical = 10.dp)
             )
-            if (product.productType.type == "Pant") {
+            if (product.productType.type == "Pants") {
                 Text(
                     text = "Waist: ${product.productSizePantsWaist.size}",
                     modifier = Modifier.padding(vertical = 10.dp)
