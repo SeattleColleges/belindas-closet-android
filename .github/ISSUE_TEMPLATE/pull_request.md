@@ -1,3 +1,12 @@
+---
+name: Pull Request
+about: Create a pull request.
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 This is a pull request!
 
 1. Please use the following format for the title:

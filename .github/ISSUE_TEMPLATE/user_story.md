@@ -1,3 +1,12 @@
+---
+name: User Story
+about: Create a user story.
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 This is a user story!
 
 1. Please use the following format for the title:
