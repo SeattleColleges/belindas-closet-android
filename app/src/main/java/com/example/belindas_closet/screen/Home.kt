@@ -42,7 +42,7 @@ import com.example.belindas_closet.data.Datasource
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductType
 
-
+//TODO Add Product Catefories to Navbar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(navController: NavController) {
@@ -75,8 +75,7 @@ fun HomePage(navController: NavController) {
             ) {
                 Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
             }
-        }
-
+        },
     )
     Row(
         modifier = Modifier
