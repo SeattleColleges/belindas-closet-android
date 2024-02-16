@@ -117,7 +117,7 @@ fun ProductDetailCard(product: Product, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .widthIn(0.dp, (Resources.getSystem().displayMetrics.widthPixels * .8/density).dp)
+            .widthIn(0.dp, (Resources.getSystem().displayMetrics.widthPixels * .8 / density).dp)
     ) {
         Column(
             modifier = Modifier

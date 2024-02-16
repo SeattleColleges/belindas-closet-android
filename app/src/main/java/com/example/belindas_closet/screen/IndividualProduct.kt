@@ -39,6 +39,8 @@ import androidx.compose.ui.window.Popup
 import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.data.network.dto.auth_dto.Role
 
+//TODO Add Product Categories to Navbar
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IndividualProductPage(navController: NavController, productId: String) {
@@ -59,28 +61,39 @@ fun IndividualProductPage(navController: NavController, productId: String) {
                 )
             }
         },
-        actions = {
-            /*  Edit option visibility */
-            val userRole = MainActivity.getPref().getString("userRole", Role.USER.name)?.let {
-                Role.valueOf(it)
-            } ?: Role.USER
-            if (userRole == Role.ADMIN || userRole == Role.CREATOR) {
-                IconButton(
+         actions =
+          {
+                /*  Edit option visibility */
+                val userRole = MainActivity.getPref().getString("userRole",Role.USER.name)?.let {
+                     Role.valueOf(it)
+                } ?: Role.USER
+                if (userRole == Role.ADMIN || userRole == Role.CREATOR) {
+                    IconButton(
+                        onClick = {
+                            navController.navigate(Routes.IndividualProductUpdatePage.route + "/$productId")
+                        }
+                    ) {
+                      Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Edit"
+                        )
+                    }
+                }
+                    IconButton(
                     onClick = {
-                        navController.navigate(Routes.IndividualProductUpdatePage.route + "/$productId")
+                        drawerState = DrawerValue.Open
                     }
                 ) {
-                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                     Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = "Menu"
+                    )
+                }
+                DropDownCategoryList(drawerState, navController) {
+                    drawerState = DrawerValue.Closed
                 }
             }
-            IconButton(
-                onClick = {
-                    drawerState = DrawerValue.Open
-                }
-            ) {
-                Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-            }
-        }
+
     )
     Column(
         modifier = Modifier
