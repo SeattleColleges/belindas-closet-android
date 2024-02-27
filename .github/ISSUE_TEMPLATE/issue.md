@@ -1,3 +1,12 @@
+---
+name: Issue
+about: Create an issue.
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 This is an issue!
 
 1. Please use the following format for the title:
