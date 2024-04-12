@@ -1,7 +1,7 @@
 ---
 name: Issue
 about: Create an issue.
-title: ''
+title: [Title of User Story]: [Title of Issue]
 labels: ''
 assignees: ''
 
