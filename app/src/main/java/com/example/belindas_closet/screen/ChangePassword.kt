@@ -54,11 +54,14 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun ResetPasswordPage(navController: NavHostController) {
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+fun ChangePasswordPage(navController: NavHostController) {
+    var currentPassword by remember {mutableStateOf("")}
+    var newPassword by remember { mutableStateOf("") }
+    var newPasswordConfirm by remember { mutableStateOf("") }
+    var isCurrentPasswordValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
     var doPasswordsMatch by remember { mutableStateOf(true) }
+    var isCurrentPasswordVisible by remember { mutableStateOf(false) }
     var isPasswordVisible by remember { mutableStateOf(false) }
     var isConfirmPasswordVisible by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
@@ -80,9 +83,12 @@ fun ResetPasswordPage(navController: NavHostController) {
                             }
                         }
                     ) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(
-                            id = R.string.reset_new_password_to_login_back_button_description
-                        ))
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = stringResource(
+                                id = R.string.change_new_password_to_login_back_button_description
+                            )
+                        )
                     }
                 },
                 actions = {
@@ -111,7 +117,7 @@ fun ResetPasswordPage(navController: NavHostController) {
                     .size(50.dp)
             )
             Text(
-                text = stringResource(id = R.string.reset_password_title),
+                text = stringResource(id = R.string.change_password_title),
                 style = TextStyle(
                     fontSize = 30.sp,
                     fontFamily = FontFamily.Default,
@@ -135,41 +141,52 @@ fun ResetPasswordPage(navController: NavHostController) {
                             shape = MaterialTheme.shapes.small
                         ),
                 ) {
+                    // Current password field
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        CustomPasswordTextField(
+                            value = currentPassword,
+                            onValueChange = {
+                                currentPassword = it
+                                isCurrentPasswordValid = validatePassword(currentPassword)
+                            },
+                            isError = !isPasswordValid,
+                            label = stringResource(id = R.string.change_current_password_label),
+                            visualTransformation = if (isCurrentPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                            keyboardType = KeyboardType.Password,
+                            isPasswordVisible = isCurrentPasswordVisible,
+                        ) {
+                            isCurrentPasswordVisible = !isCurrentPasswordVisible
+                        }
+                    }
+
+                    // Current password display error
+                    if (!isCurrentPasswordValid) {
+                        ErrorDisplay(text = stringResource(id = R.string.signup_password_error))
+                    }
+
                     // Password field and toggle button
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         // Password field
-                        TextField(
-                            value = password,
+                        CustomPasswordTextField(
+                            value = newPassword,
                             onValueChange = {
-                                password = it
-                                isPasswordValid = validatePassword(it)
-                                doPasswordsMatch = validateConfirmPassword(password, confirmPassword)
+                                newPassword = it
+                                isPasswordValid = validatePassword(newPassword)
+                                doPasswordsMatch = newPassword == newPasswordConfirm
                             },
                             isError = !isPasswordValid,
-                            label = { Text(text = stringResource(id = R.string.reset_new_password_label)) },
-                            singleLine = true,
+                            label = stringResource(id = R.string.change_new_password_label),
                             visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(start = 30.dp, end = 8.dp, bottom = 16.dp),
-                        )
-
-                        // Toggle button to show/hide password
-                        IconButton(
-                            onClick = {
-                                isPasswordVisible = !isPasswordVisible
-                            }
+                            keyboardType = KeyboardType.Password,
+                            isPasswordVisible = isPasswordVisible,
                         ) {
-                            Icon(
-                                painter = if (isPasswordVisible) painterResource(R.drawable.baseline_visibility_24) else painterResource(R.drawable.baseline_visibility_off_24),
-                                contentDescription = if (isPasswordVisible) "Hide Password" else "Show Password",
-                                modifier = Modifier
-                                    .padding(top = 15.dp),
-                            )
+                            isPasswordVisible = !isPasswordVisible
                         }
                     }
 
@@ -184,34 +201,19 @@ fun ResetPasswordPage(navController: NavHostController) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         // Confirm password field
-                        TextField(
-                            value = confirmPassword,
+                        CustomPasswordTextField(
+                            value = newPasswordConfirm,
                             onValueChange = {
-                                confirmPassword = it
-                                doPasswordsMatch = validateConfirmPassword(password, it)
+                                newPasswordConfirm = it
+                                doPasswordsMatch = newPassword == newPasswordConfirm
                             },
                             isError = !doPasswordsMatch,
-                            label = { Text(text = stringResource(id = R.string.reset_confirm_new_password_label)) },
-                            singleLine = true,
+                            label = stringResource(id = R.string.change_confirm_new_password_label),
                             visualTransformation = if (isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(start = 30.dp, end = 8.dp, bottom = 16.dp),
-                        )
-
-                        // Toggle button to show/hide confirm password
-                        IconButton(
-                            onClick = {
-                                isConfirmPasswordVisible = !isConfirmPasswordVisible
-                            }
+                            keyboardType = KeyboardType.Password,
+                            isPasswordVisible = isConfirmPasswordVisible,
                         ) {
-                            Icon(
-                                painter = if (isConfirmPasswordVisible) painterResource(R.drawable.baseline_visibility_24) else painterResource(R.drawable.baseline_visibility_off_24),
-                                contentDescription = if (isConfirmPasswordVisible) "Hide Confirm Password" else "Show Confirm Password",
-                                modifier = Modifier
-                                    .padding(top = 15.dp),
-                            )
+                            isConfirmPasswordVisible = !isConfirmPasswordVisible
                         }
                     }
 
@@ -239,7 +241,7 @@ fun ResetPasswordPage(navController: NavHostController) {
                             .align(Alignment.CenterHorizontally),
                     ) {
                         Text(
-                            text = stringResource(id = R.string.reset_password_submit_button).uppercase(),
+                            text = stringResource(id = R.string.change_password_submit_button).uppercase(),
                             style = TextStyle(
                                 fontSize = 14.sp,
                                 fontFamily = FontFamily.Default,
@@ -254,3 +256,43 @@ fun ResetPasswordPage(navController: NavHostController) {
 }
 
 // TODO: Create a function to update the password in the database
+
+@Composable
+fun CustomPasswordTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    isError: Boolean = false,
+    label: String,
+    visualTransformation: VisualTransformation,
+    keyboardType: KeyboardType,
+    isPasswordVisible: Boolean,
+    onPasswordVisibilityChange: () -> Unit
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        isError = isError,
+        label = { Text(text = label) },
+        singleLine = true,
+        visualTransformation = visualTransformation,
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        modifier = Modifier
+            .padding(start = 30.dp, end = 8.dp, bottom = 16.dp),
+    )
+
+    // Toggle button to show/hide password
+    IconButton(
+        onClick = {
+            onPasswordVisibilityChange()
+        }
+    ) {
+        Icon(
+            painter = if (isPasswordVisible) painterResource(R.drawable.baseline_visibility_24) else painterResource(
+                R.drawable.baseline_visibility_off_24
+            ),
+            contentDescription = if (isPasswordVisible) "Hide Password" else "Show Password",
+            modifier = Modifier
+                .padding(top = 15.dp),
+        )
+    }
+}

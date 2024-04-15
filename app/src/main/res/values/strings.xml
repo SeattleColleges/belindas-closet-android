@@ -79,14 +79,15 @@
     <!--    DonationInfo Screen Strings    -->
     <string name="donation_info">Donation Info</string>
 
-    <!--    Reset Password Screen Strings    -->
-    <string name="reset_password_title">Reset Password</string>
-    <string name="reset_new_password_label">New Password</string>
-    <string name="reset_password_error">New password is invalid, please try again!</string>
-    <string name="reset_confirm_new_password_label">Confirm New Password</string>
-    <string name="reset_password_submit_button">Reset Password</string>
-    <string name="reset_new_password_to_login_back_button_description">Back to Login</string>
+    <!--    Change Password Screen Strings    -->
+    <string name="change_password_title">Change Password</string>
+    <string name="change_new_password_label">New Password</string>
+    <string name="change_password_error">New password is invalid, please try again!</string>
+    <string name="change_confirm_new_password_label">Confirm New Password</string>
+    <string name="change_password_submit_button">Change Password</string>
+    <string name="change_new_password_to_login_back_button_description">Back to Login</string>
 
     <!--    Edit User Role Strings  -->
     <string name="edit_user_role_title">User Role Manager</string>
+    <string name="change_current_password_label">Current Password</string>
 </resources>
