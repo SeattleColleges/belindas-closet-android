@@ -1,5 +1,7 @@
 package com.example.belindas_closet.screen
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -36,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,6 +53,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
+import com.example.belindas_closet.data.network.auth.ChangePasswordService
+import com.example.belindas_closet.data.network.dto.auth_dto.ChangePasswordRequest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -57,7 +62,7 @@ import kotlinx.coroutines.launch
 fun ChangePasswordPage(navController: NavHostController) {
     var currentPassword by remember {mutableStateOf("")}
     var newPassword by remember { mutableStateOf("") }
-    var newPasswordConfirm by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
     var isCurrentPasswordValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
     var doPasswordsMatch by remember { mutableStateOf(true) }
@@ -66,6 +71,7 @@ fun ChangePasswordPage(navController: NavHostController) {
     var isConfirmPasswordVisible by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
+    val context = LocalContext.current
 
     Scaffold(
         modifier = Modifier
@@ -178,7 +184,7 @@ fun ChangePasswordPage(navController: NavHostController) {
                             onValueChange = {
                                 newPassword = it
                                 isPasswordValid = validatePassword(newPassword)
-                                doPasswordsMatch = newPassword == newPasswordConfirm
+                                doPasswordsMatch = newPassword == confirmPassword
                             },
                             isError = !isPasswordValid,
                             label = stringResource(id = R.string.change_new_password_label),
@@ -202,10 +208,10 @@ fun ChangePasswordPage(navController: NavHostController) {
                     ) {
                         // Confirm password field
                         CustomPasswordTextField(
-                            value = newPasswordConfirm,
+                            value = confirmPassword,
                             onValueChange = {
-                                newPasswordConfirm = it
-                                doPasswordsMatch = newPassword == newPasswordConfirm
+                                confirmPassword = it
+                                doPasswordsMatch = newPassword == confirmPassword
                             },
                             isError = !doPasswordsMatch,
                             label = stringResource(id = R.string.change_confirm_new_password_label),
@@ -228,10 +234,11 @@ fun ChangePasswordPage(navController: NavHostController) {
                         onClick = {
                             keyboardController?.hide()
                             // Check if all fields are valid
-                            if (isPasswordValid && doPasswordsMatch) {
+                            if (isCurrentPasswordValid && isPasswordValid && doPasswordsMatch) {
                                 // Sign up
                                 coroutineScope.launch {
                                     // TODO : Call reset password function
+                                    changePassword(currentPassword, newPassword, confirmPassword, context)
                                 }
                             }
                         },
@@ -254,8 +261,6 @@ fun ChangePasswordPage(navController: NavHostController) {
         }
     }
 }
-
-// TODO: Create a function to update the password in the database
 
 @Composable
 fun CustomPasswordTextField(
@@ -296,3 +301,29 @@ fun CustomPasswordTextField(
         )
     }
 }
+
+// Change password function
+suspend fun changePassword(currentPassword: String, newPassword: String, confirmPassword: String, context: Context) {
+    return try {
+        val changePasswordService = ChangePasswordService.create()
+        val response = changePasswordService.changePassword(
+            ChangePasswordRequest(
+                currentPassword = currentPassword,
+                newPassword = newPassword,
+                confirmPassword = confirmPassword
+            )
+        )
+        if (response != null) {
+            // Password changed successfully
+            Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+        } else {
+            // Error occurred
+            Toast.makeText(context,
+                context.getString(R.string.change_password_failed_msg), Toast.LENGTH_SHORT).show()
+        }
+    } catch (e: Exception) {
+        // Error occurred
+        Toast.makeText(context, "Error occurred", Toast.LENGTH_SHORT).show()
+    }
+}
+

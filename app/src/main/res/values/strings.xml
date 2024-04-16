@@ -86,8 +86,9 @@
     <string name="change_confirm_new_password_label">Confirm New Password</string>
     <string name="change_password_submit_button">Change Password</string>
     <string name="change_new_password_to_login_back_button_description">Back to Login</string>
+    <string name="change_password_failed_msg">Change Password Failed</string>
+    <string name="change_current_password_label">Current Password</string>
 
     <!--    Edit User Role Strings  -->
     <string name="edit_user_role_title">User Role Manager</string>
-    <string name="change_current_password_label">Current Password</string>
 </resources>
