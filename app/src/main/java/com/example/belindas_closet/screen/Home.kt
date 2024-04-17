@@ -78,18 +78,20 @@ fun HomePage(navController: NavController) {
                     modifier = Modifier.padding(10.dp)
                 )
             }
-            IconButton(
-                onClick = {
-                    drawerState = DrawerValue.Open
+            Row {
+                IconButton(
+                    onClick = {
+                        drawerState = DrawerValue.Open
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AccountCircle,
+                        contentDescription = "Profile dropdown"
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "Profile dropdown"
-                )
-            }
-            ProfileDropdown(drawerState, navController) {
-                drawerState = DrawerValue.Closed
+                ProfileDropdown(drawerState, navController) {
+                    drawerState = DrawerValue.Closed
+                }
             }
             IconButton(
                 onClick = {
@@ -258,8 +260,8 @@ fun ProfileDropdown(drawerState: DrawerValue, navController: NavController, onDi
             Text("Dashboard", color = Color.Black)
         }
         TextButton(onClick = {
-            MainActivity.getPref().edit().remove("token").commit()
-            MainActivity.getPref().edit().remove("userRole").commit()
+            MainActivity.getPref().edit().remove("token").apply()
+            MainActivity.getPref().edit().remove("userRole").apply()
             navController.navigate(Routes.Home.route)
         }) {
             Text("Sign Out", color = Color.Black)
