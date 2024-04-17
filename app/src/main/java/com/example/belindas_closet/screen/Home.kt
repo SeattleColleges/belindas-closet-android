@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -67,6 +68,16 @@ fun HomePage(navController: NavController) {
                     painter = painterResource(R.drawable.info_icon),
                     contentDescription = "Donation Info page",
                     modifier = Modifier.padding(10.dp)
+                )
+            }
+            IconButton(
+                onClick = {
+                    // add links
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = "Profile dropdown"
                 )
             }
             IconButton(
