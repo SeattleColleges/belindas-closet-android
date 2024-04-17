@@ -60,7 +60,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ChangePasswordPage(navController: NavHostController) {
-    var currentPassword by remember {mutableStateOf("")}
+    var currentPassword by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var isCurrentPasswordValid by remember { mutableStateOf(true) }
@@ -238,7 +238,13 @@ fun ChangePasswordPage(navController: NavHostController) {
                                 // Sign up
                                 coroutineScope.launch {
                                     // TODO : Call reset password function
-                                    changePassword(currentPassword, newPassword, confirmPassword, context)
+                                    changePassword(
+                                        currentPassword,
+                                        newPassword,
+                                        confirmPassword,
+                                        context,
+                                        navController
+                                    )
                                 }
                             }
                         },
@@ -303,27 +309,38 @@ fun CustomPasswordTextField(
 }
 
 // Change password function
-suspend fun changePassword(currentPassword: String, newPassword: String, confirmPassword: String, context: Context) {
-    return try {
-        val changePasswordService = ChangePasswordService.create()
-        val response = changePasswordService.changePassword(
+suspend fun changePassword(
+    currentPassword: String,
+    newPassword: String,
+    confirmPassword: String,
+    context: Context,
+    navController: NavHostController
+) {
+    try {
+        // Call change password service
+        val response = ChangePasswordService.create().changePassword(
             ChangePasswordRequest(
                 currentPassword = currentPassword,
                 newPassword = newPassword,
                 confirmPassword = confirmPassword
             )
         )
-        if (response != null) {
+        // Check if response is successful
+        if (response?.message == "Password changed successfully") {
             // Password changed successfully
             Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+            navController.navigate(Routes.Login.route) {
+                popUpTo(Routes.Login.route) {
+                    inclusive = true
+                }
+            }
         } else {
-            // Error occurred
-            Toast.makeText(context,
-                context.getString(R.string.change_password_failed_msg), Toast.LENGTH_SHORT).show()
+            // Password change failed
+            Toast.makeText(context, response?.message, Toast.LENGTH_SHORT).show()
         }
     } catch (e: Exception) {
         // Error occurred
-        Toast.makeText(context, "Error occurred", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Change password failed, please try again", Toast.LENGTH_SHORT).show()
     }
 }
 
