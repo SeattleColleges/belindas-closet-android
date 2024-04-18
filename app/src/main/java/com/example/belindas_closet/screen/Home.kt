@@ -13,7 +13,10 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -51,10 +54,23 @@ fun HomePage(navController: NavController) {
                 onClick = {
                     navController.navigate(Routes.DonationInfo.route)
                 }
-            ) {
+            )
+            {
                 Icon(
                     painter = painterResource(R.drawable.info_icon),
                     contentDescription =  "Donation Info page",
+                    modifier = Modifier.padding(10.dp)
+                )
+            }
+            IconButton(
+                onClick = {
+                    navController.navigate(Routes.ContactUs.route)
+                }
+            )
+            {
+                Icon(
+                    imageVector = Icons.Filled.Call, // Use the ContactSupport icon
+                    contentDescription = "Contact Us page",
                     modifier = Modifier.padding(10.dp)
                 )
             }
@@ -65,8 +81,8 @@ fun HomePage(navController: NavController) {
                 Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
             }
         }
-
     )
+
     Row(
         modifier = Modifier
             .size(75.dp)
