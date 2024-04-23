@@ -23,10 +23,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -43,13 +45,22 @@ import com.example.belindas_closet.data.Datasource
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductType
 
-
+//TODO Add Product Catefories to Navbar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(navController: NavController) {
     TopAppBar(
         title = { Text("") },
         actions = {
+            // Login button
+            TextButton(onClick = { navController.navigate(Routes.Login.route) }) {
+                Text(
+                    "Login", style = TextStyle(
+                        fontSize = 18.sp,
+                        color = Color.Black
+                    )
+                )
+            }
             IconButton(
                 onClick = {
                     navController.navigate(Routes.DonationInfo.route)
@@ -58,7 +69,7 @@ fun HomePage(navController: NavController) {
             {
                 Icon(
                     painter = painterResource(R.drawable.info_icon),
-                    contentDescription =  "Donation Info page",
+                    contentDescription = "Donation Info page",
                     modifier = Modifier.padding(10.dp)
                 )
             }
@@ -80,7 +91,8 @@ fun HomePage(navController: NavController) {
             ) {
                 Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
             }
-        }
+
+        },
     )
 
     Row(
@@ -97,7 +109,7 @@ fun HomePage(navController: NavController) {
             .fillMaxSize(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -117,25 +129,7 @@ fun HomePage(navController: NavController) {
                 fontSize = 30.sp
             )
             Spacer(modifier = Modifier.padding(8.dp))
-            NavigateButtons(
-                navController = navController,
-                text = stringResource(R.string.home_login)
-            )
             Spacer(modifier = Modifier.padding(16.dp))
-
-        // Add Product button (Temporary),
-        // todo: will later be moved and protected for only admin access
-        Button(
-            onClick = {
-                /*TODO add navigation logic to the protected page only allowing Admin access*/
-                navController.navigate(Routes.AddProduct.route)
-            },
-            modifier = Modifier
-                .padding(4.dp)
-                .align(Alignment.CenterHorizontally)
-        ) {
-            Text(text = "Add Product")
-        }
             // TODO Delete later. Just for testing purpose
 //            TextButton(
 //                onClick = {
@@ -173,7 +167,8 @@ fun TypeCard(productType: ProductType, navController: NavController) {
             .clickable {
                 MainActivity.setProductType(productType.type)
                 navController.navigate(
-                    Routes.ProductDetail.route)
+                    Routes.ProductDetail.route
+                )
             },
     ) {
         Column(
@@ -189,7 +184,7 @@ fun TypeCard(productType: ProductType, navController: NavController) {
                 modifier = Modifier
                     .size(200.dp)
                     .padding(16.dp),
-                )
+            )
             Text(
                 text = productType.type,
                 style = TextStyle(
@@ -213,7 +208,7 @@ fun ProductTypeList(products: List<Product>, navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(typeList){ productType ->
+        items(typeList) { productType ->
             TypeCard(productType = productType, navController = navController)
             Spacer(modifier = Modifier.padding(16.dp))
         }
@@ -243,5 +238,5 @@ fun NSCLogo() {
     Image(
         painter = painterResource(id = R.drawable.nsc_v_logo),
         contentDescription = stringResource(id = R.string.home_nsc_logo_description)
-    ) 
+    )
 }

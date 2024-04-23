@@ -1,6 +1,7 @@
 package com.example.belindas_closet.data
 
 import com.example.belindas_closet.R
+import com.example.belindas_closet.data.network.dto.auth_dto.Role
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductGender
 import com.example.belindas_closet.model.ProductSizePantsInseam
@@ -9,7 +10,6 @@ import com.example.belindas_closet.model.ProductSizeShoes
 import com.example.belindas_closet.model.ProductSizes
 import com.example.belindas_closet.model.ProductType
 import com.example.belindas_closet.model.User
-import com.example.belindas_closet.model.UserRole
 
 class Datasource {
     private val productList = mutableListOf<Product>()
@@ -209,7 +209,7 @@ class Datasource {
                 userFirstName = "John",
                 userLastName = "Smith",
                 userEmail = "hiJohn123@gmail.com",
-                UserRole.ADMIN,
+                Role.ADMIN,
                 userId = "1"
             )
         )
@@ -218,7 +218,7 @@ class Datasource {
                 userFirstName = "Alex",
                 userLastName = "Brown",
                 userEmail = "AlexB@gmail.com",
-                UserRole.STANDARD,
+                Role.USER,
                 userId = "2"
             )
         )
@@ -227,7 +227,7 @@ class Datasource {
                 userFirstName = "Jason",
                 userLastName = "Ni",
                 userEmail = "JNi@gmail.com",
-                UserRole.ADMIN,
+                Role.ADMIN,
                 userId = "3"
             )
         )
@@ -236,7 +236,7 @@ class Datasource {
                 userFirstName = "Kim",
                 userLastName = "Johnson",
                 userEmail = "KimJohnson@gmail.com",
-                UserRole.ADMIN,
+                Role.ADMIN,
                 userId = "4"
             )
         )
@@ -245,7 +245,7 @@ class Datasource {
                 userFirstName = "Ellen",
                 userLastName = "Jones",
                 userEmail = "Ellen_J@gmail.com",
-                UserRole.STANDARD,
+                Role.USER,
                 userId = "5"
             )
         )
@@ -254,7 +254,7 @@ class Datasource {
                 userFirstName = "Taylor",
                 userLastName = "Wright",
                 userEmail = "TayW265@gmail.com",
-                UserRole.STANDARD,
+                Role.USER,
                 userId = "6"
             )
         )

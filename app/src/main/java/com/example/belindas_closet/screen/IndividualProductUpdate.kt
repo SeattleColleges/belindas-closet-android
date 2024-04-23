@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,18 +54,23 @@ import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
-import com.example.belindas_closet.data.network.auth.ArchiveService
-import com.example.belindas_closet.data.network.auth.DeleteService
-import com.example.belindas_closet.data.network.dto.auth_dto.ArchiveRequest
-import com.example.belindas_closet.data.network.dto.auth_dto.DeleteRequest
+import com.example.belindas_closet.data.network.product.ArchiveService
+import com.example.belindas_closet.data.network.product.DeleteService
+import com.example.belindas_closet.data.network.dto.product_dto.ArchiveRequest
+import com.example.belindas_closet.data.network.dto.product_dto.DeleteRequest
 import com.example.belindas_closet.data.network.dto.auth_dto.Role
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductSizes
 import kotlinx.coroutines.launch
 
+//TODO Add Product Categories to Navbar and edit section
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IndividualProductUpdatePage(navController: NavController, productId: String) {
+    var drawerState by remember { mutableStateOf(DrawerValue.Closed) }
+
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -75,7 +81,7 @@ fun IndividualProductUpdatePage(navController: NavController, productId: String)
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            navController.navigate(Routes.IndividualProduct.route+"/${productId}")
+                            navController.navigate(Routes.IndividualProduct.route)
                         }
                     ) {
                         Icon(
@@ -84,14 +90,39 @@ fun IndividualProductUpdatePage(navController: NavController, productId: String)
                         )
                     }
                 },
-                actions = {
+                actions =
+                {
+                    /*  Edit option visibility */
+                    val userRole = MainActivity.getPref().getString("userRole",Role.USER.name)?.let {
+                        Role.valueOf(it)
+                    } ?: Role.USER
+                    if (userRole == Role.ADMIN || userRole == Role.CREATOR) {
+                        IconButton(
+                            onClick = {
+                                navController.navigate(Routes.IndividualProductUpdatePage.route)
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit"
+                            )
+                        }
+                    }
                     IconButton(
                         onClick = {
+                            drawerState = DrawerValue.Open
                         }
                     ) {
-                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "Menu"
+                        )
                     }
+                DropDownCategoryList(drawerState, navController) {
+                    drawerState = DrawerValue.Closed
                 }
+                }
+
             )
         },
     ) { innerPadding ->
