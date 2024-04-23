@@ -3,40 +3,35 @@ package com.example.belindas_closet.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.example.belindas_closet.R
-import com.example.belindas_closet.Routes
-import com.example.belindas_closet.data.Datasource
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import androidx.navigation.NavController
 import com.example.belindas_closet.MainActivity
+import com.example.belindas_closet.R
+import com.example.belindas_closet.Routes
+import com.example.belindas_closet.data.Datasource
 import com.example.belindas_closet.data.network.dto.auth_dto.Role
 
 //TODO Add Product Categories to Navbar
@@ -44,8 +39,8 @@ import com.example.belindas_closet.data.network.dto.auth_dto.Role
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IndividualProductPage(navController: NavController, productId: String) {
-
     var drawerState by remember { mutableStateOf(DrawerValue.Closed) }
+    var profileDropdownState by remember { mutableStateOf(DrawerValue.Closed) }
 
     TopAppBar(
         title = { Text("Back") },
@@ -77,6 +72,21 @@ fun IndividualProductPage(navController: NavController, productId: String) {
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Edit"
                         )
+                    }
+                    Row {
+                        IconButton(
+                            onClick = {
+                                profileDropdownState = DrawerValue.Open
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.AccountCircle,
+                                contentDescription = "Profile dropdown"
+                            )
+                        }
+                        ProfileDropdown(profileDropdownState, navController) {
+                            profileDropdownState = DrawerValue.Closed
+                        }
                     }
                 }
                     IconButton(

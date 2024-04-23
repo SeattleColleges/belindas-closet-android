@@ -5,6 +5,7 @@ import android.content.res.Resources
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
@@ -50,6 +52,7 @@ import com.example.belindas_closet.model.ProductType
 @Composable
 fun ProductDetailPage(navController: NavController) {
     var drawerState by remember { mutableStateOf(DrawerValue.Closed) }
+    var profileDropdownState by remember { mutableStateOf(DrawerValue.Closed) }
 
     Scaffold(
         modifier = Modifier
@@ -82,6 +85,21 @@ fun ProductDetailPage(navController: NavController) {
                             }
                         ) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                        }
+                        Row {
+                            IconButton(
+                                onClick = {
+                                    profileDropdownState = DrawerValue.Open
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.AccountCircle,
+                                    contentDescription = "Profile dropdown"
+                                )
+                            }
+                            ProfileDropdown(profileDropdownState, navController) {
+                                profileDropdownState = DrawerValue.Closed
+                            }
                         }
                     }
                     IconButton(
