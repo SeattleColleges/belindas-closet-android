@@ -48,6 +48,10 @@ fun ScreenMain() {
         composable(Routes.DonationInfo.route) {
             DonationInfoPage(navController = navController)
         }
+        composable(Routes.ContactUs.route) {
+            ContactUsPage(navController = navController)
+        }
+
 
         composable(Routes.CreatorView.route) {
             CreatorView(navController = navController)

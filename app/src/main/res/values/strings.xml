@@ -79,6 +79,9 @@
     <!--    DonationInfo Screen Strings    -->
     <string name="donation_info">Donation Info</string>
 
+    <!--    ContactUS Screen Strings    -->
+    <string name="contact_us">Contact Us</string>
+
     <!--    Change Password Screen Strings    -->
     <string name="change_password_title">Change Password</string>
     <string name="change_new_password_label">New Password</string>
