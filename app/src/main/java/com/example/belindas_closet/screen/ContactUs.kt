@@ -1,13 +1,7 @@
 package com.example.belindas_closet.screen
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
@@ -31,9 +25,8 @@ import com.example.belindas_closet.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DonationInfoPage(navController: NavController) {
-
-    /* Back arrow that navigataes back to Home page */
+fun ContactUsPage(navController: NavController) {
+    /* Top app bar with navigation back to Home page */
     TopAppBar(
         title = { Text("Home") },
         navigationIcon = {
@@ -65,7 +58,7 @@ fun DonationInfoPage(navController: NavController) {
         ) {
             Spacer(modifier = Modifier.height(75.dp))
             Text(
-                text = stringResource(id = R.string.donation_info),
+                text = stringResource(id = R.string.contact_us),
                 style = TextStyle(
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Light,
@@ -73,8 +66,6 @@ fun DonationInfoPage(navController: NavController) {
                 ),
                 modifier = Modifier.wrapContentSize()
             )
-            Spacer(modifier = Modifier.height(25.dp))
         }
-
     }
 }
