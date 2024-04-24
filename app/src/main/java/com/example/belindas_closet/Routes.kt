@@ -15,6 +15,6 @@ sealed class Routes (val route: String) {
     object CreatorView: Routes("Creator_View")
     object EditUserRole: Routes("Edit User Role")
     object DonationInfo: Routes("Donation_Info")
+    object Dashboard: Routes("Dashboard")
     object ContactUs: Routes("Contact_Us")
-
 }

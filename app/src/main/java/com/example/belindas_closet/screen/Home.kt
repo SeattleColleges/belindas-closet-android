@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,6 +29,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,13 +49,16 @@ import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
+import com.example.belindas_closet.data.network.dto.auth_dto.Role
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductType
 
-//TODO Add Product Catefories to Navbar
+//TODO Add Product Categories to Navbar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(navController: NavController) {
+    var profileDropdownState by remember { mutableStateOf(DrawerValue.Closed) }
+
     TopAppBar(
         title = { Text("") },
         actions = {
@@ -72,6 +82,26 @@ fun HomePage(navController: NavController) {
                     contentDescription = "Donation Info page",
                     modifier = Modifier.padding(10.dp)
                 )
+            }
+            val userRole = MainActivity.getPref().getString("userRole", Role.USER.name)?.let {
+                Role.valueOf(it)
+            } ?: Role.USER
+            if (userRole == Role.ADMIN || userRole == Role.CREATOR ) {
+                Row {
+                    IconButton(
+                        onClick = {
+                            profileDropdownState = DrawerValue.Open
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.AccountCircle,
+                            contentDescription = "Profile dropdown"
+                        )
+                    }
+                    ProfileDropdown(profileDropdownState, navController) {
+                        profileDropdownState = DrawerValue.Closed
+                    }
+                }
             }
             IconButton(
                 onClick = {
@@ -202,7 +232,7 @@ fun TypeCard(productType: ProductType, navController: NavController) {
 
 @Composable
 fun ProductTypeList(products: List<Product>, navController: NavController) {
-    val typeList = ProductType.values().sortedWith(compareBy { it.type });
+    val typeList = ProductType.values().sortedWith(compareBy { it.type })
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
@@ -239,4 +269,26 @@ fun NSCLogo() {
         painter = painterResource(id = R.drawable.nsc_v_logo),
         contentDescription = stringResource(id = R.string.home_nsc_logo_description)
     )
+}
+
+@Composable
+fun ProfileDropdown(profileDropdownState: DrawerValue, navController: NavController, onDismissRequest: () -> Unit = {}) {
+    DropdownMenu(
+        profileDropdownState == DrawerValue.Open,
+        onDismissRequest = onDismissRequest,
+        modifier = Modifier
+            .padding(8.dp)
+    ) {
+        // Dropdown menu items
+        TextButton(onClick = { navController.navigate(Routes.Dashboard.route) }) {
+            Text("Dashboard", color = Color.Black)
+        }
+        TextButton(onClick = {
+            MainActivity.getPref().edit().remove("token").apply()
+            MainActivity.getPref().edit().remove("userRole").apply()
+            navController.navigate(Routes.Home.route)
+        }) {
+            Text("Sign Out", color = Color.Black)
+        }
+    }
 }
