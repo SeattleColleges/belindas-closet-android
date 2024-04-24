@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,6 +43,7 @@ import com.example.belindas_closet.model.User
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditUserRole(navController: NavController) {
+    var profileDropdownState by remember { mutableStateOf(DrawerValue.Closed) }
 
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         /* Back arrow that navigates back to login page */
@@ -51,6 +54,23 @@ fun EditUserRole(navController: NavController) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack, contentDescription = "Back to Home page"
                 )
+            }
+        },
+        actions = {
+            Row {
+                IconButton(
+                    onClick = {
+                        profileDropdownState = DrawerValue.Open
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AccountCircle,
+                        contentDescription = "Profile dropdown"
+                    )
+                }
+                ProfileDropdown(profileDropdownState, navController) {
+                    profileDropdownState = DrawerValue.Closed
+                }
             }
         })
     }) { innerPadding ->

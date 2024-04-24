@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -54,11 +55,11 @@ import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.Datasource
-import com.example.belindas_closet.data.network.product.ArchiveService
-import com.example.belindas_closet.data.network.product.DeleteService
+import com.example.belindas_closet.data.network.dto.auth_dto.Role
 import com.example.belindas_closet.data.network.dto.product_dto.ArchiveRequest
 import com.example.belindas_closet.data.network.dto.product_dto.DeleteRequest
-import com.example.belindas_closet.data.network.dto.auth_dto.Role
+import com.example.belindas_closet.data.network.product.ArchiveService
+import com.example.belindas_closet.data.network.product.DeleteService
 import com.example.belindas_closet.model.Product
 import com.example.belindas_closet.model.ProductSizes
 import kotlinx.coroutines.launch
@@ -69,7 +70,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun IndividualProductUpdatePage(navController: NavController, productId: String) {
     var drawerState by remember { mutableStateOf(DrawerValue.Closed) }
-
+    var profileDropdownState by remember { mutableStateOf(DrawerValue.Closed) }
 
     Scaffold(
         modifier = Modifier
@@ -106,6 +107,21 @@ fun IndividualProductUpdatePage(navController: NavController, productId: String)
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Edit"
                             )
+                        }
+                        Row {
+                            IconButton(
+                                onClick = {
+                                    profileDropdownState = DrawerValue.Open
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.AccountCircle,
+                                    contentDescription = "Profile dropdown"
+                                )
+                            }
+                            ProfileDropdown(profileDropdownState, navController) {
+                                profileDropdownState = DrawerValue.Closed
+                            }
                         }
                     }
                     IconButton(

@@ -11,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,10 +22,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,6 +43,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,6 +64,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
+import com.example.belindas_closet.Routes
 import com.example.belindas_closet.data.network.dto.auth_dto.Role
 import com.example.belindas_closet.data.network.dto.product_dto.ProductRequest
 import com.example.belindas_closet.data.network.product.ProductService
@@ -71,14 +76,12 @@ import com.example.belindas_closet.model.ProductSizeShoes
 import com.example.belindas_closet.model.ProductSizes
 import com.example.belindas_closet.model.ProductType
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.rememberCoroutineScope
-import com.example.belindas_closet.Routes
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductPage(navController: NavHostController) {
-
+    var profileDropdownState by remember { mutableStateOf(DrawerValue.Closed) }
     var selectedProductType by remember { mutableStateOf(ProductType.SHOES) }
     var selectedProductGender by remember { mutableStateOf(ProductGender.NON_BINARY) }
     var selectedProductSizeShoe by remember { mutableStateOf(ProductSizeShoes.SELECT_SIZE) }
@@ -108,6 +111,21 @@ fun AddProductPage(navController: NavHostController) {
                     }
                 },
                 actions = {
+                    Row {
+                        IconButton(
+                            onClick = {
+                                profileDropdownState = DrawerValue.Open
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.AccountCircle,
+                                contentDescription = "Profile dropdown"
+                            )
+                        }
+                        ProfileDropdown(profileDropdownState, navController) {
+                            profileDropdownState = DrawerValue.Closed
+                        }
+                    }
                     IconButton(
                         onClick = {
                             // Handle menu icon click

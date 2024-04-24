@@ -2,8 +2,6 @@ package com.example.belindas_closet.screen
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,22 +13,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,6 +42,7 @@ import com.example.belindas_closet.Routes
 @Composable
 fun AdminView(navController: NavHostController) {
     val current = LocalContext.current
+    var profileDropdownState by remember { mutableStateOf(DrawerValue.Closed) }
     Row(
         modifier = Modifier
             .height(75.dp)
@@ -54,7 +52,21 @@ fun AdminView(navController: NavHostController) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         NSCLogo()
-        Icon(Icons.Filled.ExitToApp, contentDescription="Logout",
+        Row {
+            IconButton(
+                onClick = {
+                    profileDropdownState = DrawerValue.Open
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = "Profile dropdown"
+                )
+            }
+            ProfileDropdown(profileDropdownState, navController) {
+                profileDropdownState = DrawerValue.Closed
+            }
+            Icon(Icons.Filled.ExitToApp, contentDescription="Logout",
             modifier = Modifier.clickable {
                 MainActivity.getPref().edit().remove("token").commit()
                 MainActivity.getPref().edit().remove("userRole").commit()
@@ -64,7 +76,8 @@ fun AdminView(navController: NavHostController) {
                     "Logged Out",
                     Toast.LENGTH_SHORT
                 ).show()
-            })
+            }.padding(top = 10.dp))
+        }
     }
     Row(
         modifier = Modifier

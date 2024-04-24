@@ -14,11 +14,12 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DrawerValue
@@ -60,6 +61,7 @@ import kotlinx.coroutines.launch
 fun UpdatePage(navController: NavController) {
     var hiddenProducts by remember { mutableStateOf(setOf<String>()) }
     var drawerState by remember { mutableStateOf(DrawerValue.Closed) }
+    var profileDropdownState by remember { mutableStateOf(DrawerValue.Closed) }
 
     Scaffold(
         modifier = Modifier
@@ -91,6 +93,21 @@ fun UpdatePage(navController: NavController) {
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Edit"
                             )
+                        }
+                        Row {
+                            IconButton(
+                                onClick = {
+                                    profileDropdownState = DrawerValue.Open
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.AccountCircle,
+                                    contentDescription = "Profile dropdown"
+                                )
+                            }
+                            ProfileDropdown(profileDropdownState, navController) {
+                                profileDropdownState = DrawerValue.Closed
+                            }
                         }
                     }
                     IconButton(
