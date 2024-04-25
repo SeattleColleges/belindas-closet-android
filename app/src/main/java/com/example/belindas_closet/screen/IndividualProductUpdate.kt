@@ -53,6 +53,7 @@ import androidx.navigation.NavController
 import com.example.belindas_closet.MainActivity
 import com.example.belindas_closet.R
 import com.example.belindas_closet.Routes
+import com.example.belindas_closet.components.DropdownNavList
 import com.example.belindas_closet.data.Datasource
 import com.example.belindas_closet.data.network.product.ArchiveService
 import com.example.belindas_closet.data.network.product.DeleteService
@@ -118,7 +119,7 @@ fun IndividualProductUpdatePage(navController: NavController, productId: String)
                             contentDescription = "Menu"
                         )
                     }
-                DropDownCategoryList(drawerState, navController) {
+                DropdownNavList(drawerState, navController) {
                     drawerState = DrawerValue.Closed
                 }
                 }

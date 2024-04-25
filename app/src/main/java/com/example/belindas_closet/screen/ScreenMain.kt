@@ -53,6 +53,10 @@ fun ScreenMain() {
             CreatorView(navController = navController)
         }
 
+        composable(Routes.Mission.route) {
+            MissionPage(navController = navController)
+        }
+
         composable(Routes.IndividualProduct.route+"/{productId}",
             arguments = listOf(navArgument("productId") { type = NavType.StringType })
         ) { backStackEntry ->

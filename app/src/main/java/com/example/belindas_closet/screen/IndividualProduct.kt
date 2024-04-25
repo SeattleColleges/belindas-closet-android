@@ -37,6 +37,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.window.Popup
 import com.example.belindas_closet.MainActivity
+import com.example.belindas_closet.components.DropdownNavList
 import com.example.belindas_closet.data.network.dto.auth_dto.Role
 
 //TODO Add Product Categories to Navbar
@@ -89,7 +90,7 @@ fun IndividualProductPage(navController: NavController, productId: String) {
                         contentDescription = "Menu"
                     )
                 }
-                DropDownCategoryList(drawerState, navController) {
+                DropdownNavList(drawerState, navController) {
                     drawerState = DrawerValue.Closed
                 }
             }
