@@ -123,7 +123,7 @@ fun UserCard(user: User, navController: NavController) {
                         isEditingRole = false
                         user.userRole.role = selectedRole
                         isSave = true
-                    }, onDismiss = { isEditingRole = false})
+                    }, onDismiss = { isEditingRole = false })
                 }
                 if (isSave) {
                     Toast.makeText(
@@ -131,6 +131,7 @@ fun UserCard(user: User, navController: NavController) {
                         "User's role has been updated!",
                         Toast.LENGTH_SHORT
                     ).show()
+                    isSave = false
                 }
             }
         }
