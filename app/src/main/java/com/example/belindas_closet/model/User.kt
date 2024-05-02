@@ -6,6 +6,6 @@ data class User(
     val userFirstName: String,
     val userLastName: String,
     val userEmail: String,
-    val userRole: Role,
+    var userRole: Role,
     val userId: String = "0"
 )
