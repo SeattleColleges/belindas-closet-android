@@ -1,5 +1,6 @@
 package com.example.belindas_closet.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -92,6 +94,7 @@ fun UserCard(user: User, navController: NavController) {
     var selectedRole by remember { mutableStateOf(user.userRole.role) }
     var isCancel by remember { mutableStateOf(false) }
     var isSave by remember { mutableStateOf(false) }
+    val current = LocalContext.current
 
     Card(
         modifier = Modifier
@@ -105,8 +108,7 @@ fun UserCard(user: User, navController: NavController) {
         ) {
             CustomTextField(text = user.userFirstName + " " + user.userLastName)
             CustomTextField(text = user.userEmail)
-            CustomTextField(
-                text = user.userRole.role.lowercase().replaceFirstChar { it.uppercase() })
+            CustomTextField(text = user.userRole.role.lowercase().replaceFirstChar { it.uppercase() })
             Row(
                 modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically
             ) {
@@ -119,7 +121,17 @@ fun UserCard(user: User, navController: NavController) {
                     RoleSelectionDialog(selectedRole = selectedRole, onRoleSelected = {
                         selectedRole = it
                         isEditingRole = false
+                        user.userRole.role = selectedRole
+                        isSave = true
                     }, onDismiss = { isEditingRole = false })
+                }
+                if (isSave) {
+                    Toast.makeText(
+                        current,
+                        "User's role has been updated!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    isSave = false
                 }
             }
         }
