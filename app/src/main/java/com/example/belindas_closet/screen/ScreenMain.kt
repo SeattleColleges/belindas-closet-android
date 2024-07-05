@@ -14,7 +14,7 @@ import com.example.belindas_closet.Routes
 fun ScreenMain() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "Home") {
+    NavHost(navController = navController, startDestination = Routes.Dashboard.route) {
         composable(Routes.Home.route) {
             HomePage(navController = navController)
         }
@@ -44,6 +44,9 @@ fun ScreenMain() {
         }
         composable(Routes.EditUserRole.route) {
             EditUserRole(navController = navController)
+        }
+        composable(Routes.Dashboard.route) {
+            DashboardPage(navController = navController)
         }
         composable(Routes.DonationInfo.route) {
             DonationInfoPage(navController = navController)
